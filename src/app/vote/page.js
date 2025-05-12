@@ -1,4 +1,4 @@
-export default function Tivoli() {
+export default function Vote() {
     return (
         <div>
             <h1>Voting page</h1>

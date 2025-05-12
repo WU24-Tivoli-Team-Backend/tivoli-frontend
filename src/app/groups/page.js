@@ -1,4 +1,4 @@
-export default function Tivoli() {
+export default function Groups() {
     return (
         <div>
             <h1>Groups</h1>
