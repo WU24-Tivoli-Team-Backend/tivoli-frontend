@@ -1,13 +1,18 @@
 import useSWR from 'swr'
 import axios from '@/lib/axios'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 
 export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     const router = useRouter()
     const params = useParams()
+    const [jwt, setJwt] = useState(null)
 
-    const { data: user, error, mutate } = useSWR('/api/user', () =>
+    const {
+        data: user,
+        error,
+        mutate,
+    } = useSWR('/api/user', async () =>
         axios
             .get('/api/user')
             .then(res => res.data)
@@ -42,10 +47,27 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         setStatus(null)
 
         axios
-            .post('/login', props)
-            .then(() => mutate())
+            .post('http://localhost:8000/login', props, {
+                withCredentials: true,
+            })
+            .then(() => {
+                mutate()
+
+                axios
+                    .get('http://localhost:8000/api/jwt-token', {
+                        withCredentials: true,
+                    })
+                    .then(res => {
+                        const token = res.data.token
+                        localStorage.setItem('jwt', token)
+                        setJwt(token)
+                    })
+                    .catch(err => {
+                        console.error('Could not find JWT-token:', err)
+                    })
+            })
             .catch(error => {
-                if (error.response.status !== 422) throw error
+                if (error.response?.status !== 422) throw error
 
                 setErrors(error.response.data.errors)
             })
@@ -93,7 +115,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     const logout = async () => {
         if (!error) {
-            await axios.post('/logout').then(() => mutate())
+            await axios.post('/logout').then(() => mutate(null))
         }
 
         window.location.pathname = '/login'
@@ -103,9 +125,9 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         if (middleware === 'guest' && redirectIfAuthenticated && user)
             router.push(redirectIfAuthenticated)
 
-        if (middleware === 'auth' && (user && !user.email_verified_at))
+        if (middleware === 'auth' && user && !user.email_verified_at)
             router.push('/verify-email')
-        
+
         if (
             window.location.pathname === '/verify-email' &&
             user?.email_verified_at
@@ -122,5 +144,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         resetPassword,
         resendEmailVerification,
         logout,
+        jwt,
     }
 }
