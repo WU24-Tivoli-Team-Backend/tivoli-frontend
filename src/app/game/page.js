@@ -3,6 +3,7 @@
 import Header from '@/app/(app)/Header'
 import GameIframe, { ScreenSize, AspectRatio } from '@/components/GameIframe'
 import { useState } from 'react'
+import { useEffect } from 'react'
 
 const GamePage = () => {
     const customAspectRatios = {
@@ -12,6 +13,13 @@ const GamePage = () => {
         [ScreenSize.TABLET_LANDSCAPE]: AspectRatio.WIDESCREEN,
         [ScreenSize.DESKTOP]: AspectRatio.ULTRAWIDE,
     }
+    const [jwtToken, setJwtToken] = useState(null)
+    const [currentDevice, setCurrentDevice] = useState('Detecting...')
+
+    useEffect(() => {
+        const token = localStorage.getItem('jwt')
+        if (token) setJwtToken(token)
+    }, [])
 
     const [currentDevice, setCurrentDevice] = useState('Detecting...')
 
@@ -37,6 +45,9 @@ const GamePage = () => {
                             <GameIframe
                                 url="http://localhost:3001"
                                 title="My Game"
+                                jwt={jwtToken}
+                                onGameReady={() => console.log('Game ready')}
+                                onTokenSent={() => console.log('Token sent')}
                                 onScreenSizeChange={size =>
                                     setCurrentDevice(size)
                                 }
