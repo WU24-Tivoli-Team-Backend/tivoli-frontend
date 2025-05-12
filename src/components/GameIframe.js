@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import JwtMessageBridge from './JwtMessageBridge'
 
 export const ScreenSize = {
     MOBILE_PORTRAIT: 'mobile-portrait',
@@ -40,6 +41,9 @@ const GameIframe = ({
     className = '',
     allowFullscreen = true,
     onScreenSizeChange = null,
+    jwt = null, // Add JWT token prop
+    onGameReady = null,
+    onTokenSent = null,
 }) => {
     const [currentScreenSize, setCurrentScreenSize] = useState(defaultSize)
 
@@ -97,13 +101,19 @@ const GameIframe = ({
                 position: 'relative',
             }}
             data-screen-size={currentScreenSize}>
-            <iframe
-                src={url}
-                title={title}
-                className="absolute top-0 left-0 w-full h-full border-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen={allowFullscreen}
-            />
+            <JwtMessageBridge
+                url={url}
+                jwt={jwt}
+                onGameReady={onGameReady}
+                onTokenSent={onTokenSent}>
+                <iframe
+                    src={url}
+                    title={title}
+                    className="absolute top-0 left-0 w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen={allowFullscreen}
+                />
+            </JwtMessageBridge>
         </div>
     )
 }
