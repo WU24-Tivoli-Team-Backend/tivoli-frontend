@@ -12,8 +12,8 @@ import { useState } from 'react'
 
 const Navigation = ({ user }) => {
     const { logout } = useAuth()
-
     const [open, setOpen] = useState(false)
+    const pathname = usePathname()
 
     return (
         <nav className="bg-white border-b border-gray-100">
@@ -107,7 +107,7 @@ const Navigation = ({ user }) => {
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
                             href="/dashboard"
-                            active={usePathname() === '/dashboard'}>
+                            active={pathname === '/dashboard'}>
                             Dashboard
                         </ResponsiveNavLink>
                     </div>
