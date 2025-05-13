@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import axios from '@/lib/axios'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
 
@@ -17,10 +17,11 @@ export default function EditUserInfoForm() {
         axios
             .get('/api/user')
             .then(res => {
+                console.log(res);
                 setForm({
-                    image_url: res.data.data.image_url || '',
-                    github: res.data.data.github || '',
-                    url: res.data.data.url || '',
+                    image_url: res.data.image_url || '',
+                    github: res.data.github || '',
+                    url: res.data.url || '',
                     //   group_id:  res.data.data.group_id?.toString() || '',
                 })
             })
@@ -36,7 +37,7 @@ export default function EditUserInfoForm() {
     const handleSubmit = async e => {
         e.preventDefault()
         try {
-            const res = await axios.patch('/api/user/profile', form, {
+            const res = await axios.patch('/api/user', form, {
                 headers: { 'Content-Type': 'application/json' },
             })
             console.log('Uppdaterad user:', res.data.data)
@@ -50,7 +51,7 @@ export default function EditUserInfoForm() {
     if (loading) return <p>Loading…</p>
 
     return (
-        <form className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <h2 className="text-2xl font-bold">Edit User Info</h2>
             <p className="text-gray-500">You can edit your information here.</p>
             <Input
