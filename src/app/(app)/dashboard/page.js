@@ -1,5 +1,5 @@
 import Header from '@/app/(app)/Header'
-
+import EditUserInfoForm from '@/components/forms/EditUserInfoForm'
 export const metadata = {
     title: 'Laravel - Dashboard',
 }
@@ -14,6 +14,7 @@ const Dashboard = () => {
                         <div className="p-6 bg-white border-b border-gray-200">
                             You are logged in!
                         </div>
+                        <EditUserInfoForm />
                     </div>
                 </div>
             </div>
