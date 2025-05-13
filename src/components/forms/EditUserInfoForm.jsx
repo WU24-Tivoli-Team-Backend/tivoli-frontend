@@ -58,19 +58,26 @@ export default function EditUserInfoForm() {
                 type="text"
                 label="Link to your profile image"
                 placeholder="Image URL"
+                value={form.image_url}
+                onChange={handleChange}
             />
             <Input
                 name="github"
                 type="text"
                 label="Link to your GitHub"
                 placeholder="GitHub URL"
+                value={form.github}
+                onChange={handleChange}
             />
             <Input
                 name="url"
                 type="text"
                 label="Other webpage you want to add"
                 placeholder="Personal URL"
+                value={form.url}
+                onChange={handleChange}
             />
+            {/* Add input for group_id? */}
             <Button>Save Profile</Button>
         </form>
     )
