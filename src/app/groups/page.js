@@ -1,10 +1,8 @@
-import GroupData from '@/components/group-information/GroupInfo'
-import AmusementsInfo from '@/components/amusements-information/AmusementsInfo'
+import GroupData from '@/components/group-information/GroupData'
 
 export default function Groups() {
     return (
         <div>
-            <AmusementsInfo />
             <GroupData />
         </div>
     )
