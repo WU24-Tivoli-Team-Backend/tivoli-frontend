@@ -16,7 +16,7 @@ export default function UserProfile() {
 
     return (
         <>
-            {userLoading && 'Laddar..'}
+            {userLoading && 'Loading...'}
             {userData && (
                 <div>
                     <h2>{userData.name}</h2>

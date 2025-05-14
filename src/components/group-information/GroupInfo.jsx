@@ -11,7 +11,7 @@ export default function GroupData() {
 
     return (
         <>
-            {userLoading && 'Laddar..'}
+            {userLoading && 'Loading...'}
             {userError && <p>Error: {userError.message}</p>}
             {groupData?.data &&
                 groupData.data.map((data, index) => (
@@ -19,6 +19,7 @@ export default function GroupData() {
                         <div>
                             <p>Group: {data.uuid}</p>
                             <p>Members:</p>
+                            <br />
                         </div>
                     </li>
                 ))}
