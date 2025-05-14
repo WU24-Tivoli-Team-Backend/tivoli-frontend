@@ -1,11 +1,8 @@
 name: Mirror to Fork
-
 on:
   push:
     branches:
-      - master  # or your default branch
-      - main
-
+      - master  # This is the branch in your original repo
 jobs:
   mirror:
     runs-on: ubuntu-latest
@@ -32,4 +29,4 @@ jobs:
           
       - name: Push to fork
         run: |
-          git push fork main --force
+          git push fork master:main --force
