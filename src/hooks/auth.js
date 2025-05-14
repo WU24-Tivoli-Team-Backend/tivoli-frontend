@@ -47,14 +47,14 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         setStatus(null)
 
         axios
-            .post('http://localhost:8000/login', props, {
+            .post('/login', props, {
                 withCredentials: true,
             })
             .then(() => {
                 mutate()
 
                 axios
-                    .get('http://localhost:8000/api/jwt-token', {
+                    .get('/api/jwt-token', {
                         withCredentials: true,
                     })
                     .then(res => {
