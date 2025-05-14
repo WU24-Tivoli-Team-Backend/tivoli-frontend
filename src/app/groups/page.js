@@ -1,10 +1,9 @@
+import GroupData from '@/components/group-information/GroupInfo'
+
 export default function Groups() {
     return (
         <div>
-            <h1>Groups</h1>
-            <p>
-                Here, we'll present the different groups and their amusements.
-            </p>
+            <GroupData />
         </div>
     )
 }
