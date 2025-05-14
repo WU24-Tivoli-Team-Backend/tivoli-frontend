@@ -21,8 +21,6 @@ const GamePage = () => {
         if (token) setJwtToken(token)
     }, [])
 
-    const [currentDevice, setCurrentDevice] = useState('Detecting...')
-
     return (
         <>
             <Header title="Test Game" />
