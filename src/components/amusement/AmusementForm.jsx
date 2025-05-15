@@ -94,10 +94,10 @@ export default function AmusementForm({
                     stamp_id: '',
                 })
             
-                console.log('Calling onSuccess with created data')
-                onSuccess(res.data)
+                
             }
-
+            console.log('Calling onSuccess with created data')
+                onSuccess(res.data)
             // Show success message
         } catch (err) {
             console.log(err)

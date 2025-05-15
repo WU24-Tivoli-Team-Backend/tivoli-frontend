@@ -1,16 +1,12 @@
 'use client'
-import { useState, useEffect } from 'react'
-import axios from '@/lib/axios'
-import Input from '@/components/Input'
-import Button from '@/components/Button'
 import { useFetch } from '@/hooks/useFetch'
-import Image from 'next/image'
+
 
 export default function UserProfile() {
     const apiUrl = '/api/user'
     const {
         data: userData,
-        error: userError,
+        error,
         loading: userLoading,
     } = useFetch(apiUrl)
 
