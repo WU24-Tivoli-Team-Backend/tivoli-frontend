@@ -6,13 +6,14 @@ export default function UserProfile() {
     const apiUrl = '/api/user'
     const {
         data: userData,
-        error,
+        error: userError,
         loading: userLoading,
     } = useFetch(apiUrl)
 
     return (
         <>
             {userLoading && 'Loading...'}
+            {userError && 'Error'}
             {userData && (
                 <div>
                     <h2>{userData.name}</h2>
