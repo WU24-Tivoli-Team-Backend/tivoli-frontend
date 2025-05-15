@@ -103,7 +103,7 @@ function getCsrfToken() {
             return
         }
         
-        const csrfToken = getCsrfToken();
+        const csrfToken = getCsrfToken()
 
         setErrors([])
         setStatus(null)
