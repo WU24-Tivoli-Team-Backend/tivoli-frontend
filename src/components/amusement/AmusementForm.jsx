@@ -85,14 +85,19 @@ export default function AmusementForm({
                 setSuccessMessage('Amusement created successfully!')
 
                 // Clear form after successful creation
-                setForm({
-                    name: '',
-                    type: '',
-                    description: '',
-                    url: '',
-                    image_url: '',
-                    stamp_id: '',
-                })
+
+
+            
+          
+            }
+            setForm({
+                name: '',
+                type: '',
+                description: '',
+                url: '',
+                image_url: '',
+                stamp_id: '',
+            })
             
                 
             }
