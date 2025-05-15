@@ -86,6 +86,7 @@ export default function AmusementForm({
 
                 // Clear form after successful creation
 
+
             
           
             }
@@ -100,6 +101,7 @@ export default function AmusementForm({
             
             console.log('Calling onSuccess with created data')
             onSuccess(res.data)
+
 
             // Show success message
         } catch (err) {
