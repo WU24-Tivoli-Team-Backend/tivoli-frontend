@@ -85,18 +85,23 @@ export default function AmusementForm({
                 setSuccessMessage('Amusement created successfully!')
 
                 // Clear form after successful creation
-                setForm({
-                    name: '',
-                    type: '',
-                    description: '',
-                    url: '',
-                    image_url: '',
-                    stamp_id: '',
-                })
+
+
             
-                console.log('Calling onSuccess with created data')
-                onSuccess(res.data)
+          
             }
+            setForm({
+                name: '',
+                type: '',
+                description: '',
+                url: '',
+                image_url: '',
+                stamp_id: '',
+            })
+            
+            console.log('Calling onSuccess with created data')
+            onSuccess(res.data)
+
 
             // Show success message
         } catch (err) {
