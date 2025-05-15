@@ -44,7 +44,7 @@ export default function AmusementForm({
                 description: amusementData.description || '',
                 url: amusementData.url || '',
                 image_url: amusementData.image_url || '',
-                stamp_id: amusementData.stamp_id || ''
+                stamp_id: amusementData.stamp_id || '',
             })
         }
     }, [isEditMode, amusementData, amusementLoading])
@@ -71,6 +71,7 @@ export default function AmusementForm({
                     headers: { 'Content-Type': 'application/json' },
                 })
                 setSuccessMessage('Amusement updated successfully!')
+                onSuccess(res.data)
             } else {
                 // Create new amusement
                 console.log('About to send POST request to /api/amusements')
@@ -85,10 +86,8 @@ export default function AmusementForm({
                 setSuccessMessage('Amusement created successfully!')
 
                 // Clear form after successful creation
-
-
-            
-          
+                console.log('Calling onSuccess with created data')
+                onSuccess(res.data)
             }
             setForm({
                 name: '',
@@ -99,12 +98,6 @@ export default function AmusementForm({
                 stamp_id: '',
             })
 
-            
-            console.log('Calling onSuccess with created data')
-            onSuccess(res.data)
-                
-            
-       
             // Show success message
         } catch (err) {
             console.log(err)
