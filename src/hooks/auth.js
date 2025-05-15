@@ -60,24 +60,24 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 function getCsrfToken() {
     // Function to get a specific cookie value by name
     function getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
+      const value = `; ${document.cookie}`
+      const parts = value.split(`; ${name}=`)
       if (parts.length === 2) {
-        return parts.pop().split(';').shift();
+        return parts.pop().split(';').shift()
       }
-      return null;
+      return null
     }
   
     // Get the CSRF token - try both standard and Laravel prefixed names
-    let token = getCookie('XSRF-TOKEN');
+    let token = getCookie('XSRF-TOKEN')
     
     // For Laravel 12, also check for prefixed cookies
     if (!token) {
-      token = getCookie('laravel_XSRF-TOKEN');
+      token = getCookie('laravel_XSRF-TOKEN')
     }
     
     // Decode URI components if token exists
-    return token ? decodeURIComponent(token) : '';
+    return token ? decodeURIComponent(token) : ''
   }
 
     const register = async ({ setErrors, ...props }) => {
@@ -96,7 +96,14 @@ function getCsrfToken() {
     }
 
     const login = async ({ setErrors, setStatus, ...props }) => {
-        await csrf()
+        const csrfSuccess = await csrf()
+
+        if (!csrfSuccess) {
+            setStatus('Unable to establish a secure connection. CSRF token not received.')
+            return
+        }
+        
+        const csrfToken = getCsrfToken();
 
         setErrors([])
         setStatus(null)
@@ -104,7 +111,7 @@ function getCsrfToken() {
         axios
             .post('/login', props, {
                 withCredentials: true,
-                'X-XSRF-TOKEN': token ? decodeURIComponent(token) : '',
+                'X-XSRF-TOKEN': csrfToken,
             })
             .then(() => {
                 mutate()
