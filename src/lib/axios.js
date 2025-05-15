@@ -17,24 +17,24 @@ axios.interceptors.request.use(function (config) {
   let token = document.cookie
     .split('; ')
     .find(row => row.startsWith('XSRF-TOKEN='))
-    ?.split('=')[1];
+    ?.split('=')[1]
   
   // Fallback check for prefixed cookies (Laravel 12 may use these in some setups)
   if (!token) {
     token = document.cookie
       .split('; ')
       .find(row => row.startsWith('laravel_XSRF-TOKEN='))
-      ?.split('=')[1];
+      ?.split('=')[1]
   }
   
   if (token) {
     // Laravel 12 still accepts the token in the X-XSRF-TOKEN header
-    config.headers['X-XSRF-TOKEN'] = decodeURIComponent(token);
+    config.headers['X-XSRF-TOKEN'] = decodeURIComponent(token)
   }
   
-  return config;
+  return config
 }, function (error) {
-  return Promise.reject(error);
-});
+  return Promise.reject(error)
+})
 
 export default axios
