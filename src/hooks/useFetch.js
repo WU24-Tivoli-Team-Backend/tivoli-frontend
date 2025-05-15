@@ -17,6 +17,7 @@ export function useFetch(url, dependencies = []) {
       return
     }
 
+
     const controller = new AbortController()
     const { signal } = controller
     

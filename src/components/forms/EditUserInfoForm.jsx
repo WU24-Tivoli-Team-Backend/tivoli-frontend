@@ -17,7 +17,7 @@ export default function EditUserInfoForm() {
         axios
             .get('/api/user')
             .then(res => {
-                console.log(res);
+                console.log(res)
                 setForm({
                     image_url: res.data.image_url || '',
                     github: res.data.github || '',
@@ -40,10 +40,10 @@ export default function EditUserInfoForm() {
             const res = await axios.patch('/api/user', form, {
                 headers: { 'Content-Type': 'application/json' },
             })
-            console.log('Uppdaterad user:', res.data.data)
+            console.log('Updated User:', res.data.data)
             // Show success message
         } catch (err) {
-            console.error('Valideringsfel eller serverfel', err.response.data)
+            console.error('Validation or server err', err.response.data)
             // Show error message
         }
     }
