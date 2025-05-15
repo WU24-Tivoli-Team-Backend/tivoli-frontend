@@ -17,7 +17,7 @@ export default function AmusementForm({
         description: '',
         url: '',
         image_url: '',
-        // stamp_id: '',
+        stamp_id: '',
     })
 
     // Only fetch if we have an amusementId (editing mode)
@@ -44,6 +44,7 @@ export default function AmusementForm({
                 description: amusementData.description || '',
                 url: amusementData.url || '',
                 image_url: amusementData.image_url || '',
+                stamp_id: amusementData.stamp_id || ''
             })
         }
     }, [isEditMode, amusementData, amusementLoading])
@@ -90,11 +91,12 @@ export default function AmusementForm({
                     description: '',
                     url: '',
                     image_url: '',
-                    //   stamp_id: '',
+                    stamp_id: '',
                 })
+            
+                console.log('Calling onSuccess with created data')
+                onSuccess(res.data)
             }
-            console.log('Calling onSuccess with created data')
-            onSuccess(res.data)
 
             // Show success message
         } catch (err) {
@@ -213,20 +215,19 @@ export default function AmusementForm({
                 </p>
             )}
 
-            {/* <Input
-        name="stamp_id"
-        type="text"
-        label="Stamp ID"
-        placeholder="Stamp ID for amusement"
-        value={form.stamp_id}
-        onChange={handleChange}
-      /> 
-       {validationErrors.stamp_Id && validationErrors.stamp_id[0] && (
+            <Input
+                name="stamp_id"
+                type="text"
+                label="Stamp ID"
+                placeholder="Stamp ID for amusement"
+                value={form.stamp_id}
+                onChange={handleChange}
+            />
+            {validationErrors.stamp_Id && validationErrors.stamp_id[0] && (
                 <p className="text-red-500 text-sm mt-1">
                     {validationErrors.stamp_id[0]}
                 </p>
             )}
-      */}
 
             <Button type="submit" disabled={amusementLoading}>
                 {isEditMode ? 'Update Amusement' : 'Create Amusement'}
