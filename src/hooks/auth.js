@@ -105,6 +105,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             return
         }
 
+
         const csrfToken = getCsrfToken()
 
         setErrors([])
