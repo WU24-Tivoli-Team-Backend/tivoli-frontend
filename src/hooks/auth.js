@@ -57,28 +57,28 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     }
 
     // Helper function to extract CSRF token from cookies
-function getCsrfToken() {
-    // Function to get a specific cookie value by name
-    function getCookie(name) {
-      const value = `; ${document.cookie}`
-      const parts = value.split(`; ${name}=`)
-      if (parts.length === 2) {
-        return parts.pop().split(';').shift()
-      }
-      return null
+    function getCsrfToken() {
+        // Function to get a specific cookie value by name
+        function getCookie(name) {
+            const value = `; ${document.cookie}`
+            const parts = value.split(`; ${name}=`)
+            if (parts.length === 2) {
+                return parts.pop().split(';').shift()
+            }
+            return null
+        }
+
+        // Get the CSRF token - try both standard and Laravel prefixed names
+        let token = getCookie('XSRF-TOKEN')
+
+        // For Laravel 12, also check for prefixed cookies
+        if (!token) {
+            token = getCookie('laravel_XSRF-TOKEN')
+        }
+
+        // Decode URI components if token exists
+        return token ? decodeURIComponent(token) : ''
     }
-  
-    // Get the CSRF token - try both standard and Laravel prefixed names
-    let token = getCookie('XSRF-TOKEN')
-    
-    // For Laravel 12, also check for prefixed cookies
-    if (!token) {
-      token = getCookie('laravel_XSRF-TOKEN')
-    }
-    
-    // Decode URI components if token exists
-    return token ? decodeURIComponent(token) : ''
-  }
 
     const register = async ({ setErrors, ...props }) => {
         await csrf()
@@ -99,10 +99,13 @@ function getCsrfToken() {
         const csrfSuccess = await csrf()
 
         if (!csrfSuccess) {
-            setStatus('Unable to establish a secure connection. CSRF token not received.')
+            setStatus(
+                'Unable to establish a secure connection. CSRF token not received.',
+            )
             return
         }
-        
+
+
         const csrfToken = getCsrfToken()
 
         setErrors([])
@@ -197,14 +200,6 @@ function getCsrfToken() {
         if (middleware === 'guest' && redirectIfAuthenticated && user)
             router.push(redirectIfAuthenticated)
 
-        if (middleware === 'auth' && user && !user.email_verified_at)
-            router.push('/verify-email')
-
-        if (
-            window.location.pathname === '/verify-email' &&
-            user?.email_verified_at
-        )
-            router.push(redirectIfAuthenticated)
         if (middleware === 'auth' && error) logout()
     }, [user, error])
 
