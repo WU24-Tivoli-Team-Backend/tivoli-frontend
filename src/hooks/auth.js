@@ -23,62 +23,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             }),
     )
 
-    const csrf = async () => {
-        try {
-            // Make the request to get the CSRF cookie
-            const response = await axios.get('/sanctum/csrf-cookie')
-
-            // Check if we can get the CSRF token from the cookies
-            const csrfToken = getCsrfToken() // Using the function from my previous message
-
-            // Log the result
-            if (csrfToken) {
-                console.log(
-                    'CSRF token successfully retrieved:',
-                    csrfToken.substring(0, 10) + '...',
-                )
-                return true
-            } else {
-                console.warn(
-                    'CSRF endpoint accessed, but no CSRF token found in cookies',
-                )
-                console.log('All cookies:', document.cookie)
-
-                // Check response headers for Set-Cookie
-                console.log('Response status:', response.status)
-                console.log('Response headers:', response.headers)
-
-                return false
-            }
-        } catch (error) {
-            console.error('Error retrieving CSRF token:', error)
-            return false
-        }
-    }
-
-    // Helper function to extract CSRF token from cookies
-function getCsrfToken() {
-    // Function to get a specific cookie value by name
-    function getCookie(name) {
-      const value = `; ${document.cookie}`
-      const parts = value.split(`; ${name}=`)
-      if (parts.length === 2) {
-        return parts.pop().split(';').shift()
-      }
-      return null
-    }
-  
-    // Get the CSRF token - try both standard and Laravel prefixed names
-    let token = getCookie('XSRF-TOKEN')
-    
-    // For Laravel 12, also check for prefixed cookies
-    if (!token) {
-      token = getCookie('laravel_XSRF-TOKEN')
-    }
-    
-    // Decode URI components if token exists
-    return token ? decodeURIComponent(token) : ''
-  }
+    const csrf = () => axios.get('/sanctum/csrf-cookie')
 
     const register = async ({ setErrors, ...props }) => {
         await csrf()
@@ -96,14 +41,7 @@ function getCsrfToken() {
     }
 
     const login = async ({ setErrors, setStatus, ...props }) => {
-        const csrfSuccess = await csrf()
-
-        if (!csrfSuccess) {
-            setStatus('Unable to establish a secure connection. CSRF token not received.')
-            return
-        }
-        
-        const csrfToken = getCsrfToken()
+        await csrf()
 
         setErrors([])
         setStatus(null)
@@ -111,7 +49,6 @@ function getCsrfToken() {
         axios
             .post('/login', props, {
                 withCredentials: true,
-                'X-XSRF-TOKEN': csrfToken,
             })
             .then(() => {
                 mutate()
@@ -130,18 +67,9 @@ function getCsrfToken() {
                     })
             })
             .catch(error => {
-                if (error.response?.status === 422) {
-                    setErrors(error.response.data.errors)
-                } else if (error.response?.status === 419) {
-                    console.error(
-                        'CSRF token mismatch. Trying to refresh token...',
-                    )
-                    // Attempt to refresh CSRF token and try again
-                    csrf()
-                    setStatus('Please try again, refreshing security token...')
-                } else {
-                    console.error('Login error:', error)
-                }
+                if (error.response?.status !== 422) throw error
+
+                setErrors(error.response.data.errors)
             })
     }
 

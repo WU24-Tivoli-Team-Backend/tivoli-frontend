@@ -12,7 +12,6 @@ export default function UserProfile() {
     return (
         <>
             {userLoading && 'Loading...'}
-            {userError && 'Error'}
             {userData && (
                 <div>
                     <h2>{userData.name}</h2>
