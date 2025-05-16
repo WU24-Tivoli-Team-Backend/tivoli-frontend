@@ -1,7 +1,6 @@
 'use client'
 import { useFetch } from '@/hooks/useFetch'
 
-
 export default function UserProfile() {
     const apiUrl = '/api/user'
     const {

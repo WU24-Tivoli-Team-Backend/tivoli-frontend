@@ -1,5 +1,4 @@
 import Header from '@/app/(app)/Header'
-import AmusementForm from '@/components/amusement/AmusementForm'
 import AmusementList from '@/components/amusement/AmusementList'
 import EditUserInfoForm from '@/components/forms/EditUserInfoForm'
 import UserProfile from '@/components/profile-information/UserProfile'
