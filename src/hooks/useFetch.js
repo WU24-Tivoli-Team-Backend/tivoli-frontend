@@ -26,8 +26,7 @@ export function useFetch(url, dependencies = []) {
       const res = await axios.get(url, {
         signal,
         headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache'
+          'Cache-Control': 'no-store',
         }
       })
       setData(res.data)
