@@ -1,5 +1,4 @@
 import LoginLinks from '@/app/LoginLinks'
-import Button from '@/components/Button'
 import Image from 'next/image'
 
 export const metadata = {
