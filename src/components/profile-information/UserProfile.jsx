@@ -1,7 +1,9 @@
 'use client'
-import { useAuth } from '@/hooks/auth'
+
+import { useAuth } from "@/hooks/auth"
 
 export default function UserProfile() {
+
     const { user } = useAuth({ middleware: 'auth' })
     // const apiUrl = '/api/user'
     // const {
@@ -40,6 +42,7 @@ export default function UserProfile() {
                                 </li>
                             ))}
                     </ul>
+
                 </div>
             )}
         </>
