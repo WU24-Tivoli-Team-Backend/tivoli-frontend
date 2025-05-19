@@ -1,5 +1,7 @@
 'use client'
 import { useFetch } from '@/hooks/useFetch'
+import { useAuth } from '@/hooks/auth'
+import { redirect } from 'next/navigation'
 
 export default function UserProfile() {
     const apiUrl = '/api/user'
@@ -8,6 +10,13 @@ export default function UserProfile() {
         error: userError,
         loading: userLoading,
     } = useFetch(apiUrl)
+
+    //This will be added after May 26th:
+    // This redirects Rune to the dashboard
+    //     const { user } = useAuth({ middleware: 'auth' })
+    // if (user.group_id == 8) {
+    //     redirect('/groups')
+    // }
 
     return (
         <>
