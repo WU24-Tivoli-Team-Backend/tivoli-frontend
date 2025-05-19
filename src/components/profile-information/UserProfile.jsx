@@ -1,4 +1,5 @@
 'use client'
+
 import { useAuth } from "@/hooks/auth"
 
 export default function UserProfile() {
@@ -30,9 +31,18 @@ export default function UserProfile() {
                     <p>Group: {user.group_id}</p>
                     <p>Github: {user.github && user.github}</p>
                     <p>URL: {user.url && user.url}</p>
-                    <p>Stamps: {user.stamps && user.stamps.map((stamp) => {
-                        <p>{ stamp }</p>
-                    })}</p>
+                    <p>Stamps:</p>
+                    <ul>
+                        {user.stamps &&
+                            user.stamps.map(stamp => (
+                                <li key={stamp.id}>
+                                    {stamp.premium_attribute
+                                        ? `${stamp.premium_attribute} ${stamp.animal}`
+                                        : stamp.animal}
+                                </li>
+                            ))}
+                    </ul>
+
                 </div>
             )}
         </>
