@@ -1,7 +1,11 @@
 'use client'
 import { useFetch } from '@/hooks/useFetch'
+import { useState } from 'react'
+import GameIframe from '../GameIframe'
 
 export default function GroupData() {
+    const [openAmusement, setOpenAmusement] = useState(null)
+
     const groupsApiUrl = '/api/groups'
     const usersApiUrl = '/api/users'
     const amusementsApiUrl = '/api/amusements'
@@ -62,11 +66,21 @@ export default function GroupData() {
                                         amusement =>
                                             amusement.group_id === group.uuid,
                                     )
-                                    .map((amusement, amusementIndex) => (
+                                    .map(amusement => (
                                         <li
-                                            key={amusementIndex}
+                                            key={amusement.id}
                                             style={{ listStyleType: 'none' }}>
-                                            <p>{amusement.name}</p>
+                                            <button
+                                                onClick={() =>
+                                                    setOpenAmusement(
+                                                        openAmusement ===
+                                                            amusement.id
+                                                            ? null
+                                                            : amusement.id,
+                                                    )
+                                                }>
+                                                {amusement.name}
+                                            </button>
                                             <p>Type: {amusement.type}</p>
                                             <p>URL: {amusement.url}</p>
                                             <p>
@@ -74,6 +88,11 @@ export default function GroupData() {
                                                 {amusement.description}
                                             </p>
                                             <p>Image: {amusement.image}</p>
+                                            {openAmusement === amusement.id && (
+                                                <GameIframe
+                                                    url={amusement.url}
+                                                />
+                                            )}
                                             <br />
                                         </li>
                                     ))}
