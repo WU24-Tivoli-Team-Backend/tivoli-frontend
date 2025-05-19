@@ -1,8 +1,9 @@
 import Image from 'next/image'
+import ProfileCard from './ProfileCard'
 
-export default function GroupCard({ groupData, userData, amusementData }) {
+export default function GroupCard({ group, members, amusements = [] }) {
     return (
-        <div className="w-full bg-white m-4 shadow-md rounded-lg overflow-hidden">
+        <div className="bg-white m-4 shadow-md rounded-lg overflow-hidden">
             {/* Bild */}
             <div className="">
                 {/* <Image
@@ -15,17 +16,34 @@ export default function GroupCard({ groupData, userData, amusementData }) {
                     Placeholder for image
                 </div>
                 {/* Accordion */}
-                <div>
-                    <details className="accordion group p-4">
-                        <summary className="accordion-header flex justify-between items-center gap-2 cursor-pointer">
+                <div className="">
+                    <details className="accordion group p-4 w-full">
+                        <summary className="w-full accordion-header flex justify-between items-center gap-2 cursor-pointer p-4">
                             <h2 className="text-lg font-semibold text-gray-800">
-                                Group {}
+                                {group.name ?? `Group ${group.uuid}`}
                             </h2>
                             <span className="inline-block w-4 h-4 text-gray-500 transition-transform group-open:rotate-90">
                                 ▶
                             </span>
                         </summary>
-                        <div className="accordion-content p-4"></div>
+                        <div className="accordion-content p-4">
+                            {members.length > 0 ? (
+                                members.map(user => (
+                                    <ProfileCard key={user.id} user={user} />
+                                ))
+                            ) : (
+                                <p className="text-sm text-gray-500">
+                                    No members registered for this group.
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Amusements */}
+                        <div className="mt-4">
+                            <h4 className="font-medium text-gray-700 mb-2">
+                                Amusements will be shown here
+                            </h4>
+                        </div>
                     </details>
                 </div>
             </div>
