@@ -94,8 +94,6 @@ const GameIframe = ({
     }, [currentScreenSize, onScreenSizeChange])
 
       const [jwtToken, setJwtToken] = useState(null)
-    const [currentDevice, setCurrentDevice] = useState('Detecting...')
-
 
         useEffect(() => {
         const token = localStorage.getItem('jwt')
