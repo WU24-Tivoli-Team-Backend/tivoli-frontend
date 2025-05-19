@@ -73,8 +73,17 @@ export default function AmusementList() {
                                     <h3 className="font-bold text-lg">
                                         {amusement.name}
                                     </h3>
+                                     <p className="text-gray-600">
+                                        Type: {amusement.type}
+                                    </p>
                                     <p className="text-gray-600">
-                                        {amusement.description}
+                                        Description: {amusement.description}
+                                    </p>
+                                     <p className="text-gray-600">
+                                        Amusement id: {amusement.id}
+                                    </p>
+                                     <p className="text-gray-600">
+                                        Stamp id: {amusement.stamp_id}
                                     </p>
                                     {amusement.url && (
                                         <Link
