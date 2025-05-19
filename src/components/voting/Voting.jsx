@@ -2,18 +2,28 @@
 import React, { useState } from 'react'
 import { useFetch } from '@/hooks/useFetch'
 import axios from '@/lib/axios'
-import { useAuth } from '@/hooks/auth' // För att hämta användarens data
+import { useAuth } from '@/hooks/auth'
 
 export default function Voting() {
-    const { user } = useAuth() // Hämta den inloggade användaren
+    const { user } = useAuth()
+    const {
+        data: voteData,
+        error: voteError,
+        loading: voteLoading,
+        mutate: mutateVotes,
+        refetch: refetchVotes,
+    } = useFetch('/api/votes')
+
     const {
         data: amusements,
-        error,
-        loading,
-        mutate,
-    } = useFetch('/api/amusements') // Hämta amusements från backend
+        error: amusementError,
+        loading: amusementLoading,
+        mutate: mutateAmusements,
+    } = useFetch('/api/amusements')
+
     const [message, setMessage] = useState('')
     const [loadingVote, setLoadingVote] = useState(false)
+    const [votingForId, setVotingForId] = useState(null)
 
     const submitVote = async amusementId => {
         if (!user) {
@@ -22,19 +32,19 @@ export default function Voting() {
         }
 
         setLoadingVote(true)
+        setVotingForId(amusementId)
         setMessage('')
-
-        console.log('Submitting vote for amusement ID:', amusementId)
 
         try {
             const response = await axios.post('/api/votes', {
                 amusement_id: amusementId,
-                user_id: user.id, // Skicka användarens ID
+                user_id: user.id,
             })
 
             if (response.status === 201) {
                 setMessage('Vote submitted successfully!')
-                mutate() // Uppdatera amusements efter framgångsrik röstning
+
+                await Promise.all([mutateVotes(), mutateAmusements()])
             }
         } catch (error) {
             console.error(
@@ -44,27 +54,63 @@ export default function Voting() {
             setMessage(error.response?.data?.message || 'Failed to submit vote')
         } finally {
             setLoadingVote(false)
+            setVotingForId(null)
+            refetchVotes()
         }
     }
 
-    if (loading) return <p>Loading...</p>
-    if (error) return <p>Error: {error.message}</p>
+    // Combine amusements with vote counts
+    const processedAmusements = React.useMemo(() => {
+        if (!amusements?.data || !voteData) return []
+
+        return amusements.data.map(amusement => {
+            // Find vote count for this amusement from the vote data
+            const voteInfo = voteData.find(
+                v => v.amusement === amusement.name,
+            ) || { votes: 0 }
+
+            return {
+                ...amusement,
+                votes: voteInfo.votes || 0,
+            }
+        })
+    }, [amusements, voteData])
+
+    if (voteLoading || amusementLoading) return <p>Loading...</p>
+    if (voteError || amusementError)
+        return <p>Error: {(voteError || amusementError).message}</p>
 
     return (
-        <div>
-            <h1>Vote Counts</h1>
-            {message && <p className="text-green-500">{message}</p>}
-            <ul>
-                {Array.isArray(amusements?.data) &&
-                    amusements.data.map((amusement, index) => (
-                        <li key={index}>
-                            <p>Amusement: {amusement.name}</p>
-                            <p>Votes: {amusement.votes}</p>
+        <div className="max-w-2xl mx-auto p-4">
+            <h1 className="text-2xl font-bold mb-4">
+                Vote for Your Favorite Amusement
+            </h1>
+            {message && (
+                <div className="p-3 mb-4 bg-green-100 text-green-800 rounded">
+                    {message}
+                </div>
+            )}
+            <ul className="space-y-4">
+                {Array.isArray(processedAmusements) &&
+                    processedAmusements.map(amusement => (
+                        <li
+                            key={amusement.id}
+                            className="p-4 border rounded shadow-sm flex justify-between items-center">
+                            <div>
+                                <p className="font-semibold">
+                                    {amusement.name}
+                                </p>
+                                <p className="text-gray-600">
+                                    Votes: {amusement.votes}
+                                </p>
+                            </div>
                             <button
                                 onClick={() => submitVote(amusement.id)}
                                 disabled={loadingVote}
                                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400">
-                                {loadingVote ? 'Submitting...' : 'Vote'}
+                                {votingForId === amusement.id
+                                    ? 'Submitting...'
+                                    : 'Vote'}
                             </button>
                         </li>
                     ))}
