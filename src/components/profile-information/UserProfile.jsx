@@ -1,26 +1,38 @@
 'use client'
-import { useFetch } from '@/hooks/useFetch'
+import { useAuth } from "@/hooks/auth"
 
 export default function UserProfile() {
-    const apiUrl = '/api/user'
-    const {
-        data: userData,
-        error: userError,
-        loading: userLoading,
-    } = useFetch(apiUrl)
+
+    const { user } = useAuth({ middleware: 'auth' })
+    // const apiUrl = '/api/user'
+    // const {
+    //     data: userData,
+    //     error: userError,
+    //     loading: userLoading,
+    // } = useFetch(apiUrl)
+
+    //This will be added after May 26th:
+    // This redirects Rune to the dashboard
+    //     const { user } = useAuth({ middleware: 'auth' })
+    // if (user.group_id == 8) {
+    //     redirect('/groups')
+    // }
 
     return (
         <>
-            {userLoading && 'Loading...'}
-            {userError && 'Error'}
-            {userData && (
+            {/* {userLoading && 'Loading...'}
+            {userError && 'Error'} */}
+            {user && (
                 <div>
-                    <h2>{userData.name}</h2>
-                    <p>{userData.email}</p>
-                    <p>Balance: €{userData.balance}</p>
-                    <p>Group: {userData.group_id}</p>
-                    <p>{userData.github && userData.github}</p>
-                    <p>{userData.url && userData.url}</p>
+                    <h2>{user.name}</h2>
+                    <p>{user.email}</p>
+                    <p>Balance: €{user.balance}</p>
+                    <p>Group: {user.group_id}</p>
+                    <p>Github: {user.github && user.github}</p>
+                    <p>URL: {user.url && user.url}</p>
+                    <p>Stamps: {user.stamps && user.stamps.map((stamp) => {
+                        <p>{ stamp }</p>
+                    })}</p>
                 </div>
             )}
         </>

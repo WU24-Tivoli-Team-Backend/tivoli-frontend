@@ -2,6 +2,8 @@ import Header from '@/app/(app)/Header'
 import AmusementList from '@/components/amusement/AmusementList'
 import EditUserInfoForm from '@/components/forms/EditUserInfoForm'
 import UserProfile from '@/components/profile-information/UserProfile'
+// import { useAuth } from '@/hooks/auth'
+// import { redirect } from 'next/navigation'
 export const metadata = {
     title: 'Laravel - Dashboard',
 }
