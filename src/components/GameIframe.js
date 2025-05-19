@@ -42,7 +42,7 @@ const GameIframe = ({
     className = '',
     allowFullscreen = true,
     onScreenSizeChange = null,
-    jwt = null, // Add JWT token prop
+    //jwt = null, // Add JWT token prop
     onGameReady = null,
     onTokenSent = null,
 }) => {
@@ -93,9 +93,12 @@ const GameIframe = ({
         }
     }, [currentScreenSize, onScreenSizeChange])
 
-      const [jwtToken, setJwtToken] = useState(null)
 
-        useEffect(() => {
+    const [jwtToken, setJwtToken] = useState(null)
+
+    useEffect(() => {
+
+
         const token = localStorage.getItem('jwt')
         if (token) setJwtToken(token)
     }, [])
@@ -111,7 +114,8 @@ const GameIframe = ({
             data-screen-size={currentScreenSize}>
             <JwtMessageBridge
                 url={url}
-                    jwt={jwtToken}
+
+                jwt={jwtToken}
                 onGameReady={onGameReady}
                 onTokenSent={onTokenSent}>
                 <iframe
