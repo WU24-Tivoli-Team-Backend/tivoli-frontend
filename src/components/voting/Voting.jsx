@@ -92,28 +92,41 @@ export default function Voting() {
             )}
             <ul className="space-y-4">
                 {Array.isArray(processedAmusements) &&
-                    processedAmusements.map(amusement => (
-                        <li
-                            key={amusement.id}
-                            className="p-4 border rounded shadow-sm flex justify-between items-center">
-                            <div>
-                                <p className="font-semibold">
-                                    {amusement.name}
-                                </p>
-                                <p className="text-gray-600">
-                                    Votes: {amusement.votes}
-                                </p>
-                            </div>
-                            <button
-                                onClick={() => submitVote(amusement.id)}
-                                disabled={loadingVote}
-                                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400">
-                                {votingForId === amusement.id
-                                    ? 'Submitting...'
-                                    : 'Vote'}
-                            </button>
-                        </li>
-                    ))}
+                    processedAmusements.map(amusement => {
+                        const isOwner =
+                            !!user && amusement.group_id === user.group_id
+                        return (
+                            <li
+                                key={amusement.id}
+                                className="p-4 border rounded shadow-sm flex justify-between items-center">
+                                <div>
+                                    <p className="font-semibold">
+                                        {amusement.name}
+                                    </p>
+                                    <p className="text-gray-600">
+                                        Votes: {amusement.votes}
+                                    </p>
+                                    {isOwner && (
+                                        <p className="text-xs text-red-500">
+                                            You own this amusement
+                                        </p>
+                                    )}
+                                </div>
+                                <button
+                                    onClick={() => submitVote(amusement.id)}
+                                    disabled={loadingVote || isOwner}
+                                    className={`px-4 py-2 rounded text-white ${
+                                        isOwner
+                                            ? 'bg-gray-400 cursor-not-allowed'
+                                            : 'bg-blue-500 hover:bg-blue-600'
+                                    }`}>
+                                    {votingForId === amusement.id
+                                        ? 'Submitting...'
+                                        : 'Vote'}
+                                </button>
+                            </li>
+                        )
+                    })}
             </ul>
         </div>
     )
