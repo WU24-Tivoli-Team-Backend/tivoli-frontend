@@ -88,7 +88,8 @@ export default function AmusementList() {
                                     <h3 className="font-bold text-lg">
                                         {amusement.name}
                                     </h3>
-                                    <Image src="/Red_panda.png" width={200} height={200} alt={amusement.name} />
+                                    {!amusement.image_url && <Image src="/Red_panda.png" width={200} height={200} alt={amusement.name} />}
+                                    {amusement.image_url && <Image src={amusement.image_url} width={200} height={200} alt={amusement.name} />}
                                     <p className="text-gray-600">
                                         Type: {amusement.type}
                                     </p>
