@@ -3,13 +3,13 @@ import { useState, useEffect } from 'react'
 import axios from '@/lib/axios'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
+import Label from '../Label'
 
 export default function EditUserInfoForm() {
     const [form, setForm] = useState({
         image_url: '',
         github: '',
         url: '',
-        // group_id: '',
     })
     const [loading, setLoading] = useState(true)
 
@@ -22,7 +22,6 @@ export default function EditUserInfoForm() {
                     image_url: res.data.image_url || '',
                     github: res.data.github || '',
                     url: res.data.url || '',
-                    //   group_id:  res.data.data.group_id?.toString() || '',
                 })
             })
             .catch(console.error)
@@ -54,6 +53,7 @@ export default function EditUserInfoForm() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <h2 className="text-2xl font-bold">Edit User Info</h2>
             <p className="text-gray-500">You can edit your information here.</p>
+            <Label>Image url</Label>
             <Input
                 name="image_url"
                 type="text"
@@ -62,6 +62,7 @@ export default function EditUserInfoForm() {
                 value={form.image_url}
                 onChange={handleChange}
             />
+            <Label>Github url</Label>
             <Input
                 name="github"
                 type="text"
@@ -70,6 +71,7 @@ export default function EditUserInfoForm() {
                 value={form.github}
                 onChange={handleChange}
             />
+            <Label>Porfolio URL</Label>
             <Input
                 name="url"
                 type="text"
