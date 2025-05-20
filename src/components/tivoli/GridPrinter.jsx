@@ -61,41 +61,44 @@ const GridPrinter = ({
         }
     }
 
-    const renderGrid = () => {
-        const grid = []
 
-        for (let y = 0; y < rows; y++) {
-            const row = []
+    // const renderGrid = () => {
+    //     const grid = []
 
-            for (let x = 0; x < cols; x++) {
-                const key = `${x}-${y}`
-                const isActive = x === activeCell.x && y === activeCell.y
-                const hasContent = cellsWithContent[key] !== undefined
-                const content = hasContent ? cellsWithContent[key] : null
+    //     for (let y = 0; y < rows; y++) {
+    //         const row = []
 
-                row.push(
-                    <div key={key} className="relative">
-                        <GridCell
-                            x={x}
-                            y={y}
-                            isActive={isActive}
-                            hasContent={hasContent}
-                            content={content}
-                            onClick={handleCellClick}
-                        />
-                    </div>,
-                )
-            }
+    //         for (let x = 0; x < cols; x++) {
+    //             const key = `${x}-${y}`
+    //             const isActive = x === activeCell.x && y === activeCell.y
+    //             const hasContent = cellsWithContent[key] !== undefined
+    //             const content = hasContent ? cellsWithContent[key] : null
 
-            grid.push(
-                <div key={`row-${y}`} className="grid-row flex">
-                    {row}
-                </div>,
-            )
-        }
+    //             row.push(
+    //                 <div key={key} className="relative">
+    //                     <GridCell
+    //                         x={x}
+    //                         y={y}
+    //                         isActive={isActive}
+    //                         hasContent={hasContent}
+    //                         content={content}
+    //                         onClick={handleCellClick}
+    //                     />
+    //                 </div>,
+    //             )
+    //         }
 
-        return grid
-    }
+    //         grid.push(
+    //             <div key={`row-${y}`} className="grid-row flex">
+    //                 {row}
+    //             </div>,
+    //         )
+    //     }
+
+    //     return grid
+    // }
+
+   
 
     return (
         <div className="grid-container relative">

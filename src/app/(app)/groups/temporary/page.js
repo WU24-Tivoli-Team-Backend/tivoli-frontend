@@ -1,4 +1,3 @@
-import GroupList from '@/components/group-information/GroupList'
 import GroupData from '@/components/group-information/GroupData'
 
 export default function Groups() {
