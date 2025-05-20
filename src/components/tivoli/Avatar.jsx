@@ -16,10 +16,8 @@ import React, { useEffect, useRef } from 'react'
 const Avatar = ({ x, y, onArrival, imageUrl = '/avatar-placeholder.png' }) => {
     const avatarRef = useRef(null)
 
-    // When position changes, trigger animation and onArrival callback
     useEffect(() => {
         if (onArrival) {
-            // Add a slight delay to allow for animation
             const timer = setTimeout(() => {
                 onArrival({ x, y })
             }, 300) // Match this with your transition duration
