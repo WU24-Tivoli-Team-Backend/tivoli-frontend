@@ -30,7 +30,8 @@ export default function AmusementForm({
         data: amusementData,
         error: amusementError,
         loading: amusementLoading,
-    } = useFetch(amusementUrl || '/api/dummy-endpoint')
+        refetch: refetchAmusement,
+    } = useFetch(amusementUrl)
 
     const [error, setError] = useState()
     const [successMessage, setSuccessMessage] = useState()
@@ -73,7 +74,7 @@ export default function AmusementForm({
                     headers: { 'Content-Type': 'application/json' },
                 })
                 setSuccessMessage('Amusement updated successfully!')
-                onSuccess(res.data)
+                onSuccess && onSuccess(res.data, 'update')
             } else {
                 // Create new amusement
                 console.log('About to send POST request to /api/amusements')
@@ -88,7 +89,7 @@ export default function AmusementForm({
                 setSuccessMessage('Amusement created successfully!')
 
                 console.log('Calling onSuccess with created data')
-                onSuccess(res.data)
+                onSuccess(res.data, 'create') 
             }
             setForm({
                 name: '',
@@ -114,6 +115,34 @@ export default function AmusementForm({
                 }
             }
             // Show error message
+        }
+    }
+
+    async function handleDelete(e) {
+        e.preventDefault()
+        const confirmed = window.confirm(
+            'Are you sure you want to delete this entry?',
+        )
+
+        if (confirmed) {
+            try {
+                const res = await axios.request({
+                    method: 'delete',
+                    url: `/api/amusements/${amusementId}`,
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true,
+                })
+                setSuccessMessage('Amusement deleted successfully')
+                onSuccess(null, 'delete')
+            } catch (err) {
+                 setError(err.response?.data?.message || 'Error deleting amusement')
+            } finally {
+                refetchAmusement()
+              
+            }
+        } else {
+            // User clicked "Cancel" - do nothing or handle cancellation
+            return // This exits the function
         }
     }
 
@@ -220,15 +249,7 @@ export default function AmusementForm({
                     {validationErrors.image_url[0]}
                 </p>
             )}
-            <Label>Stamp ID</Label>
-            {/* <Input
-                name="stamp_id"
-                type="text"
-                label="Stamp ID"
-                placeholder="Stamp ID for amusement"
-                value={form.stamp_id}
-                onChange={handleChange}
-            /> */}
+            <Label>Stamp</Label>
             <Select
                 id="stamp_id"
                 name="stamp_id"
@@ -269,6 +290,7 @@ export default function AmusementForm({
             <Button type="submit" disabled={amusementLoading}>
                 {isEditMode ? 'Update Amusement' : 'Create Amusement'}
             </Button>
+            { isEditMode && <Button type="button" onClick={handleDelete}>Delete Amusement</Button>}
         </form>
     )
 }

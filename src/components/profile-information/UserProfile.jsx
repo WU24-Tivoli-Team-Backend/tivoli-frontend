@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from "@/hooks/auth"
+import Image from "next/image"
 
 export default function UserProfile() {
 
@@ -18,6 +19,7 @@ export default function UserProfile() {
             {user && (
                 <div>
                     <h2>{user.name}</h2>
+                    <Image src="/Red_panda.png" width={200} height={200} alt={`image of ${user.name}`} />
                     <p>{user.email}</p>
                     <p>Balance: €{user.balance}</p>
                     <p>Group: {user.group_id}</p>
