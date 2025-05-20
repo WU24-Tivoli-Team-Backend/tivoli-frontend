@@ -1,9 +1,7 @@
 'use client'
 
-import Link from 'next/link'
 import { useAuth } from '@/hooks/auth'
 import NavLink from '@/components/NavLink'
-import Navigation from './(app)/Navigation'
 
 const LoginLinks = () => {
     const { user } = useAuth({ middleware: 'guest' })
