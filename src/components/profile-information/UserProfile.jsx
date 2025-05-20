@@ -5,12 +5,6 @@ import { useAuth } from "@/hooks/auth"
 export default function UserProfile() {
 
     const { user } = useAuth({ middleware: 'auth' })
-    // const apiUrl = '/api/user'
-    // const {
-    //     data: userData,
-    //     error: userError,
-    //     loading: userLoading,
-    // } = useFetch(apiUrl)
 
     //This will be added after May 26th:
     // This redirects Rune to the dashboard
