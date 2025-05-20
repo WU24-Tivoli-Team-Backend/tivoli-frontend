@@ -2,10 +2,11 @@
 import axios from '@/lib/axios'
 import Input from '../Input'
 import { useFetch } from '@/hooks/useFetch'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Button from '../Button'
 import Select from '../Select'
 import Label from '../Label'
+import handleUploadChange from '@/lib/handeFileUpload'
 
 export default function AmusementForm({
     amusementId,
@@ -36,6 +37,7 @@ export default function AmusementForm({
     const [error, setError] = useState()
     const [successMessage, setSuccessMessage] = useState()
     const [validationErrors, setValidationErrors] = useState({})
+    const imageRef = useRef()
 
     // Only update form with existing data if in edit mode and data is loaded
     useEffect(() => {
@@ -64,13 +66,31 @@ export default function AmusementForm({
         setError(null)
         setValidationErrors({})
         try {
+            let updatedForm = { ...form }
+
+            const file = imageRef.current?.files?.[0]
+            if (file) {
+                // Upload the file and get the path
+                const imagePath = await handleUploadChange(file)
+                console.log('Image uploaded to:', imagePath)
+
+                // Update our local copy of the form data
+                updatedForm = {
+                    ...updatedForm,
+                    image_url: imagePath,
+                }
+
+                // Also update the React state (but don't wait for it)
+                setForm(updatedForm)
+            }
+
             await axios.get('/sanctum/csrf-cookie')
             console.log('CSRF cookie obtained')
             let res
 
             if (isEditMode) {
                 // Update existing amusement
-                res = await axios.put(`/api/amusements/${amusementId}`, form, {
+                res = await axios.put(`/api/amusements/${amusementId}`, updatedForm, {
                     headers: { 'Content-Type': 'application/json' },
                 })
                 setSuccessMessage('Amusement updated successfully!')
@@ -81,7 +101,7 @@ export default function AmusementForm({
                 const res = await axios.request({
                     method: 'post',
                     url: '/api/amusements',
-                    data: form,
+                    data: updatedForm,
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true,
                 })
@@ -89,7 +109,7 @@ export default function AmusementForm({
                 setSuccessMessage('Amusement created successfully!')
 
                 console.log('Calling onSuccess with created data')
-                onSuccess(res.data, 'create') 
+                onSuccess(res.data, 'create')
             }
             setForm({
                 name: '',
@@ -135,10 +155,11 @@ export default function AmusementForm({
                 setSuccessMessage('Amusement deleted successfully')
                 onSuccess(null, 'delete')
             } catch (err) {
-                 setError(err.response?.data?.message || 'Error deleting amusement')
+                setError(
+                    err.response?.data?.message || 'Error deleting amusement',
+                )
             } finally {
                 refetchAmusement()
-              
             }
         } else {
             // User clicked "Cancel" - do nothing or handle cancellation
@@ -238,11 +259,10 @@ export default function AmusementForm({
             <Label>Image</Label>
             <Input
                 name="image_url"
-                type="text"
-                label="Image URL"
-                placeholder="Image URL for amusement"
-                value={form.image_url}
-                onChange={handleChange}
+                type="file"
+                label="Link to your profile image"
+                placeholder="Image URL"
+                ref={imageRef}
             />
             {validationErrors.image_url && validationErrors.image_url[0] && (
                 <p className="text-red-500 text-sm mt-1">
@@ -290,7 +310,11 @@ export default function AmusementForm({
             <Button type="submit" disabled={amusementLoading}>
                 {isEditMode ? 'Update Amusement' : 'Create Amusement'}
             </Button>
-            { isEditMode && <Button type="button" onClick={handleDelete}>Delete Amusement</Button>}
+            {isEditMode && (
+                <Button type="button" onClick={handleDelete}>
+                    Delete Amusement
+                </Button>
+            )}
         </form>
     )
 }
