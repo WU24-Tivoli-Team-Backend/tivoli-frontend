@@ -38,10 +38,29 @@ export default function EditUserInfoForm() {
 
     const handleSubmit = async e => {
         e.preventDefault()
-        const file = e.target.files[0]
-        await handleUploadChange(file)
+        // console.log(form['image_url']);
+        // const file = form['image_url']
+
         try {
-            const res = await axios.patch('/api/user', form, {
+            // Start with the current form state
+            let updatedForm = { ...form }
+
+            const file = imageRef.current?.files?.[0]
+            if (file) {
+                // Upload the file and get the path
+                const imagePath = await handleUploadChange(file)
+                console.log('Image uploaded to:', imagePath)
+
+                // Update our local copy of the form data
+                updatedForm = {
+                    ...updatedForm,
+                    image_url: imagePath,
+                }
+
+                // Also update the React state (but don't wait for it)
+                setForm(updatedForm)
+            }
+            const res = await axios.patch('/api/user', updatedForm, {
                 headers: { 'Content-Type': 'application/json' },
             })
             console.log('Updated User:', res.data.data)
@@ -65,7 +84,6 @@ export default function EditUserInfoForm() {
                 label="Link to your profile image"
                 placeholder="Image URL"
                 ref={imageRef}
-                // onChange={handleUploadChange}
             />
             <Label>Github url</Label>
             <Input
