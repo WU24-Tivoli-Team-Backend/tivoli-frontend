@@ -1,9 +1,10 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import axios from '@/lib/axios'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
 import Label from '../Label'
+import handleUploadChange from '@/lib/handeFileUpload'
 
 export default function EditUserInfoForm() {
     const [form, setForm] = useState({
@@ -12,6 +13,8 @@ export default function EditUserInfoForm() {
         url: '',
     })
     const [loading, setLoading] = useState(true)
+
+    const imageRef = useRef()
 
     useEffect(() => {
         axios
@@ -35,6 +38,8 @@ export default function EditUserInfoForm() {
 
     const handleSubmit = async e => {
         e.preventDefault()
+        const file = e.target.files[0]
+        await handleUploadChange(file)
         try {
             const res = await axios.patch('/api/user', form, {
                 headers: { 'Content-Type': 'application/json' },
@@ -56,11 +61,11 @@ export default function EditUserInfoForm() {
             <Label>Image url</Label>
             <Input
                 name="image_url"
-                type="text"
+                type="file"
                 label="Link to your profile image"
                 placeholder="Image URL"
-                value={form.image_url}
-                onChange={handleChange}
+                ref={imageRef}
+                // onChange={handleUploadChange}
             />
             <Label>Github url</Label>
             <Input
