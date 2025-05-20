@@ -4,67 +4,71 @@ import { useState } from 'react'
 import Image from 'next/image'
 
 export default function AmusementCard({ amusement }) {
-    // Now we only need mode 0 and 2 (simplified from 3 modes to 2)
     const [expanded, setExpanded] = useState(false)
-
-    // Toggle between compact (0) and expanded (2) modes on click
     const handleClick = () => setExpanded(prev => !prev)
 
-    // Base classes for all states
+    // Base classes
     const baseClasses =
         'cursor-pointer overflow-hidden rounded-lg shadow-md transition-all duration-300'
 
-    // Size classes - now just compact or expanded
-    const sizeClasses = expanded ? 'w-full' : 'w-full h-32'
-
     return (
         <div
-            className={`${baseClasses} ${sizeClasses} group/card`}
+            className={`${baseClasses} w-full group/card ${expanded ? '' : 'h-32'}`}
             onClick={handleClick}>
-            <div
-                className="relative w-full"
-                style={expanded ? { paddingTop: '56.25%' } : { height: '100%' }}>
-                {/* Name overlay - shows on hover or when expanded */}
-                <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/70 to-transparent p-4 opacity-0 group-hover/card:opacity-100 transition-opacity">
-                    <h3 className="text-lg font-medium text-white">
-                        {amusement.name}
-                    </h3>
-                </div>
+            {!expanded ? (
+                // Compact view (shows image with hover effects)
+                <div className="relative h-full w-full">
+                    {/* Hover overlays with proper group targeting */}
+                    <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/70 to-transparent p-4 opacity-0 group-hover/card:opacity-100 transition-opacity">
+                        <h3 className="text-lg font-medium text-white">
+                            {amusement.name}
+                        </h3>
+                    </div>
 
-                <Image
-                    src="/Red_panda.png"
-                    alt={amusement.name}
-                    fill
-                    className={`object-cover ${expanded ? 'brightness-150' : ''}`}
-                />
+                    <Image
+                        src="/Red_panda.png"
+                        alt={amusement.name}
+                        fill
+                        className="object-cover"
+                    />
 
-                {/* Type overlay - shows on hover or when expanded */}
-                <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-4 opacity-0 group-hover/card:opacity-100 transition-opacity">
-                    <p className="text-sm text-white uppercase">
-                        {amusement.type}
-                    </p>
-                </div>
-
-                {/* Expanded overlay - only shows when in expanded mode */}
-                {expanded && (
-                    <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-between p-6 text-white">
-                        <div>
-                            <h3 className="text-2xl font-semibold">
-                                {amusement.name}
-                            </h3>
-                            <p className="uppercase text-sm mt-1">
-                                {amusement.type}
-                            </p>
-                        </div>
-                        <p className="flex-1 mt-4 overflow-auto text-base">
-                            {amusement.description}
+                    <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-4 opacity-0 group-hover/card:opacity-100 transition-opacity">
+                        <p className="text-sm text-white uppercase">
+                            {amusement.type}
                         </p>
-                        <button className="mt-6 w-full py-2 bg-white text-black font-medium rounded-md">
+                    </div>
+                </div>
+            ) : (
+                // Expanded view
+                <div className="w-full flex flex-col bg-black text-white">
+                    {/* Image at the top */}
+                    <div className="relative w-full h-48">
+                        <Image
+                            src="/Red_panda.png"
+                            alt={amusement.name}
+                            fill
+                            className="object-cover brightness-75"
+                        />
+                    </div>
+
+                    {/* Content below image */}
+                    <div className="p-6 flex flex-col">
+                        <h3 className="text-2xl font-semibold mb-1">
+                            {amusement.name}
+                        </h3>
+                        <p className="uppercase text-sm">{amusement.type}</p>
+
+                        <p className="my-4">
+                            {amusement.description ||
+                                'No description available'}
+                        </p>
+
+                        <button className="w-full py-2 bg-white text-black font-medium rounded-md mt-4">
                             Play Now
                         </button>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     )
 }
