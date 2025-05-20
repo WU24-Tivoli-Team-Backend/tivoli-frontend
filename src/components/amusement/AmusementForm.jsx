@@ -157,7 +157,7 @@ export default function AmusementForm({
                     {validationErrors.name[0]}
                 </p>
             )}
-        <Label>Type of amusement</Label>
+            <Label>Type of amusement</Label>
             <Select
                 id="type"
                 name="type"
@@ -221,13 +221,44 @@ export default function AmusementForm({
                 </p>
             )}
             <Label>Stamp ID</Label>
-            <Input
+            {/* <Input
                 name="stamp_id"
                 type="text"
                 label="Stamp ID"
                 placeholder="Stamp ID for amusement"
                 value={form.stamp_id}
                 onChange={handleChange}
+            /> */}
+            <Select
+                id="stamp_id"
+                name="stamp_id"
+                className="block w-full mt-1"
+                value={form.stamp_id}
+                onChange={handleChange}
+                required
+                options={[
+                    { value: '', label: 'Choose your stamp' },
+                    { value: '1', label: 'Panda' },
+                    { value: '6', label: 'Silver panda' },
+                    { value: '7', label: 'Gold panda' },
+                    { value: '8', label: 'Platinum panda' },
+                    { value: '2', label: 'Orca' },
+                    { value: '9', label: 'Silver Orca' },
+                    { value: '10', label: 'Gold Orca' },
+                    { value: '11', label: 'Platinum Orca' },
+                    { value: '3', label: 'Raven' },
+                    { value: '12', label: 'Silver Raven' },
+                    { value: '13', label: 'Gold Raven' },
+                    { value: '14', label: 'Platinum Raven' },
+                    { value: '4', label: 'Blobfish' },
+                    { value: '15', label: 'Silver Blobfish' },
+                    { value: '16', label: 'Gold Blobfish' },
+                    { value: '17', label: 'Platinum Blobfish' },
+                    { value: '5', label: 'Pallas cat' },
+                    { value: '18', label: 'Silver Pallas cat' },
+                    { value: '19', label: 'Gold Pallas cat' },
+                    { value: '20', label: 'Platinum Pallas cat' },
+                ]}
             />
             {validationErrors.stamp_Id && validationErrors.stamp_id[0] && (
                 <p className="text-red-500 text-sm mt-1">
