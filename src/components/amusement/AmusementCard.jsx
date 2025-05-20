@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 
 export default function AmusementCard({ amusement }) {
     const [mode, setMode] = useState(0)
@@ -28,12 +29,11 @@ export default function AmusementCard({ amusement }) {
                 style={
                     mode === 0 ? { height: '100%' } : { paddingTop: '56.25%' }
                 }>
-                <img
-                    src={amusement.image_url}
+                <Image
+                    src="/Red_panda.png"
                     alt={amusement.name}
-                    className={`absolute inset-0 w-full h-full object-cover ${
-                        mode === 2 ? 'filter brightness-150' : ''
-                    }`}
+                    fill
+                    className={`object-cover ${mode === 2 ? 'brightness-150' : ''}`}
                 />
 
                 {/* Overlay for mode 2 */}
