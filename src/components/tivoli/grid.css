@@ -1,0 +1,42 @@
+.grid-container {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.grid-cell {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f9fafb;
+    transition: all 0.2s ease-in-out;
+}
+
+.grid-cell:hover {
+    transform: scale(1.02);
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.avatar-container {
+    pointer-events: none;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.grid-cell.is-active {
+    animation: pulse 0.5s ease-in-out;
+}

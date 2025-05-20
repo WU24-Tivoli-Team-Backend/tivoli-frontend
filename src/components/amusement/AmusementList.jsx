@@ -5,6 +5,7 @@ import { useState } from 'react'
 import AmusementForm from './AmusementForm'
 import Button from '../Button'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function AmusementList() {
     const { user } = useAuth({ middleware: 'auth' })
@@ -19,11 +20,15 @@ export default function AmusementList() {
     const [showCreateForm, setShowCreateForm] = useState(false)
     const [editingAmusementId, setEditingAmusementId] = useState(null)
     const [successMessage, setSuccessMessage] = useState(null)
-    
 
     if (amusementLoading) return <p>Loading amusements...</p>
     if (amusementError)
-        return <p>Error loading amusements: {amusementError.message}</p>
+        return (
+            <p>
+                Error loading amusements:{' '}
+                {amusementError.message || String(amusementError)}
+            </p>
+        )
 
     const hasAmusements = amusementData?.data?.length > 0
 
@@ -38,19 +43,29 @@ export default function AmusementList() {
     }
 
     // Form submitted successfully - reset state to hide forms
-    const handleFormSuccess = data => {
+    const handleFormSuccess = (data, action = 'unknown') => {
         console.log('Form submission successful with data:', data)
         setShowCreateForm(false)
         setEditingAmusementId(null)
         refetch()
-        setSuccessMessage('Amusement created and/or updated')// Refresh the data
+            if (action === 'create') {
+        setSuccessMessage('Amusement created successfully')
+    } else if (action === 'update') {
+        setSuccessMessage('Amusement updated successfully')
+    } else if (action === 'delete') {
+        setSuccessMessage('Amusement deleted successfully')
+    } else {
+        setSuccessMessage('Operation completed successfully')
+    } // Refresh the data
     }
 
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Amusements</h2>
-                {successMessage && <p className='text-green-500'>{successMessage}</p>}
+                {successMessage && (
+                    <p className="text-green-500">{successMessage}</p>
+                )}
                 <Button onClick={handleCreateClick}>Add New Amusement</Button>
             </div>
 
@@ -73,16 +88,18 @@ export default function AmusementList() {
                                     <h3 className="font-bold text-lg">
                                         {amusement.name}
                                     </h3>
-                                     <p className="text-gray-600">
+                                    {!amusement.image_url && <Image src="/Red_panda.png" width={200} height={200} alt={amusement.name} />}
+                                    {amusement.image_url && <Image src={amusement.image_url} width={200} height={200} alt={amusement.name} />}
+                                    <p className="text-gray-600">
                                         Type: {amusement.type}
                                     </p>
                                     <p className="text-gray-600">
                                         Description: {amusement.description}
                                     </p>
-                                     <p className="text-gray-600">
+                                    <p className="text-gray-600">
                                         Amusement id: {amusement.id}
                                     </p>
-                                     <p className="text-gray-600">
+                                    <p className="text-gray-600">
                                         Stamp id: {amusement.stamp_id}
                                     </p>
                                     {amusement.url && (

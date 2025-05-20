@@ -2,8 +2,11 @@
 import axios from '@/lib/axios'
 import Input from '../Input'
 import { useFetch } from '@/hooks/useFetch'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Button from '../Button'
+import Select from '../Select'
+import Label from '../Label'
+import handleUploadChange from '@/lib/handeFileUpload'
 
 export default function AmusementForm({
     amusementId,
@@ -28,11 +31,13 @@ export default function AmusementForm({
         data: amusementData,
         error: amusementError,
         loading: amusementLoading,
-    } = useFetch(amusementUrl || '/api/dummy-endpoint')
+        refetch: refetchAmusement,
+    } = useFetch(amusementUrl)
 
     const [error, setError] = useState()
     const [successMessage, setSuccessMessage] = useState()
     const [validationErrors, setValidationErrors] = useState({})
+    const imageRef = useRef()
 
     // Only update form with existing data if in edit mode and data is loaded
     useEffect(() => {
@@ -61,35 +66,50 @@ export default function AmusementForm({
         setError(null)
         setValidationErrors({})
         try {
+            let updatedForm = { ...form }
+
+            const file = imageRef.current?.files?.[0]
+            if (file) {
+                // Upload the file and get the path
+                const imagePath = await handleUploadChange(file)
+                console.log('Image uploaded to:', imagePath)
+
+                // Update our local copy of the form data
+                updatedForm = {
+                    ...updatedForm,
+                    image_url: imagePath,
+                }
+
+                // Also update the React state (but don't wait for it)
+                setForm(updatedForm)
+            }
+
             await axios.get('/sanctum/csrf-cookie')
             console.log('CSRF cookie obtained')
             let res
 
             if (isEditMode) {
                 // Update existing amusement
-                res = await axios.put(`/api/amusements/${amusementId}`, form, {
+                res = await axios.put(`/api/amusements/${amusementId}`, updatedForm, {
                     headers: { 'Content-Type': 'application/json' },
                 })
                 setSuccessMessage('Amusement updated successfully!')
-                onSuccess(res.data)
+                onSuccess && onSuccess(res.data, 'update')
             } else {
                 // Create new amusement
                 console.log('About to send POST request to /api/amusements')
                 const res = await axios.request({
                     method: 'post',
                     url: '/api/amusements',
-                    data: form,
+                    data: updatedForm,
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true,
                 })
 
                 setSuccessMessage('Amusement created successfully!')
 
-                // Clear form after successful creation
-
                 console.log('Calling onSuccess with created data')
-                onSuccess(res.data)
-
+                onSuccess(res.data, 'create')
             }
             setForm({
                 name: '',
@@ -118,6 +138,35 @@ export default function AmusementForm({
         }
     }
 
+    async function handleDelete(e) {
+        e.preventDefault()
+        const confirmed = window.confirm(
+            'Are you sure you want to delete this entry?',
+        )
+
+        if (confirmed) {
+            try {
+                const res = await axios.request({
+                    method: 'delete',
+                    url: `/api/amusements/${amusementId}`,
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true,
+                })
+                setSuccessMessage('Amusement deleted successfully')
+                onSuccess(null, 'delete')
+            } catch (err) {
+                setError(
+                    err.response?.data?.message || 'Error deleting amusement',
+                )
+            } finally {
+                refetchAmusement()
+            }
+        } else {
+            // User clicked "Cancel" - do nothing or handle cancellation
+            return // This exits the function
+        }
+    }
+
     return (
         <form
             onSubmit={handleSubmit}
@@ -143,6 +192,7 @@ export default function AmusementForm({
                 <div className="text-green-500">{successMessage}</div>
             )}
 
+            <Label>Name</Label>
             <Input
                 name="name"
                 type="text"
@@ -157,22 +207,26 @@ export default function AmusementForm({
                     {validationErrors.name[0]}
                 </p>
             )}
-
-            <Input
+            <Label>Type of amusement</Label>
+            <Select
+                id="type"
                 name="type"
-                type="text"
-                label="Type"
-                placeholder="Type of amusement"
+                className="block w-full mt-1"
                 value={form.type}
                 onChange={handleChange}
                 required
+                options={[
+                    { value: '', label: 'Choose your type' },
+                    { value: 'game', label: 'Game' },
+                    { value: 'attraction', label: 'Attraction' },
+                ]}
             />
             {validationErrors.type && validationErrors.type[0] && (
                 <p className="text-red-500 text-sm mt-1">
                     {validationErrors.type[0]}
                 </p>
             )}
-
+            <Label>Description</Label>
             <Input
                 name="description"
                 type="text"
@@ -188,7 +242,7 @@ export default function AmusementForm({
                         {validationErrors.description[0]}
                     </p>
                 )}
-
+            <Label>Deploy URL</Label>
             <Input
                 name="url"
                 type="text"
@@ -202,28 +256,50 @@ export default function AmusementForm({
                     {validationErrors.url[0]}
                 </p>
             )}
-
+            <Label>Image</Label>
             <Input
                 name="image_url"
-                type="text"
-                label="Image URL"
-                placeholder="Image URL for amusement"
-                value={form.image_url}
-                onChange={handleChange}
+                type="file"
+                label="Link to your profile image"
+                placeholder="Image URL"
+                ref={imageRef}
             />
             {validationErrors.image_url && validationErrors.image_url[0] && (
                 <p className="text-red-500 text-sm mt-1">
                     {validationErrors.image_url[0]}
                 </p>
             )}
-
-            <Input
+            <Label>Stamp</Label>
+            <Select
+                id="stamp_id"
                 name="stamp_id"
-                type="text"
-                label="Stamp ID"
-                placeholder="Stamp ID for amusement"
+                className="block w-full mt-1"
                 value={form.stamp_id}
                 onChange={handleChange}
+                required
+                options={[
+                    { value: '', label: 'Choose your stamp' },
+                    { value: '1', label: 'Panda' },
+                    { value: '6', label: 'Silver panda' },
+                    { value: '7', label: 'Gold panda' },
+                    { value: '8', label: 'Platinum panda' },
+                    { value: '2', label: 'Orca' },
+                    { value: '9', label: 'Silver Orca' },
+                    { value: '10', label: 'Gold Orca' },
+                    { value: '11', label: 'Platinum Orca' },
+                    { value: '3', label: 'Raven' },
+                    { value: '12', label: 'Silver Raven' },
+                    { value: '13', label: 'Gold Raven' },
+                    { value: '14', label: 'Platinum Raven' },
+                    { value: '4', label: 'Blobfish' },
+                    { value: '15', label: 'Silver Blobfish' },
+                    { value: '16', label: 'Gold Blobfish' },
+                    { value: '17', label: 'Platinum Blobfish' },
+                    { value: '5', label: 'Pallas cat' },
+                    { value: '18', label: 'Silver Pallas cat' },
+                    { value: '19', label: 'Gold Pallas cat' },
+                    { value: '20', label: 'Platinum Pallas cat' },
+                ]}
             />
             {validationErrors.stamp_Id && validationErrors.stamp_id[0] && (
                 <p className="text-red-500 text-sm mt-1">
@@ -234,6 +310,11 @@ export default function AmusementForm({
             <Button type="submit" disabled={amusementLoading}>
                 {isEditMode ? 'Update Amusement' : 'Create Amusement'}
             </Button>
+            {isEditMode && (
+                <Button type="button" onClick={handleDelete}>
+                    Delete Amusement
+                </Button>
+            )}
         </form>
     )
 }

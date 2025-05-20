@@ -1,17 +1,20 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import axios from '@/lib/axios'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
+import Label from '../Label'
+import handleUploadChange from '@/lib/handeFileUpload'
 
 export default function EditUserInfoForm() {
     const [form, setForm] = useState({
         image_url: '',
         github: '',
         url: '',
-        // group_id: '',
     })
     const [loading, setLoading] = useState(true)
+
+    const imageRef = useRef()
 
     useEffect(() => {
         axios
@@ -22,7 +25,6 @@ export default function EditUserInfoForm() {
                     image_url: res.data.image_url || '',
                     github: res.data.github || '',
                     url: res.data.url || '',
-                    //   group_id:  res.data.data.group_id?.toString() || '',
                 })
             })
             .catch(console.error)
@@ -36,8 +38,29 @@ export default function EditUserInfoForm() {
 
     const handleSubmit = async e => {
         e.preventDefault()
+        // console.log(form['image_url']);
+        // const file = form['image_url']
+
         try {
-            const res = await axios.patch('/api/user', form, {
+            // Start with the current form state
+            let updatedForm = { ...form }
+
+            const file = imageRef.current?.files?.[0]
+            if (file) {
+                // Upload the file and get the path
+                const imagePath = await handleUploadChange(file)
+                console.log('Image uploaded to:', imagePath)
+
+                // Update our local copy of the form data
+                updatedForm = {
+                    ...updatedForm,
+                    image_url: imagePath,
+                }
+
+                // Also update the React state (but don't wait for it)
+                setForm(updatedForm)
+            }
+            const res = await axios.patch('/api/user', updatedForm, {
                 headers: { 'Content-Type': 'application/json' },
             })
             console.log('Updated User:', res.data.data)
@@ -54,14 +77,15 @@ export default function EditUserInfoForm() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <h2 className="text-2xl font-bold">Edit User Info</h2>
             <p className="text-gray-500">You can edit your information here.</p>
+            <Label>Image url</Label>
             <Input
                 name="image_url"
-                type="text"
+                type="file"
                 label="Link to your profile image"
                 placeholder="Image URL"
-                value={form.image_url}
-                onChange={handleChange}
+                ref={imageRef}
             />
+            <Label>Github url</Label>
             <Input
                 name="github"
                 type="text"
@@ -70,6 +94,7 @@ export default function EditUserInfoForm() {
                 value={form.github}
                 onChange={handleChange}
             />
+            <Label>Porfolio URL</Label>
             <Input
                 name="url"
                 type="text"
