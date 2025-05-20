@@ -61,6 +61,7 @@ const GridPrinter = ({
         }
     }
 
+
     // const renderGrid = () => {
     //     const grid = []
 
@@ -96,6 +97,8 @@ const GridPrinter = ({
 
     //     return grid
     // }
+
+   
 
     return (
         <div className="grid-container relative">

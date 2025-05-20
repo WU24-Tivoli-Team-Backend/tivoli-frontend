@@ -94,8 +94,10 @@ export default function AmusementForm({
                     headers: { 'Content-Type': 'application/json' },
                 })
                 setSuccessMessage('Amusement updated successfully!')
+
                 //@TODO: Error: Expected an assignment or function call and instead saw an expression.  no-unused-expressions
                 onSuccess?.(res.data, 'update');
+
             } else {
                 // Create new amusement
                 console.log('About to send POST request to /api/amusements')

@@ -1,6 +1,8 @@
+
 import ProfileCard from './ProfileCard'
 
 export default function GroupCard({ group, members }) {
+
     return (
         <div className="bg-white m-4 shadow-md rounded-lg overflow-hidden">
             {/* Bild */}
