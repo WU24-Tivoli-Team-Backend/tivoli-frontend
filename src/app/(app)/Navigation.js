@@ -36,8 +36,8 @@ const Navigation = ({ user }) => {
                                 Dashboard
                             </NavLink>
                             <NavLink
-                                href="/groups"
-                                active={usePathname() === '/groups'}>
+                                href="/groups/temporary"
+                                active={usePathname() === '/groups/temporary'}>
                                 Groups
                             </NavLink>
                             <NavLink
@@ -126,8 +126,8 @@ const Navigation = ({ user }) => {
                             Dashboard
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
-                            href="/groups"
-                            active={pathname === '/groups'}>
+                            href="/groups/temporary"
+                            active={pathname === '/groups/temporary'}>
                             Groups
                         </ResponsiveNavLink>
                         <ResponsiveNavLink

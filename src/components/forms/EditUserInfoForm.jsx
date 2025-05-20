@@ -1,9 +1,10 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import axios from '@/lib/axios'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
 import Label from '../Label'
+import handleUploadChange from '@/lib/handeFileUpload'
 
 export default function EditUserInfoForm() {
     const [form, setForm] = useState({
@@ -12,6 +13,8 @@ export default function EditUserInfoForm() {
         url: '',
     })
     const [loading, setLoading] = useState(true)
+
+    const imageRef = useRef()
 
     useEffect(() => {
         axios
@@ -35,8 +38,29 @@ export default function EditUserInfoForm() {
 
     const handleSubmit = async e => {
         e.preventDefault()
+        // console.log(form['image_url']);
+        // const file = form['image_url']
+
         try {
-            const res = await axios.patch('/api/user', form, {
+            // Start with the current form state
+            let updatedForm = { ...form }
+
+            const file = imageRef.current?.files?.[0]
+            if (file) {
+                // Upload the file and get the path
+                const imagePath = await handleUploadChange(file)
+                console.log('Image uploaded to:', imagePath)
+
+                // Update our local copy of the form data
+                updatedForm = {
+                    ...updatedForm,
+                    image_url: imagePath,
+                }
+
+                // Also update the React state (but don't wait for it)
+                setForm(updatedForm)
+            }
+            const res = await axios.patch('/api/user', updatedForm, {
                 headers: { 'Content-Type': 'application/json' },
             })
             console.log('Updated User:', res.data.data)
@@ -56,11 +80,10 @@ export default function EditUserInfoForm() {
             <Label>Image url</Label>
             <Input
                 name="image_url"
-                type="text"
+                type="file"
                 label="Link to your profile image"
                 placeholder="Image URL"
-                value={form.image_url}
-                onChange={handleChange}
+                ref={imageRef}
             />
             <Label>Github url</Label>
             <Input
