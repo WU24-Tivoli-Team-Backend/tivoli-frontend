@@ -66,7 +66,7 @@ export default function EditUserInfoForm() {
             console.log('Updated User:', res.data.data)
             // Show success message
         } catch (err) {
-            console.error('Validation or server err', err.response.data)
+            console.error('Validation or server err', err.response?.data)
             // Show error message
         }
     }
