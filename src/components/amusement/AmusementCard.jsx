@@ -14,12 +14,14 @@ export default function AmusementCard({ amusement }) {
         'cursor-pointer overflow-hidden rounded-lg shadow-md transition-all duration-300'
 
     // Dynamic size-classes based on mode
-    const sizeClasses =
-        mode === 0
-            ? 'w-48 h-32' // liten vy, bara bilden
-            : mode === 1
-              ? 'w-64' // medium vy, bild + titel/type
-              : 'w-full' // full bredd + overlay
+    let sizeClasses
+    if (mode === 0) {
+        sizeClasses = 'w-full h-32'
+    } else if (mode === 1) {
+        sizeClasses = 'w-full'
+    } else {
+        sizeClasses = 'w-full'
+    }
 
     return (
         <div className={`${baseClasses} ${sizeClasses}`} onClick={handleClick}>
@@ -29,6 +31,15 @@ export default function AmusementCard({ amusement }) {
                 style={
                     mode === 0 ? { height: '100%' } : { paddingTop: '56.25%' }
                 }>
+                {/* Name overlay for mode 1 - at the top */}
+                {mode === 1 && (
+                    <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/70 to-transparent p-4">
+                        <h3 className="text-lg font-medium text-white">
+                            {amusement.name}
+                        </h3>
+                    </div>
+                )}
+
                 <Image
                     src="/Red_panda.png"
                     alt={amusement.name}
@@ -36,7 +47,16 @@ export default function AmusementCard({ amusement }) {
                     className={`object-cover ${mode === 2 ? 'brightness-150' : ''}`}
                 />
 
-                {/* Overlay for mode 2 */}
+                {/* Type overlay for mode 1 - at the bottom */}
+                {mode === 1 && (
+                    <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-4">
+                        <p className="text-sm text-white uppercase">
+                            {amusement.type}
+                        </p>
+                    </div>
+                )}
+
+                {/* Overlay for mode 2 - unchanged */}
                 {mode === 2 && (
                     <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-between p-6 text-white">
                         <div>
@@ -56,18 +76,6 @@ export default function AmusementCard({ amusement }) {
                     </div>
                 )}
             </div>
-
-            {/* Titel + genre visible in mode 1 */}
-            {mode === 1 && (
-                <div className="bg-white px-4 py-2">
-                    <h3 className="text-lg font-medium text-gray-800">
-                        {amusement.name}
-                    </h3>
-                    <p className="text-sm text-gray-600 uppercase">
-                        {amusement.type}
-                    </p>
-                </div>
-            )}
         </div>
     )
 }
