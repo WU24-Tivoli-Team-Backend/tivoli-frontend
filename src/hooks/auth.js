@@ -96,6 +96,9 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     }
 
     const login = async ({ setErrors, setStatus, ...props }) => {
+        localStorage.removeItem('jwt')
+        console.log('Old JWT token removed before login.')
+
         const csrfSuccess = await csrf()
 
         if (!csrfSuccess) {
@@ -104,7 +107,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             )
             return
         }
-
 
         const csrfToken = getCsrfToken()
 
@@ -192,6 +194,9 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         if (!error) {
             await axios.post('/logout').then(() => mutate(null))
         }
+
+        localStorage.removeItem('jwt')
+        console.log('JWT token removed during logout.')
 
         window.location.pathname = '/login'
     }
