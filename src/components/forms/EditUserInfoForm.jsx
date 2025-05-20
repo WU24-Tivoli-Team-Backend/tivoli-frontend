@@ -9,7 +9,6 @@ export default function EditUserInfoForm() {
         image_url: '',
         github: '',
         url: '',
-        // group_id: '',
     })
     const [loading, setLoading] = useState(true)
 
@@ -22,7 +21,6 @@ export default function EditUserInfoForm() {
                     image_url: res.data.image_url || '',
                     github: res.data.github || '',
                     url: res.data.url || '',
-                    //   group_id:  res.data.data.group_id?.toString() || '',
                 })
             })
             .catch(console.error)

@@ -4,6 +4,8 @@ import Input from '../Input'
 import { useFetch } from '@/hooks/useFetch'
 import { useState, useEffect } from 'react'
 import Button from '../Button'
+import Select from '../Select'
+import Label from '../Label'
 
 export default function AmusementForm({
     amusementId,
@@ -85,11 +87,8 @@ export default function AmusementForm({
 
                 setSuccessMessage('Amusement created successfully!')
 
-                // Clear form after successful creation
-
                 console.log('Calling onSuccess with created data')
                 onSuccess(res.data)
-
             }
             setForm({
                 name: '',
@@ -143,6 +142,7 @@ export default function AmusementForm({
                 <div className="text-green-500">{successMessage}</div>
             )}
 
+            <Label>Name</Label>
             <Input
                 name="name"
                 type="text"
@@ -157,22 +157,26 @@ export default function AmusementForm({
                     {validationErrors.name[0]}
                 </p>
             )}
-
-            <Input
+        <Label>Type of amusement</Label>
+            <Select
+                id="type"
                 name="type"
-                type="text"
-                label="Type"
-                placeholder="Type of amusement"
+                className="block w-full mt-1"
                 value={form.type}
                 onChange={handleChange}
                 required
+                options={[
+                    { value: '', label: 'Choose your type' },
+                    { value: 'game', label: 'Game' },
+                    { value: 'attraction', label: 'Attraction' },
+                ]}
             />
             {validationErrors.type && validationErrors.type[0] && (
                 <p className="text-red-500 text-sm mt-1">
                     {validationErrors.type[0]}
                 </p>
             )}
-
+            <Label>Description</Label>
             <Input
                 name="description"
                 type="text"
@@ -188,7 +192,7 @@ export default function AmusementForm({
                         {validationErrors.description[0]}
                     </p>
                 )}
-
+            <Label>Deploy URL</Label>
             <Input
                 name="url"
                 type="text"
@@ -202,7 +206,7 @@ export default function AmusementForm({
                     {validationErrors.url[0]}
                 </p>
             )}
-
+            <Label>Image</Label>
             <Input
                 name="image_url"
                 type="text"
@@ -216,7 +220,7 @@ export default function AmusementForm({
                     {validationErrors.image_url[0]}
                 </p>
             )}
-
+            <Label>Stamp ID</Label>
             <Input
                 name="stamp_id"
                 type="text"
