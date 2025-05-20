@@ -16,7 +16,7 @@ export default function GroupCard({ group, members, amusements = [] }) {
                 <div className="h-20 bg-pink-400 p-4 w-full">
                     Placeholder for image
                 </div>
-                
+
                 {/* Accordion */}
                 <div className="">
                     <details className="accordion group p-4 w-full">
@@ -28,7 +28,7 @@ export default function GroupCard({ group, members, amusements = [] }) {
                                 ▶
                             </span>
                         </summary>
-                        
+
                         {/* Members section */}
                         <div className="accordion-content p-4">
                             {members.length > 0 ? (
@@ -47,13 +47,13 @@ export default function GroupCard({ group, members, amusements = [] }) {
                             <h3 className="text-lg font-semibold text-gray-800 mb-4">
                                 Amusements
                             </h3>
-                            
+
                             {amusements && amusements.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div className="flex flex-col space-y-4 w-full">
                                     {amusements.map(amusement => (
-                                        <AmusementCard 
-                                            key={amusement.id} 
-                                            amusement={amusement} 
+                                        <AmusementCard
+                                            key={amusement.id}
+                                            amusement={amusement}
                                         />
                                     ))}
                                 </div>

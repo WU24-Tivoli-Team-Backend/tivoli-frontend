@@ -47,21 +47,22 @@ export default function AmusementCard({ amusement }) {
                             src="/Red_panda.png"
                             alt={amusement.name}
                             fill
-                            className="object-cover brightness-75"
+                            className="object-cover"
                         />
                     </div>
 
                     {/* Content below image */}
                     <div className="p-6 flex flex-col">
-                        <h3 className="text-2xl font-semibold mb-1">
+                        <h3 className="text-2xl font-semibold mb-1 uppercase">
                             {amusement.name}
                         </h3>
-                        <p className="uppercase text-sm">{amusement.type}</p>
 
                         <p className="my-4">
                             {amusement.description ||
                                 'No description available'}
                         </p>
+
+                        <p className="uppercase text-sm">{amusement.type}</p>
 
                         <button className="w-full py-2 bg-white text-black font-medium rounded-md mt-4">
                             Play Now
