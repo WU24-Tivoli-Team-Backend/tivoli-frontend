@@ -1,9 +1,7 @@
-
 import ProfileCard from './ProfileCard'
 import AmusementCard from '../amusement/AmusementCard'
 
-export default function GroupCard({ group, members }) {
-
+export default function GroupCard({ group, members, amusements = [] }) {
     return (
         <div className="bg-white m-4 shadow-md rounded-lg overflow-hidden">
             {/* Bild */}
