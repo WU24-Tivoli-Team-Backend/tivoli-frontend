@@ -99,6 +99,17 @@ const GameIframe = ({
         if (token) setJwtToken(token)
     }, [])
 
+    const enterFullscreen = () => {
+        const iframe = document.querySelector('iframe')
+        if (iframe?.requestFullscreen) {
+            iframe.requestFullscreen()
+        } else if (iframe?.webkitRequestFullscreen) {
+            iframe.webkitRequestFullscreen() // for Safari
+        } else if (iframe?.msRequestFullscreen) {
+            iframe.msRequestFullscreen() // for older version of IE
+        }
+    }
+
     return (
         <div
             className={`w-full responsive-game-container ${className}`}
