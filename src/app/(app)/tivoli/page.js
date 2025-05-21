@@ -44,179 +44,42 @@ const GridDemo = () => {
         return amusementData.data.find(amusement => amusement.id === id)
     }
 
-    const specialCells = [
-        {
-            x: 1,
-            y: 1,
-            amusementId:
-                amusementData && amusementData.data && amusementData.data[0]
-                    ? amusementData.data[0].id
-                    : null,
-            content: amusementData &&
-                amusementData.data &&
-                amusementData.data[0] && (
-                    <div
-                        key={amusementData.data[0].id}
-                        className="p-2 text-center bg-yellow-100 rounded-md w-full h-full flex items-center justify-center">
-                        <button className="py-2 px-4 bg-blue-500 text-white rounded-lg">
-                            {amusementData.data[0].name}
-                        </button>
-                    </div>
-                ),
-        },
-        {
-            x: 0,
-            y: 2,
-            amusementId:
-                amusementData && amusementData.data && amusementData.data[1]
-                    ? amusementData.data[1].id
-                    : null,
-            content: amusementData &&
-                amusementData.data &&
-                amusementData.data[1] && (
-                    <div
-                        key={amusementData.data[1].id}
-                        className="p-2 text-center bg-green-100 rounded-md w-full h-full flex items-center justify-center">
-                        <button className="py-2 px-4 bg-blue-500 text-white rounded-lg">
-                            {amusementData.data[1].name}
-                        </button>
-                    </div>
-                ),
-        },
-        {
-            x: 2,
-            y: 0,
-            amusementId:
-                amusementData && amusementData.data && amusementData.data[2]
-                    ? amusementData.data[2].id
-                    : null,
-            content: amusementData &&
-                amusementData.data &&
-                amusementData.data[1] && (
-                    <div
-                        key={amusementData.data[2].id}
-                        className="p-2 text-center bg-purple-100 rounded-md w-full h-full flex items-center justify-center">
-                        <button className="py-2 px-4 bg-blue-500 text-white rounded-lg">
-                            {amusementData.data[1].name}
-                        </button>
-                    </div>
-                ),
-        },
-        {
-            x: 4,
-            y: 4,
-            amusementId:
-                amusementData && amusementData.data && amusementData.data[3]
-                    ? amusementData.data[3].id
-                    : null,
-            content: amusementData &&
-                amusementData.data &&
-                amusementData.data[3] && (
-                    <div
-                        key={amusementData.data[3].id}
-                        className="p-2 text-center bg-purple-100 rounded-md w-full h-full flex items-center justify-center">
-                        <button className="py-2 px-4 bg-blue-500 text-white rounded-lg">
-                            {amusementData.data[3].name}
-                        </button>
-                    </div>
-                ),
-        },
-        {
-            x: 2,
-            y: 4,
-            amusementId:
-                amusementData && amusementData.data && amusementData.data[4]
-                    ? amusementData.data[4].id
-                    : null,
-            content: amusementData &&
-                amusementData.data &&
-                amusementData.data[4] && (
-                    <div
-                        key={amusementData.data[3].id}
-                        className="p-2 text-center bg-purple-100 rounded-md w-full h-full flex items-center justify-center">
-                        <button className="py-2 px-4 bg-blue-500 text-white rounded-lg">
-                            {amusementData.data[4].name}
-                        </button>
-                    </div>
-                ),
-        },
-        {
-            x: 1,
-            y: 3,
-            amusementId:
-                amusementData && amusementData.data && amusementData.data[5]
-                    ? amusementData.data[5].id
-                    : null,
-            content: amusementData &&
-                amusementData.data &&
-                amusementData.data[5] && (
-                    <div
-                        key={amusementData.data[3].id}
-                        className="p-2 text-center bg-purple-100 rounded-md w-full h-full flex items-center justify-center">
-                        <button className="py-2 px-4 bg-blue-500 text-white rounded-lg">
-                            {amusementData.data[5].name}
-                        </button>
-                    </div>
-                ),
-        },
-                {
-            x: 0,
-            y: 4,
-            amusementId:
-                amusementData && amusementData.data && amusementData.data[6]
-                    ? amusementData.data[6].id
-                    : null,
-            content: amusementData &&
-                amusementData.data &&
-                amusementData.data[6] && (
-                    <div
-                        key={amusementData.data[3].id}
-                        className="p-2 text-center bg-purple-100 rounded-md w-full h-full flex items-center justify-center">
-                        <button className="py-2 px-4 bg-blue-500 text-white rounded-lg">
-                            {amusementData.data[6].name}
-                        </button>
-                    </div>
-                ),
-        },
-                      {
-            x: 3,
-            y: 2,
-            amusementId:
-                amusementData && amusementData.data && amusementData.data[7]
-                    ? amusementData.data[7].id
-                    : null,
-            content: amusementData &&
-                amusementData.data &&
-                amusementData.data[7] && (
-                    <div
-                        key={amusementData.data[3].id}
-                        className="p-2 text-center bg-purple-100 rounded-md w-full h-full flex items-center justify-center">
-                        <button className="py-2 px-4 bg-blue-500 text-white rounded-lg">
-                            {amusementData.data[7].name}
-                        </button>
-                    </div>
-                ),
-        },
-                                        {
-            x: 4,
-            y: 0,
-            amusementId:
-                amusementData && amusementData.data && amusementData.data[8]
-                    ? amusementData.data[8].id
-                    : null,
-            content: amusementData &&
-                amusementData.data &&
-                amusementData.data[8] && (
-                    <div
-                        key={amusementData.data[3].id}
-                        className="p-2 text-center bg-purple-100 rounded-md w-full h-full flex items-center justify-center">
-                        <button className="py-2 px-4 bg-blue-500 text-white rounded-lg">
-                            {amusementData.data[8].name}
-                        </button>
-                    </div>
-                ),
-        },
-    ]
+   const specialCells = amusementData && amusementData.data 
+  ? amusementData.data.map((amusement, index) => {
+      // Define coordinates for each amusement based on index
+      const coordinates = [
+        { x: 1, y: 1 },  // index 0
+        { x: 0, y: 2 },  // index 1
+        { x: 2, y: 0 },  // index 2
+        { x: 4, y: 4 },  // index 3
+        { x: 2, y: 4 },  // index 4
+        { x: 1, y: 3 },  // index 5
+        { x: 0, y: 4 },  // index 6
+        { x: 3, y: 2 },  // index 7
+        { x: 4, y: 0 }   // index 8
+      ];
+      
+      // Get the coordinates for current index
+      const { x, y } = coordinates[index] || { x: 0, y: 0 };
+      
+      // Create the cell object
+      return {
+        x,
+        y,
+        amusementId: amusement ? amusement.id : null,
+        content: amusement && (
+          <div
+            key={amusement.id}
+            className="p-2 text-center bg-purple-100 rounded-md w-full h-full flex items-center justify-center"
+          >
+            <button className="py-2 px-4 bg-blue-500 text-white rounded-lg">
+              {amusement.name}
+            </button>
+          </div>
+        )
+      };
+    })
+  : [];
 
     const handleCellActivated = cellInfo => {
         setActiveCell(cellInfo)
