@@ -1,8 +1,7 @@
-
 import ProfileCard from './ProfileCard'
+import AmusementCard from '../amusement/AmusementCard'
 
-export default function GroupCard({ group, members }) {
-
+export default function GroupCard({ group, members, amusements = [] }) {
     return (
         <div className="bg-white m-4 shadow-md rounded-lg overflow-hidden">
             {/* Bild */}
@@ -13,9 +12,10 @@ export default function GroupCard({ group, members }) {
                     layout="fill"
                     objectFit="cover"
                 /> */}
-                <div className="h-20 bg-pink-400 p-4">
+                <div className="h-20 bg-pink-400 p-4 w-full">
                     Placeholder for image
                 </div>
+
                 {/* Accordion */}
                 <div className="">
                     <details className="accordion group p-4 w-full">
@@ -27,6 +27,8 @@ export default function GroupCard({ group, members }) {
                                 ▶
                             </span>
                         </summary>
+
+                        {/* Members section */}
                         <div className="accordion-content p-4">
                             {members.length > 0 ? (
                                 members.map(user => (
@@ -39,11 +41,26 @@ export default function GroupCard({ group, members }) {
                             )}
                         </div>
 
-                        {/* Amusements */}
-                        <div className="mt-4">
-                            <h4 className="font-medium text-gray-700 mb-2">
-                                Amusements will be shown here
-                            </h4>
+                        {/* Amusements section */}
+                        <div className="mt-4 p-4">
+                            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                                Amusements
+                            </h3>
+
+                            {amusements && amusements.length > 0 ? (
+                                <div className="flex flex-col space-y-4 w-full">
+                                    {amusements.map(amusement => (
+                                        <AmusementCard
+                                            key={amusement.id}
+                                            amusement={amusement}
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-sm text-gray-500">
+                                    No amusements for this group.
+                                </p>
+                            )}
                         </div>
                     </details>
                 </div>
