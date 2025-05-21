@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import JwtMessageBridge from './JwtMessageBridge'
 
-
 export const ScreenSize = {
     MOBILE_PORTRAIT: 'mobile-portrait',
     MOBILE_LANDSCAPE: 'mobile-landscape',
@@ -93,12 +92,9 @@ const GameIframe = ({
         }
     }, [currentScreenSize, onScreenSizeChange])
 
-
     const [jwtToken, setJwtToken] = useState(null)
 
     useEffect(() => {
-
-
         const token = localStorage.getItem('jwt')
         if (token) setJwtToken(token)
     }, [])
@@ -114,7 +110,6 @@ const GameIframe = ({
             data-screen-size={currentScreenSize}>
             <JwtMessageBridge
                 url={url}
-
                 jwt={jwtToken}
                 onGameReady={onGameReady}
                 onTokenSent={onTokenSent}>
@@ -122,7 +117,7 @@ const GameIframe = ({
                     src={url}
                     title={title}
                     className="absolute top-0 left-0 w-full h-full border-0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                     allowFullScreen={allowFullscreen}
                 />
             </JwtMessageBridge>
