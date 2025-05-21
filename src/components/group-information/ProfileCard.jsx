@@ -23,12 +23,12 @@ export default function ProfileCard({ user }) {
                         </a>
                     )}
 
-                    {/* Show ”|” only if both website and github links are provided */}
-                    {user.github && user.website && <span>|</span>}
+                    {/* Show ”|” only if both GitHub and website links are provided */}
+                    {user.github && user.url && <span>|</span>}
 
-                    {user.website && (
+                    {user.url && (
                         <a
-                            href={user.website}
+                            href={user.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:underline">
