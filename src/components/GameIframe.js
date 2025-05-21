@@ -46,6 +46,7 @@ const GameIframe = ({
     onTokenSent = null,
 }) => {
     const [currentScreenSize, setCurrentScreenSize] = useState(defaultSize)
+    const [isFullscreen, setIsFullscreen] = useState(false)
 
     const getAspectRatio = () => {
         if (currentScreenSize === ScreenSize.CUSTOM && customAspectRatio) {
@@ -100,16 +101,59 @@ const GameIframe = ({
     }, [])
 
     const enterFullscreen = () => {
-        const iframe = document.querySelector('iframe')
-        if (iframe?.requestFullscreen) {
-            iframe.requestFullscreen()
-        } else if (iframe?.webkitRequestFullscreen) {
-            iframe.webkitRequestFullscreen() // for Safari
-        } else if (iframe?.msRequestFullscreen) {
-            iframe.msRequestFullscreen() // for older version of IE
+        const container = document.querySelector('.responsive-game-container')
+        if (container?.requestFullscreen) {
+            container.requestFullscreen()
+        } else if (container?.webkitRequestFullscreen) {
+            container.webkitRequestFullscreen()
+        } else if (container?.msRequestFullscreen) {
+            container.msRequestFullscreen()
         }
     }
 
+    // Event listener to detect if fullscreen is active
+    useEffect(() => {
+        const handleFullscreenChange = () => {
+            const fullscreenElement =
+                document.fullscreenElement ||
+                document.webkitFullscreenElement ||
+                document.msFullscreenElement
+            setIsFullscreen(!!fullscreenElement)
+        }
+
+        document.addEventListener('fullscreenchange', handleFullscreenChange)
+        document.addEventListener(
+            'webkitfullscreenchange',
+            handleFullscreenChange,
+        )
+        document.addEventListener('msfullscreenchange', handleFullscreenChange)
+
+        return () => {
+            document.removeEventListener(
+                'fullscreenchange',
+                handleFullscreenChange,
+            )
+            document.removeEventListener(
+                'webkitfullscreenchange',
+                handleFullscreenChange,
+            )
+            document.removeEventListener(
+                'msfullscreenchange',
+                handleFullscreenChange,
+            )
+        }
+    }, [])
+
+    // Exit fullscreen function
+    const exitFullscreen = () => {
+        if (document.exitFullscreen) {
+            document.exitFullscreen()
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen()
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen()
+        }
+    }
     return (
         <div
             className={`w-full responsive-game-container ${className}`}
@@ -132,6 +176,20 @@ const GameIframe = ({
                     allowFullScreen={allowFullscreen}
                 />
             </JwtMessageBridge>
+
+            {isFullscreen ? (
+                <button
+                    onClick={exitFullscreen}
+                    className="absolute bottom-4 right-4 z-10 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors">
+                    Exit fullscreen
+                </button>
+            ) : (
+                <button
+                    onClick={enterFullscreen}
+                    className="absolute bottom-4 right-4 z-10 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors">
+                    Enter fullscreen
+                </button>
+            )}
         </div>
     )
 }
