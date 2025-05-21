@@ -8,7 +8,6 @@ export const metadata = {
     title: 'Laravel - Dashboard',
 }
 
-
 const Dashboard = () => {
     return (
         <>
@@ -20,7 +19,6 @@ const Dashboard = () => {
                             You are logged in!
                         </div>
                         <UserProfile />
-                        <EditUserInfoForm />
                         <AmusementList />
                     </div>
                 </div>
