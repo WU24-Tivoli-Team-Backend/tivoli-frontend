@@ -1,14 +1,23 @@
 import React from 'react'
+import Image from 'next/image'
 
 export default function ProfileCard({ user }) {
     return (
-        <div className="flex items-center bg-gray-100 p-4 rounded-lg space-x-4">
-            {/* Profileimage-placeholder */}
-            <div className="w-16 h-16 bg-white rounded-full flex-shrink-0" />
+        <div className="flex items-center bg-gray-100 p-4 rounded-lg space-x-4 justify-evenly w-full max-w-md">
+            {/* Profile Image */}
+            <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
+                <Image
+                    src={user.image_url || '/Red_panda.png'} // Use user image or fallback
+                    alt={`Profile image of ${user.name}`}
+                    width={64} // Match the size of the container
+                    height={64}
+                    className="object-cover"
+                />
+            </div>
 
-            {/* Textcontainer */}
+            {/* Text Container */}
             <div>
-                {/* Namme */}
+                {/* Name */}
                 <p className="text-lg font-medium text-black">{user.name}</p>
 
                 {/* Links */}
