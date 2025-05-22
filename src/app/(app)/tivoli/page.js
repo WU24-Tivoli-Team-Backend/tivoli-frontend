@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Header from '@/app/(app)/Header'
 import GridPrinter from '@/components/tivoli/GridPrinter'
 import { useFetch } from '@/hooks/useFetch'
