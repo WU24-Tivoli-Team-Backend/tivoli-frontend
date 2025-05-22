@@ -11,15 +11,44 @@
     position: relative;
 }
 
+/* Mobile-specific adjustments */
+@media (max-width: 767px) {
+    .tivoli-grid-container {
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .grid-background.mobile-background {
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .game-grid {
+        padding: 0.5rem;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .grid-overlay {
+        width: 100%;
+        height: 100%;
+    }
+
+    .avatar-layer {
+        width: 100%;
+        height: 100%;
+    }
+}
+
 .grid-background {
     position: relative;
     border-radius: 1rem;
     overflow: hidden;
-    box-shadow:
-        0 25px 50px -12px rgba(0, 0, 0, 0.25),
-        0 0 0 1px rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
     padding: 2rem;
+    background-color: transparent;
 }
 
 .grid-background.mobile-background {
@@ -41,9 +70,8 @@
     z-index: 1;
     border-radius: 0.5rem;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    border: none;
 }
 
 .avatar-layer {

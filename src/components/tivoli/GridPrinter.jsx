@@ -114,22 +114,23 @@ const GridPrinter = ({
     const cellSize = getCellSize()
 
     return (
-        <div className="tivoli-grid-container">
+        <div className="tivoli-grid-container w-full h-full">
             {/* Grid background container */}
             <div
-                className={`grid-background ${isMobile ? 'mobile-background' : 'desktop-background'}`}
+                className={`grid-background ${isMobile ? 'mobile-background' : 'desktop-background'} w-full h-full`}
                 style={{
                     backgroundImage: isMobile
-                        ? 'url(/tivoli-mobile-bg.png)'
-                        : 'url(/tivoli-desktop-bg.png)',
-                    backgroundSize: 'cover',
+                        ? 'url(/mobile.png)'
+                        : 'url(/desktop.png)',
+                    backgroundSize: 'contain',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
+                    backgroundColor: 'transparent',
                 }}>
-                <div className="grid-overlay">
+                <div className="grid-overlay w-full h-full">
                     <div
                         ref={gridRef}
-                        className="game-grid"
+                        className="game-grid w-full h-full"
                         style={{
                             display: 'grid',
                             gridTemplateColumns: `repeat(${currentCols}, ${cellSize})`,
@@ -137,6 +138,8 @@ const GridPrinter = ({
                             gap: isMobile
                                 ? 'clamp(2px, 1vw, 6px)'
                                 : 'clamp(4px, 1vw, 10px)',
+                            justifyContent: 'center',
+                            alignContent: 'center',
                         }}>
                         {/* Generate cells */}
                         {Array.from({ length: currentRows * currentCols }).map(
