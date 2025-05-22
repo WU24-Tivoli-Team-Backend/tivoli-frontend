@@ -4,8 +4,7 @@ import { useFetch } from '@/hooks/useFetch'
 import { useState } from 'react'
 import AmusementForm from './AmusementForm'
 import Button from '../Button'
-import Link from 'next/link'
-import Image from 'next/image'
+import AmusementCard from './AmusementCard'
 
 export default function AmusementList() {
     const { user } = useAuth({ middleware: 'auth' })
@@ -38,7 +37,8 @@ export default function AmusementList() {
     }
 
     function handleEditClick(amusementId) {
-        setEditingAmusementId(amusementId)
+        // Toggle the edit form for the clicked amusement
+        setEditingAmusementId(prevId => (prevId === amusementId ? null : amusementId))
         setShowCreateForm(false)
     }
 
@@ -56,118 +56,85 @@ export default function AmusementList() {
             setSuccessMessage('Amusement deleted successfully')
         } else {
             setSuccessMessage('Operation completed successfully')
-        } // Refresh the data
+        }
     }
 
     return (
-        <section className="bg-white shadow-md rounded-lg px-8 p-4 flex flex-col gap-2">
-            <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                    <h2 className="text-xl font-semibold">Amusements</h2>
-                    {successMessage && (
-                        <p className="text-green-500">{successMessage}</p>
-                    )}
-                    <Button onClick={handleCreateClick}>
-                        Add New Amusement
-                    </Button>
-                </div>
-
-                {/* Show create form conditionally */}
-                {showCreateForm && (
-                    <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                        <AmusementForm onSuccess={handleFormSuccess} />
-                    </div>
-                )}
-
-                {/* Display amusements if available */}
-                {hasAmusements ? (
-                    <ul className="space-y-4">
-                        {amusementData.data.map(amusement => (
-                            <li
-                                key={amusement.id}
-                                className="bg-white p-4 rounded-lg shadow">
-                                <div className="flex justify-between">
-                                    <div>
-                                        <h3 className="font-bold text-lg">
-                                            {amusement.name}
-                                        </h3>
-                                        {!amusement.image_url && (
-                                            <Image
-                                                src="/Red_panda.png"
-                                                width={200}
-                                                height={200}
-                                                alt={amusement.name}
-                                            />
-                                        )}
-                                        {amusement.image_url && (
-                                            <Image
-                                                src={amusement.image_url}
-                                                width={200}
-                                                height={200}
-                                                alt={amusement.name}
-                                            />
-                                        )}
-                                        <p className="text-gray-600">
-                                            Type: {amusement.type}
-                                        </p>
-                                        <p className="text-gray-600">
-                                            Description: {amusement.description}
-                                        </p>
-                                        <p className="text-gray-600">
-                                            Amusement id: {amusement.id}
-                                        </p>
-                                        <p className="text-gray-600">
-                                            Stamp id: {amusement.stamp_id}
-                                        </p>
-                                        {amusement.url && (
-                                            <Link
-                                                href={amusement.url}
-                                                className="text-blue-700">
-                                                {amusement.name}
-                                            </Link>
-                                        )}
-                                    </div>
-                                    <Button
-                                        onClick={() =>
-                                            handleEditClick(amusement.id)
-                                        }>
-                                        Edit
-                                    </Button>
-                                </div>
-
-                                {/* Show edit form for this specific amusement */}
-                                {editingAmusementId === amusement.id && (
-                                    <div className="mt-4 border-t pt-4">
-                                        <AmusementForm
-                                            amusementId={amusement.id}
-                                            onSuccess={handleFormSuccess}
-                                        />
-                                    </div>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    // No amusements available - show create form or message
-                    <div className="bg-white p-6 rounded-lg shadow text-center">
-                        <p className="text-gray-500 mb-4">
-                            No amusements found. Create your first one!
-                        </p>
-
-                        {!showCreateForm && (
-                            <Button onClick={handleCreateClick}>
-                                Create Amusement
-                            </Button>
-                        )}
-
-                        {showCreateForm && (
-                            <div className="mt-4 text-left">
-                                <AmusementForm onSuccess={handleFormSuccess} />
-                            </div>
-                        )}
-                    </div>
+        <div className="">
+            <div className="flex justify-between items-center">
+                {successMessage && (
+                    <p className="text-green-500">{successMessage}</p>
                 )}
             </div>
-        </section>
+
+            {/* Show create form conditionally */}
+            {showCreateForm && (
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                    <AmusementForm onSuccess={handleFormSuccess} />
+                </div>
+            )}
+
+            {/* Display amusements if available */}
+            {hasAmusements ? (
+                <ul className="space-y-4">
+                    {amusementData.data.map(amusement => (
+                        <li key={amusement.id} className="">
+                            {/* Use AmusementCard for amusement details */}
+                            <AmusementCard amusement={amusement} />
+
+                            {/* Display amusement stamp and group */}
+                            <div className="mt-2 text-sm text-gray-600">
+                                <p>
+                                    <strong>Stamp:</strong>{' '}
+                                    {amusement.stamp_id ? amusement.stamp_id : 'No stamp assigned'}
+                                </p>
+                                <p>
+                                    <strong>Group:</strong>{' '}
+                                    {amusement.group_id ? amusement.group_id : 'No group assigned'}
+                                </p>
+                            </div>
+
+                            {/* Edit Button */}
+                            <button
+                                onClick={() => handleEditClick(amusement.id)}
+                                className="text-blue-600 hover:underline mt-4"
+                            >
+                                Add and edit info
+                            </button>
+
+                            {/* Show edit form for this specific amusement */}
+                            {editingAmusementId === amusement.id && (
+                                <div className="mt-4 border-t pt-4">
+                                    <AmusementForm
+                                        amusementId={amusement.id}
+                                        onSuccess={handleFormSuccess}
+                                    />
+                                </div>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                // No amusements available - show create form or message
+                <div className="bg-white p-6 rounded-lg shadow text-center">
+                    <p className="text-gray-500 mb-4">
+                        No amusements found. Create your first one!
+                    </p>
+
+                    {!showCreateForm && (
+                        <Button onClick={handleCreateClick}>
+                            Create Amusement
+                        </Button>
+                    )}
+
+                    {showCreateForm && (
+                        <div className="mt-4 text-left">
+                            <AmusementForm onSuccess={handleFormSuccess} />
+                        </div>
+                    )}
+                </div>
+            )}
+            <Button onClick={handleCreateClick}>Add New Amusement</Button>
+        </div>
     )
 }
