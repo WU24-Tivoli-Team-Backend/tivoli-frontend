@@ -5,7 +5,6 @@ import Header from '@/app/(app)/Header'
 import GridPrinter from '@/components/tivoli/GridPrinter'
 import { useFetch } from '@/hooks/useFetch'
 import AmusementCard from '@/components/amusement/AmusementCard'
-import Button from '@/components/Button'
 import Modal from '@/components/tivoli/Modal'
 
 const GridDemo = () => {
@@ -16,9 +15,6 @@ const GridDemo = () => {
     const amusementsApiUrl = `/api/amusements`
     const {
         data: amusementData,
-        error: amusementError,
-        loading: amusementLoading,
-        refetch,
     } = useFetch(amusementsApiUrl)
 
     const [openModalId, setOpenModalId] = useState(null)
@@ -57,10 +53,10 @@ const GridDemo = () => {
         { x: 0, y: 4 },  // index 6
         { x: 3, y: 2 },  // index 7
         { x: 4, y: 0 }   // index 8
-      ];
+      ]
       
       // Get the coordinates for current index
-      const { x, y } = coordinates[index] || { x: 0, y: 0 };
+      const { x, y } = coordinates[index] || { x: 0, y: 0 }
       
       // Create the cell object
       return {
@@ -77,9 +73,9 @@ const GridDemo = () => {
             </button>
           </div>
         )
-      };
+      }
     })
-  : [];
+  : []
 
     const handleCellActivated = cellInfo => {
         setActiveCell(cellInfo)

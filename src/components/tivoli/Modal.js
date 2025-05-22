@@ -1,5 +1,4 @@
 // components/Modal.js
-import { useState } from 'react'
 
 export default function Modal({ isOpen, closeModal, children }) {
     if (!isOpen) return null
