@@ -5,7 +5,6 @@ import Header from '@/app/(app)/Header'
 import GridPrinter from '@/components/tivoli/GridPrinter'
 import { useFetch } from '@/hooks/useFetch'
 import AmusementCard from '@/components/amusement/AmusementCard'
-import Button from '@/components/Button'
 import Modal from '@/components/tivoli/Modal'
 
 const GridDemo = () => {
