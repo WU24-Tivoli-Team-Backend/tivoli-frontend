@@ -30,6 +30,8 @@ const TivoliPage = () => {
     const amusementsApiUrl = `/api/amusements`
     const {
         data: amusementData,
+        loading: amusementLoading,
+        error: amusementError,
     } = useFetch(amusementsApiUrl)
 
     // Open the modal for a specific amusement card
@@ -188,11 +190,11 @@ const TivoliPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
-            <div className="flex flex-col items-center pt-8">
+        <div className="min-h-screen">
+            <div className="flex flex-col items-center pt-2">
                 {/* Status Message */}
-                <div className="mb-4">
-                    <div className="bg-white rounded-full px-6 py-3 shadow-lg border border-purple-200">
+                <div className="mb-2 px-2 w-full flex justify-center">
+                    <div className="bg-white/80 rounded-full px-6 py-3 shadow-lg border border-purple-200">
                         <p className="text-sm lg:text-base text-purple-800 font-medium text-center">
                             {message}
                         </p>
@@ -200,7 +202,7 @@ const TivoliPage = () => {
                 </div>
 
                 {/* Main Grid */}
-                <div className="flex-1 flex items-center justify-center">
+                <div className="flex-1 flex items-center justify-center w-full px-1">
                     <GridPrinter
                         rows={6}
                         cols={5}
