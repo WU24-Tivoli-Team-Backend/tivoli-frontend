@@ -41,8 +41,8 @@ const Navigation = ({ user }) => {
                                 Groups
                             </NavLink>
                             <NavLink
-                                href="/vote"
-                                active={usePathname() === '/vote'}>
+                                href="/votes"
+                                active={usePathname() === '/votes'}>
                                 Votes
                             </NavLink>
                             <NavLink
