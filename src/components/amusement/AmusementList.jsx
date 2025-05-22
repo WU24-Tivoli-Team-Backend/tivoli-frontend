@@ -20,6 +20,30 @@ export default function AmusementList() {
     const [editingAmusementId, setEditingAmusementId] = useState(null)
     const [successMessage, setSuccessMessage] = useState(null)
 
+    // Hardcoded stamp mapping
+    const stampMap = {
+        '1': 'Panda',
+        '6': 'Silver panda',
+        '7': 'Gold panda',
+        '8': 'Platinum panda',
+        '2': 'Orca',
+        '9': 'Silver Orca',
+        '10': 'Gold Orca',
+        '11': 'Platinum Orca',
+        '3': 'Raven',
+        '12': 'Silver Raven',
+        '13': 'Gold Raven',
+        '14': 'Platinum Raven',
+        '4': 'Blobfish',
+        '15': 'Silver Blobfish',
+        '16': 'Gold Blobfish',
+        '17': 'Platinum Blobfish',
+        '5': 'Pallas cat',
+        '18': 'Silver Pallas cat',
+        '19': 'Gold Pallas cat',
+        '20': 'Platinum Pallas cat',
+    }
+
     if (amusementLoading) return <p>Loading amusements...</p>
     if (amusementError)
         return (
@@ -37,14 +61,13 @@ export default function AmusementList() {
     }
 
     function handleEditClick(amusementId) {
-        // Toggle the edit form for the clicked amusement
-        setEditingAmusementId(prevId => (prevId === amusementId ? null : amusementId))
+        setEditingAmusementId(prevId =>
+            prevId === amusementId ? null : amusementId,
+        )
         setShowCreateForm(false)
     }
 
-    // Form submitted successfully - reset state to hide forms
     const handleFormSuccess = (data, action = 'unknown') => {
-        console.log('Form submission successful with data:', data)
         setShowCreateForm(false)
         setEditingAmusementId(null)
         refetch()
@@ -60,7 +83,7 @@ export default function AmusementList() {
     }
 
     return (
-        <div className="">
+        <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
                 {successMessage && (
                     <p className="text-green-500">{successMessage}</p>
@@ -85,20 +108,23 @@ export default function AmusementList() {
                             {/* Display amusement stamp and group */}
                             <div className="mt-2 text-sm text-gray-600">
                                 <p>
-                                    <strong>Stamp:</strong>{' '}
-                                    {amusement.stamp_id ? amusement.stamp_id : 'No stamp assigned'}
+                                    <strong>Group:</strong>{' '}
+                                    {amusement.group_id
+                                        ? amusement.group_id
+                                        : 'No group assigned'}
                                 </p>
                                 <p>
-                                    <strong>Group:</strong>{' '}
-                                    {amusement.group_id ? amusement.group_id : 'No group assigned'}
+                                    <strong>Stamp:</strong>{' '}
+                                    {amusement.stamp_id
+                                        ? `${stampMap[amusement.stamp_id] || 'Unknown stamp'} (ID: ${amusement.stamp_id})`
+                                        : 'No stamp assigned'}
                                 </p>
                             </div>
 
                             {/* Edit Button */}
                             <button
                                 onClick={() => handleEditClick(amusement.id)}
-                                className="text-blue-600 hover:underline mt-4"
-                            >
+                                className="text-blue-600 hover:underline mt-4">
                                 Add and edit info
                             </button>
 
