@@ -15,9 +15,6 @@ const GridDemo = () => {
     const amusementsApiUrl = `/api/amusements`
     const {
         data: amusementData,
-        error: amusementError,
-        loading: amusementLoading,
-        refetch,
     } = useFetch(amusementsApiUrl)
 
     const [openModalId, setOpenModalId] = useState(null)
