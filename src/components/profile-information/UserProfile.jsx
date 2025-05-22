@@ -34,8 +34,8 @@ export default function UserProfile() {
                         <p>Stamps:</p>
                         <ul>
                             {user.stamps &&
-                                user.stamps.map(stamp => (
-                                    <li key={stamp.id}>
+                                user.stamps.map((stamp, index) => (
+                                    <li key={index}>
                                         {stamp.premium_attribute
                                             ? `${stamp.premium_attribute} ${stamp.animal}`
                                             : stamp.animal}

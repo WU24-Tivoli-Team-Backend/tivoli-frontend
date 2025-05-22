@@ -1,7 +1,7 @@
 import Header from '@/app/(app)/Header'
-import AmusementList from '@/components/amusement/AmusementList'
-import EditUserInfoForm from '@/components/forms/EditUserInfoForm'
 import UserProfile from '@/components/profile-information/UserProfile'
+import UserAmusementContainer from '@/components/amusement/UserAmusementContainer'
+
 // import { useAuth } from '@/hooks/auth'
 // import { redirect } from 'next/navigation'
 export const metadata = {
@@ -19,7 +19,7 @@ const Dashboard = () => {
                             You are logged in!
                         </div>
                         <UserProfile />
-                        <AmusementList />
+                        <UserAmusementContainer />
                     </div>
                 </div>
             </div>
