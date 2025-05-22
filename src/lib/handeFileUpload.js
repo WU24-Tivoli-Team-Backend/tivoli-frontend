@@ -1,8 +1,6 @@
 'use server'
-import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
 import { put } from '@vercel/blob'
-import { NextResponse } from 'next/server'
 
 export default async function handleUploadChange(imageFile) {
     try {
