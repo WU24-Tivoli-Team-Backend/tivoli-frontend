@@ -1,42 +1,141 @@
-.grid-container {
+/* Tivoli Grid Styles - Production Ready */
+
+.tivoli-grid-container {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    margin: 2rem 0;
-}
-
-.grid-cell {
+    padding: 1rem;
+    height: 100%;
+    width: 100%;
     position: relative;
-    width: 100px;
-    height: 100px;
-    border-radius: 8px;
+}
+
+.grid-background {
+    position: relative;
+    border-radius: 1rem;
     overflow: hidden;
-    background: #f9fafb;
-    transition: all 0.2s ease-in-out;
-}
-
-.grid-cell:hover {
-    transform: scale(1.02);
     box-shadow:
-        0 4px 6px -1px rgba(0, 0, 0, 0.1),
-        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    padding: 2rem;
 }
 
-.avatar-container {
+.grid-background.mobile-background {
+    padding: 1rem;
+    border-radius: 0.75rem;
+}
+
+.grid-background.desktop-background {
+    padding: 2.5rem;
+}
+
+.grid-overlay {
+    position: relative;
+    z-index: 10;
+}
+
+.game-grid {
+    position: relative;
+    z-index: 1;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.avatar-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
+    z-index: 20;
 }
 
-@keyframes pulse {
-    0% {
+/* Grid Cell Enhancements */
+.tivoli-grid-cell {
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    will-change: transform, box-shadow;
+}
+
+.tivoli-grid-cell:active {
+    transform: scale(0.95);
+}
+
+.tivoli-grid-cell:hover {
+    transform: scale(1.02);
+}
+
+/* Avatar Enhancements */
+.tivoli-avatar {
+    will-change: transform, left, top;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
+}
+
+/* Content Animations */
+@keyframes contentPulse {
+    0%,
+    100% {
+        opacity: 0.7;
         transform: scale(1);
     }
     50% {
-        transform: scale(1.1);
-    }
-    100% {
-        transform: scale(1);
+        opacity: 1;
+        transform: scale(1.05);
     }
 }
 
-.grid-cell.is-active {
-    animation: pulse 0.5s ease-in-out;
+.content-container {
+    animation: contentPulse 2s ease-in-out infinite;
+}
+
+/* Active Cell Animation */
+@keyframes activeGlow {
+    0% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+}
+
+.tivoli-grid-cell:has(.active-indicator) {
+    animation: activeGlow 1.5s ease-in-out infinite;
+}
+
+/* Focus states for accessibility - only visible when using keyboard navigation */
+.tivoli-grid-cell:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    background: rgba(59, 130, 246, 0.1);
+}
+
+/* Hide focus outline for mouse/touch users */
+.tivoli-grid-cell:focus:not(:focus-visible) {
+    outline: none;
+    background: transparent;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .tivoli-grid-cell,
+    .tivoli-avatar,
+    .content-container {
+        animation: none;
+        transition: none;
+    }
+
+    .tivoli-avatar {
+        transition:
+            left 0.1s ease,
+            top 0.1s ease;
+    }
 }

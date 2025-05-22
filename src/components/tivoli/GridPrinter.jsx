@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import GridCell from './GridCell'
 import Avatar from './Avatar'
 import './grid.css'
@@ -8,18 +8,22 @@ import './grid.css'
 /**
  * GridPrinter Component
  *
- * Creates a grid system and manages the avatar's position
+ * Creates a responsive grid system with mobile and desktop layouts
  *
  * @param {Object} props
- * @param {number} props.rows - Number of rows in the grid
- * @param {number} props.cols - Number of columns in the grid
+ * @param {number} props.rows - Number of rows in the grid (desktop default)
+ * @param {number} props.cols - Number of columns in the grid (desktop default)
+ * @param {number} props.mobileRows - Number of rows for mobile layout
+ * @param {number} props.mobileCols - Number of columns for mobile layout
  * @param {Array} props.specialCells - Array of cell coordinates with special content
  * @param {Function} props.onCellActivated - Callback when a cell is activated by the avatar
  * @param {string} props.avatarImage - URL for the avatar image
  */
 const GridPrinter = ({
-    rows = 3,
-    cols = 3,
+    rows = 5,
+    cols = 5,
+    mobileRows = 3,
+    mobileCols = 3,
     specialCells = [],
     onCellActivated,
     avatarImage,
@@ -27,19 +31,58 @@ const GridPrinter = ({
     const [avatarPosition, setAvatarPosition] = useState({ x: 0, y: 0 })
     const [activeCell, setActiveCell] = useState({ x: 0, y: 0 })
     const [cellsWithContent, setCellsWithContent] = useState({})
+    const [isMobile, setIsMobile] = useState(false)
+    const [isTablet, setIsTablet] = useState(false)
+    const gridRef = useRef(null)
+
+    // Detect device type
+    useEffect(() => {
+        const checkDeviceType = () => {
+            const width = window.innerWidth
+            setIsMobile(width < 768)
+            setIsTablet(width >= 768 && width < 1024)
+        }
+
+        checkDeviceType()
+        window.addEventListener('resize', checkDeviceType)
+        return () => window.removeEventListener('resize', checkDeviceType)
+    }, [])
+
+    // Get current grid dimensions based on device
+    const getCurrentGridDimensions = () => {
+        if (isMobile) {
+            return { rows: mobileRows, cols: mobileCols }
+        }
+        return { rows, cols }
+    }
+
+    const { rows: currentRows, cols: currentCols } = getCurrentGridDimensions()
+
+    // Reset avatar position when switching between mobile/desktop
+    useEffect(() => {
+        const maxX = currentCols - 1
+        const maxY = currentRows - 1
+
+        if (avatarPosition.x > maxX || avatarPosition.y > maxY) {
+            setAvatarPosition({ x: 0, y: 0 })
+        }
+    }, [isMobile, currentRows, currentCols, avatarPosition])
 
     useEffect(() => {
         if (specialCells.length > 0) {
             const contentMap = {}
 
             specialCells.forEach(cell => {
-                const key = `${cell.x}-${cell.y}`
-                contentMap[key] = cell.content || true
+                // Only include cells that fit in current grid
+                if (cell.x < currentCols && cell.y < currentRows) {
+                    const key = `${cell.x}-${cell.y}`
+                    contentMap[key] = cell.content || true
+                }
             })
 
             setCellsWithContent(contentMap)
         }
-    }, [specialCells])
+    }, [specialCells, currentRows, currentCols])
 
     const handleCellClick = ({ x, y }) => {
         setAvatarPosition({ x, y })
@@ -61,89 +104,84 @@ const GridPrinter = ({
         }
     }
 
+    // Get responsive cell size with better mobile responsiveness
+    const getCellSize = () => {
+        if (isMobile) return 'clamp(50px, 15vw, 70px)'
+        if (isTablet) return 'clamp(70px, 12vw, 90px)'
+        return 'clamp(80px, 8vw, 120px)'
+    }
 
-    // const renderGrid = () => {
-    //     const grid = []
-
-    //     for (let y = 0; y < rows; y++) {
-    //         const row = []
-
-    //         for (let x = 0; x < cols; x++) {
-    //             const key = `${x}-${y}`
-    //             const isActive = x === activeCell.x && y === activeCell.y
-    //             const hasContent = cellsWithContent[key] !== undefined
-    //             const content = hasContent ? cellsWithContent[key] : null
-
-    //             row.push(
-    //                 <div key={key} className="relative">
-    //                     <GridCell
-    //                         x={x}
-    //                         y={y}
-    //                         isActive={isActive}
-    //                         hasContent={hasContent}
-    //                         content={content}
-    //                         onClick={handleCellClick}
-    //                     />
-    //                 </div>,
-    //             )
-    //         }
-
-    //         grid.push(
-    //             <div key={`row-${y}`} className="grid-row flex">
-    //                 {row}
-    //             </div>,
-    //         )
-    //     }
-
-    //     return grid
-    // }
-
-   
+    const cellSize = getCellSize()
 
     return (
-        <div className="grid-container relative">
+        <div className="tivoli-grid-container">
+            {/* Grid background container */}
             <div
-                className="grid"
+                className={`grid-background ${isMobile ? 'mobile-background' : 'desktop-background'}`}
                 style={{
-                    display: 'grid',
-                    gridTemplateColumns: `repeat(${cols}, 100px)`,
-                    gridTemplateRows: `repeat(${rows}, 100px)`,
-                    gap: '8px',
+                    backgroundImage: isMobile
+                        ? 'url(/tivoli-mobile-bg.png)'
+                        : 'url(/tivoli-desktop-bg.png)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
                 }}>
-                {/* Generate cells in a grid */}
-                {Array.from({ length: rows * cols }).map((_, index) => {
-                    const x = index % cols
-                    const y = Math.floor(index / cols)
-                    const key = `${x}-${y}`
-                    const isActive = x === activeCell.x && y === activeCell.y
-                    const hasContent = cellsWithContent[key] !== undefined
-                    const content =
-                        hasContent && cellsWithContent[key] !== true
-                            ? cellsWithContent[key]
-                            : null
+                <div className="grid-overlay">
+                    <div
+                        ref={gridRef}
+                        className="game-grid"
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: `repeat(${currentCols}, ${cellSize})`,
+                            gridTemplateRows: `repeat(${currentRows}, ${cellSize})`,
+                            gap: isMobile
+                                ? 'clamp(2px, 1vw, 6px)'
+                                : 'clamp(4px, 1vw, 10px)',
+                        }}>
+                        {/* Generate cells */}
+                        {Array.from({ length: currentRows * currentCols }).map(
+                            (_, index) => {
+                                const x = index % currentCols
+                                const y = Math.floor(index / currentCols)
+                                const key = `${x}-${y}`
+                                const isActive =
+                                    x === activeCell.x && y === activeCell.y
+                                const hasContent =
+                                    cellsWithContent[key] !== undefined
+                                const content =
+                                    hasContent && cellsWithContent[key] !== true
+                                        ? cellsWithContent[key]
+                                        : null
 
-                    return (
-                        <GridCell
-                            key={key}
-                            x={x}
-                            y={y}
-                            isActive={isActive}
-                            hasContent={hasContent}
-                            content={content}
-                            onClick={handleCellClick}
+                                return (
+                                    <GridCell
+                                        key={key}
+                                        x={x}
+                                        y={y}
+                                        isActive={isActive}
+                                        hasContent={hasContent}
+                                        content={content}
+                                        onClick={handleCellClick}
+                                        isMobile={isMobile}
+                                    />
+                                )
+                            },
+                        )}
+                    </div>
+
+                    {/* Avatar container */}
+                    <div className="avatar-layer">
+                        <Avatar
+                            x={avatarPosition.x}
+                            y={avatarPosition.y}
+                            onArrival={handleAvatarArrival}
+                            imageUrl={avatarImage}
+                            gridRef={gridRef}
+                            currentCols={currentCols}
+                            currentRows={currentRows}
                         />
-                    )
-                })}
-            </div>
-
-            {/* Position the avatar absolutely over the grid */}
-            <div className="avatar-container absolute top-0 left-0 w-full h-full">
-                <Avatar
-                    x={avatarPosition.x}
-                    y={avatarPosition.y}
-                    onArrival={handleAvatarArrival}
-                    imageUrl={avatarImage}
-                />
+                    </div>
+                </div>
             </div>
         </div>
     )
