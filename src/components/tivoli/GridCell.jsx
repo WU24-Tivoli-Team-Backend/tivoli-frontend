@@ -5,7 +5,7 @@ import React from 'react'
 /**
  * GridCell Component
  *
- * Represents a single cell in the grid system
+ * Represents a single cell in the grid system with production-ready styling
  *
  * @param {Object} props
  * @param {number} props.x - X coordinate of the cell
@@ -14,6 +14,7 @@ import React from 'react'
  * @param {boolean} props.hasContent - Whether this cell has special content
  * @param {Object} props.content - Optional content to display in this cell
  * @param {Function} props.onClick - Function to call when cell is clicked
+ * @param {boolean} props.isMobile - Whether we're in mobile view
  */
 const GridCell = ({
     x,
@@ -22,6 +23,7 @@ const GridCell = ({
     hasContent = false,
     content = null,
     onClick,
+    isMobile = false,
 }) => {
     // Generate a unique ID for this cell based on coordinates
     const cellId = `cell-${x}-${y}`
@@ -31,7 +33,38 @@ const GridCell = ({
         if (onClick) {
             onClick({ x, y })
         }
+        // Remove focus after click to prevent focus styles
+        document.activeElement?.blur()
     }
+
+    // Handle keyboard events
+    const handleKeyDown = e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            handleClick()
+        }
+    }
+
+    // Base classes for the cell
+    const baseClasses = `
+        tivoli-grid-cell
+        w-full 
+        h-full 
+        flex 
+        items-center 
+        justify-center
+        transition-all
+        duration-300
+        cursor-pointer
+        relative
+        rounded-lg
+    `
+
+    // Conditional classes based on state
+    const stateClasses = `
+        ${isActive ? 'scale-105' : 'hover:scale-102'}
+        ${hasContent ? '' : ''}
+    `
 
     return (
         <div
@@ -39,26 +72,30 @@ const GridCell = ({
             data-x={x}
             data-y={y}
             onClick={handleClick}
-            className={`
-        grid-cell
-        w-full 
-        h-full 
-        border-2 
-        flex 
-        items-center 
-        justify-center
-        transition-all
-        duration-200
-        ${isActive ? 'border-blue-500 bg-blue-100' : 'border-gray-300 hover:border-gray-400'}
-        ${hasContent ? 'bg-gray-100' : ''}
-        cursor-pointer
-      `}>
-            <div className="text-xs text-gray-500 absolute top-1 left-1">
-                {x},{y}
-            </div>
+            onKeyDown={handleKeyDown}
+            tabIndex={0}
+            role="button"
+            aria-label={`Grid cell at position ${x}, ${y}${hasContent ? ' with content' : ''}`}
+            className={`${baseClasses} ${stateClasses}`}>
+            {/* Active cell indicator */}
+            {isActive && (
+                <div className="absolute inset-0 rounded-lg animate-pulse opacity-50" />
+            )}
 
+            {/* Content container */}
             {hasContent && content && (
-                <div className="content-container">{content}</div>
+                <div className="content-container relative z-10 w-full h-full flex items-center justify-center">
+                    {content}
+                </div>
+            )}
+
+            {/* Special content indicator when no custom content */}
+            {hasContent && !content && (
+                <div className="relative z-10">
+                    <div className="w-4 h-4 bg-purple-500 rounded-full animate-bounce shadow-lg">
+                        <div className="absolute inset-0 bg-purple-400 rounded-full animate-ping opacity-75" />
+                    </div>
+                </div>
             )}
         </div>
     )
