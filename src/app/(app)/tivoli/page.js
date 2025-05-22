@@ -30,9 +30,6 @@ const TivoliPage = () => {
     const amusementsApiUrl = `/api/amusements`
     const {
         data: amusementData,
-        error: amusementError,
-        loading: amusementLoading,
-        refetch,
     } = useFetch(amusementsApiUrl)
 
     // Open the modal for a specific amusement card
@@ -54,7 +51,6 @@ const TivoliPage = () => {
         if (!amusementData || !amusementData.data) return null
         return amusementData.data.find(amusement => amusement.id === id)
     }
-
     // Define special cells with better distribution for both mobile and desktop
     const specialCells =
         amusementData && amusementData.data
