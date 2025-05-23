@@ -119,16 +119,11 @@ const TivoliPage = () => {
                       y: coord.y,
                       amusementId: amusement ? amusement.id : null,
                       content: amusement && (
-                          <div className="w-full h-full flex items-center justify-center p-1">
-                              <div className="bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-lg px-2 py-1 text-xs font-bold shadow-lg transform hover:scale-105 transition-transform max-w-full">
+                          <div className="w-full h-full flex items-center justify-center p-0.5 sm:p-1">
+                              <div className="bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-lg px-1.5 py-0.5 sm:px-2 sm:py-1 text-2xs sm:text-xs font-bold shadow-lg transform hover:scale-105 transition-transform w-full max-w-full overflow-hidden">
                                   <span
-                                      className="block"
-                                      style={{
-                                          overflow: 'hidden',
-                                          textOverflow: 'ellipsis',
-                                          whiteSpace: 'nowrap',
-                                          maxWidth: '120px',
-                                      }}>
+                                      className="block line-clamp-2 leading-tight"
+                                      title={amusement.name}>
                                       {amusement.name}
                                   </span>
                               </div>
