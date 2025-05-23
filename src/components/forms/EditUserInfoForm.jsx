@@ -13,6 +13,8 @@ export default function EditUserInfoForm() {
         url: '',
     })
     const [loading, setLoading] = useState(true)
+    const [successMessage, setSuccessMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
     const imageRef = useRef()
 
@@ -37,6 +39,8 @@ export default function EditUserInfoForm() {
 
     const handleSubmit = async e => {
         e.preventDefault()
+        setSuccessMessage('')
+        setErrorMessage('')
 
         try {
             let updatedForm = { ...form }
@@ -52,11 +56,15 @@ export default function EditUserInfoForm() {
 
                 setForm(updatedForm)
             }
-            const _res = await axios.patch('/api/user', updatedForm, {
+
+            await axios.patch('/api/user', updatedForm, {
                 headers: { 'Content-Type': 'application/json' },
             })
+
+            setSuccessMessage('Profile updated successfully!')
         } catch (err) {
             console.error('Validation or server err', err.response?.data)
+            setErrorMessage('Failed to update profile. Please try again.')
         }
     }
 
@@ -66,6 +74,14 @@ export default function EditUserInfoForm() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <h2 className="text-2xl font-bold">Edit User Info</h2>
             <p className="text-gray-500">You can edit your information here.</p>
+
+            {successMessage && (
+                <div className="text-green-500 text-sm">{successMessage}</div>
+            )}
+            {errorMessage && (
+                <div className="text-red-500 text-sm">{errorMessage}</div>
+            )}
+
             <Label>Image url</Label>
             <Input
                 name="image_url"
