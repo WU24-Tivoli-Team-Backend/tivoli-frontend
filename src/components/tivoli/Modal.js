@@ -13,17 +13,40 @@ export default function Modal({ isOpen, closeModal, children }) {
     }
 
     return (
-        <div
-            className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50"
-            onClick={handleBackdropClick}>
-            <div className="bg-white p-6 rounded-lg max-w-md w-full relative">
+    <div
+        className="fixed inset-0 bg-gray-600 bg-opacity-50 z-50 overflow-y-auto"
+        onClick={handleBackdropClick}
+        style={{
+            minHeight: '100dvh',
+        }}>
+        
+        <div className="min-h-full flex items-start justify-center p-4 py-8">
+            <div
+                className="bg-white rounded-lg w-full relative shadow-xl"
+                style={{
+                    maxWidth: '28rem',
+                    maxHeight: '90dvh',
+                }}
+                onClick={e => e.stopPropagation()}>
+                
                 <button
                     onClick={closeModal}
-                    className="absolute top-2 right-2 text-gray-600">
-                    X
+                    className="absolute top-2 right-2 text-gray-600 z-10 p-2 hover:bg-gray-100 rounded-full"
+                    style={{ touchAction: 'manipulation' }}>
+                    ✕
                 </button>
-                {children}
+                
+                <div
+                    className="p-6 overflow-y-auto"
+                    style={{
+                        maxHeight: 'calc(90dvh - 2rem)',
+                        WebkitOverflowScrolling: 'touch',
+                        touchAction: 'manipulation',
+                    }}>
+                    {children}
+                </div>
             </div>
         </div>
-    )
+    </div>
+)
 }
