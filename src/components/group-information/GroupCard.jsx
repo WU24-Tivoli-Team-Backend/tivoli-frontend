@@ -1,19 +1,19 @@
 import ProfileCard from './ProfileCard'
 import AmusementCard from '../amusement/AmusementCard'
+import Image from 'next/image'
 
 export default function GroupCard({ group, members, amusements = [] }) {
     return (
-        <div className="bg-white m-4 shadow-md rounded-lg overflow-hidden">
+<div className="bg-white m-4 shadow-md rounded-lg overflow-hidden w-full max-w-2xl">
             {/* Bild */}
             <div className="">
-                {/* <Image
-                    src=""
-                    alt="Gruppbild"
-                    layout="fill"
-                    objectFit="cover"
-                /> */}
-                <div className="h-20 bg-pink-400 p-4 w-full">
-                    Placeholder for image
+                <div className="relative h-40 bg-pink-400 p-4">
+                    <Image
+                        src={amusements && amusements[0] ? amusements[0].image_url : '/Red_panda.png'}
+                        alt="Group image"
+                        layout="fill"
+                        objectFit="cover"
+                    />
                 </div>
 
                 {/* Accordion */}
