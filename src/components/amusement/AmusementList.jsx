@@ -20,28 +20,27 @@ export default function AmusementList() {
     const [editingAmusementId, setEditingAmusementId] = useState(null)
     const [successMessage, setSuccessMessage] = useState(null)
 
-    // Hardcoded stamp mapping
     const stampMap = {
-        '1': 'Panda',
-        '6': 'Silver panda',
-        '7': 'Gold panda',
-        '8': 'Platinum panda',
-        '2': 'Orca',
-        '9': 'Silver Orca',
-        '10': 'Gold Orca',
-        '11': 'Platinum Orca',
-        '3': 'Raven',
-        '12': 'Silver Raven',
-        '13': 'Gold Raven',
-        '14': 'Platinum Raven',
-        '4': 'Blobfish',
-        '15': 'Silver Blobfish',
-        '16': 'Gold Blobfish',
-        '17': 'Platinum Blobfish',
-        '5': 'Pallas cat',
-        '18': 'Silver Pallas cat',
-        '19': 'Gold Pallas cat',
-        '20': 'Platinum Pallas cat',
+        1: 'Panda',
+        6: 'Silver panda',
+        7: 'Gold panda',
+        8: 'Platinum panda',
+        2: 'Orca',
+        9: 'Silver Orca',
+        10: 'Gold Orca',
+        11: 'Platinum Orca',
+        3: 'Raven',
+        12: 'Silver Raven',
+        13: 'Gold Raven',
+        14: 'Platinum Raven',
+        4: 'Blobfish',
+        15: 'Silver Blobfish',
+        16: 'Gold Blobfish',
+        17: 'Platinum Blobfish',
+        5: 'Pallas cat',
+        18: 'Silver Pallas cat',
+        19: 'Gold Pallas cat',
+        20: 'Platinum Pallas cat',
     }
 
     if (amusementLoading) return <p>Loading amusements...</p>
@@ -90,22 +89,18 @@ export default function AmusementList() {
                 )}
             </div>
 
-            {/* Show create form conditionally */}
             {showCreateForm && (
                 <div className="bg-gray-50 p-4 rounded-lg mb-4">
                     <AmusementForm onSuccess={handleFormSuccess} />
                 </div>
             )}
 
-            {/* Display amusements if available */}
             {hasAmusements ? (
                 <ul className="space-y-4">
                     {amusementData.data.map(amusement => (
                         <li key={amusement.id} className="">
-                            {/* Use AmusementCard for amusement details */}
                             <AmusementCard amusement={amusement} />
 
-                            {/* Display amusement stamp and group */}
                             <div className="mt-2 text-sm text-gray-600">
                                 <p>
                                     <strong>Group:</strong>{' '}
@@ -121,14 +116,12 @@ export default function AmusementList() {
                                 </p>
                             </div>
 
-                            {/* Edit Button */}
                             <button
                                 onClick={() => handleEditClick(amusement.id)}
                                 className="text-blue-600 hover:underline mt-4">
                                 Add and edit info
                             </button>
 
-                            {/* Show edit form for this specific amusement */}
                             {editingAmusementId === amusement.id && (
                                 <div className="mt-4 border-t pt-4">
                                     <AmusementForm
@@ -141,7 +134,6 @@ export default function AmusementList() {
                     ))}
                 </ul>
             ) : (
-                // No amusements available - show create form or message
                 <div className="bg-white p-6 rounded-lg shadow text-center">
                     <p className="text-gray-500 mb-4">
                         No amusements found. Create your first one!

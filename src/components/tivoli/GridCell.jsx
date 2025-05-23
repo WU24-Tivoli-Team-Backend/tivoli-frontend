@@ -23,21 +23,16 @@ const GridCell = ({
     hasContent = false,
     content = null,
     onClick,
-    // isMobile = false,
 }) => {
-    // Generate a unique ID for this cell based on coordinates
     const cellId = `cell-${x}-${y}`
 
-    // Handle the click event and pass the coordinates to the parent
     const handleClick = () => {
         if (onClick) {
             onClick({ x, y })
         }
-        // Remove focus after click to prevent focus styles
         document.activeElement?.blur()
     }
 
-    // Handle keyboard events
     const handleKeyDown = e => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()
@@ -45,7 +40,6 @@ const GridCell = ({
         }
     }
 
-    // Base classes for the cell
     const baseClasses = `
         tivoli-grid-cell
         w-full 
@@ -60,7 +54,6 @@ const GridCell = ({
         rounded-lg
     `
 
-    // Conditional classes based on state
     const stateClasses = `
         ${isActive ? 'scale-105' : 'hover:scale-102'}
         ${hasContent ? '' : ''}
@@ -77,19 +70,16 @@ const GridCell = ({
             role="button"
             aria-label={`Grid cell at position ${x}, ${y}${hasContent ? ' with content' : ''}`}
             className={`${baseClasses} ${stateClasses}`}>
-            {/* Active cell indicator */}
             {isActive && (
                 <div className="absolute inset-0 rounded-lg animate-pulse opacity-50" />
             )}
 
-            {/* Content container */}
             {hasContent && content && (
                 <div className="content-container relative z-10 w-full h-full flex items-center justify-center">
                     {content}
                 </div>
             )}
 
-            {/* Special content indicator when no custom content */}
             {hasContent && !content && (
                 <div className="relative z-10">
                     <div className="w-4 h-4 bg-purple-500 rounded-full animate-bounce shadow-lg">

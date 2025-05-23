@@ -13,7 +13,6 @@ export default function AmusementForm({
     onSuccess = () => {},
     ...props
 }) {
-    // Initialize state with empty values
     const [form, setForm] = useState({
         name: '',
         type: '',
@@ -23,7 +22,6 @@ export default function AmusementForm({
         stamp_id: '',
     })
 
-    // Only fetch if we have an amusementId (editing mode)
     const isEditMode = !!amusementId
     const amusementUrl = isEditMode ? `/api/amusements/${amusementId}` : null
 
@@ -39,10 +37,8 @@ export default function AmusementForm({
     const [validationErrors, setValidationErrors] = useState({})
     const imageRef = useRef()
 
-    // Only update form with existing data if in edit mode and data is loaded
     useEffect(() => {
         if (isEditMode && amusementData && !amusementLoading) {
-            console.log('Loading existing amusement data:', amusementData)
             setForm({
                 name: amusementData.name || '',
                 type: amusementData.type || '',
@@ -61,7 +57,6 @@ export default function AmusementForm({
 
     const handleSubmit = async e => {
         e.preventDefault()
-        console.log('Form data being sent:', form)
         setSuccessMessage('')
         setError(null)
         setValidationErrors({})
@@ -70,37 +65,31 @@ export default function AmusementForm({
 
             const file = imageRef.current?.files?.[0]
             if (file) {
-                // Upload the file and get the path
                 const imagePath = await handleUploadChange(file)
-                console.log('Image uploaded to:', imagePath)
 
-                // Update our local copy of the form data
                 updatedForm = {
                     ...updatedForm,
                     image_url: imagePath,
                 }
 
-                // Also update the React state (but don't wait for it)
                 setForm(updatedForm)
             }
 
             await axios.get('/sanctum/csrf-cookie')
-            console.log('CSRF cookie obtained')
             let res
 
             if (isEditMode) {
-                // Update existing amusement
-                res = await axios.put(`/api/amusements/${amusementId}`, updatedForm, {
-                    headers: { 'Content-Type': 'application/json' },
-                })
+                res = await axios.put(
+                    `/api/amusements/${amusementId}`,
+                    updatedForm,
+                    {
+                        headers: { 'Content-Type': 'application/json' },
+                    },
+                )
                 setSuccessMessage('Amusement updated successfully!')
-
-                //@TODO: Error: Expected an assignment or function call and instead saw an expression.  no-unused-expressions
 
                 onSuccess?.(res.data, 'update')
             } else {
-                // Create new amusement
-                console.log('About to send POST request to /api/amusements')
                 const res = await axios.request({
                     method: 'post',
                     url: '/api/amusements',
@@ -111,7 +100,6 @@ export default function AmusementForm({
 
                 setSuccessMessage('Amusement created successfully!')
 
-                console.log('Calling onSuccess with created data')
                 onSuccess(res.data, 'create')
             }
             setForm({
@@ -122,22 +110,15 @@ export default function AmusementForm({
                 image_url: '',
                 stamp_id: '',
             })
-
-            // Show success message
         } catch (err) {
-            console.log(err)
             if (err.response?.data?.errors) {
-                // Set validation errors
                 setValidationErrors(err.response.data.errors)
-
-                // Set general error message
                 if (err.response.data.message) {
                     setError(err.response.data.message)
                 } else {
                     setError('Please correct the validation errors below')
                 }
             }
-            // Show error message
         }
     }
 
@@ -165,8 +146,7 @@ export default function AmusementForm({
                 refetchAmusement()
             }
         } else {
-            // User clicked "Cancel" - do nothing or handle cancellation
-            return // This exits the function
+            return
         }
     }
 

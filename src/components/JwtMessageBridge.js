@@ -17,11 +17,9 @@ const JwtMessageBridge = ({ url, jwt, onGameReady, onTokenSent, children }) => {
     const [gameReady, setGameReady] = useState(false)
     const [tokenSent, setTokenSent] = useState(false)
 
-    // Handle communication with the game iframe
     useEffect(() => {
         const handleMessage = event => {
             try {
-                // Only accept messages from the game URL
                 const gameUrlObj = new URL(url)
                 if (
                     event.origin !==
@@ -30,9 +28,7 @@ const JwtMessageBridge = ({ url, jwt, onGameReady, onTokenSent, children }) => {
                     return
                 }
 
-                // Handle GAME_READY message
                 if (event.data && event.data.type === 'GAME_READY') {
-                    console.log('Game is ready to receive messages')
                     setGameReady(true)
                     if (onGameReady) onGameReady()
                 }
@@ -52,9 +48,6 @@ const JwtMessageBridge = ({ url, jwt, onGameReady, onTokenSent, children }) => {
     useEffect(() => {
         if (gameReady && jwt && iframeRef.current && !tokenSent) {
             try {
-                console.log('Sending JWT token to game')
-
-                // Post the token to the iframe
                 iframeRef.current.contentWindow.postMessage(
                     {
                         type: 'JWT_TOKEN',
@@ -71,17 +64,14 @@ const JwtMessageBridge = ({ url, jwt, onGameReady, onTokenSent, children }) => {
         }
     }, [gameReady, jwt, url, tokenSent, onTokenSent])
 
-    // Reset tokenSent if JWT changes
     useEffect(() => {
         setTokenSent(false)
     }, [jwt])
 
-    // Clone the iframe child and add our ref to it
     if (!children) {
         return null
     }
 
-    // Clone the iframe element to add our ref
     const childWithRef = cloneElement(children, {
         ref: iframeRef,
     })

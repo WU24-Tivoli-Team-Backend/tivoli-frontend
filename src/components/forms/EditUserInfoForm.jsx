@@ -20,7 +20,6 @@ export default function EditUserInfoForm() {
         axios
             .get('/api/user')
             .then(res => {
-                console.log(res)
                 setForm({
                     image_url: res.data.image_url || '',
                     github: res.data.github || '',
@@ -38,36 +37,26 @@ export default function EditUserInfoForm() {
 
     const handleSubmit = async e => {
         e.preventDefault()
-        // console.log(form['image_url']);
-        // const file = form['image_url']
 
         try {
-            // Start with the current form state
             let updatedForm = { ...form }
 
             const file = imageRef.current?.files?.[0]
             if (file) {
-                // Upload the file and get the path
                 const imagePath = await handleUploadChange(file)
-                console.log('Image uploaded to:', imagePath)
 
-                // Update our local copy of the form data
                 updatedForm = {
                     ...updatedForm,
                     image_url: imagePath,
                 }
 
-                // Also update the React state (but don't wait for it)
                 setForm(updatedForm)
             }
             const res = await axios.patch('/api/user', updatedForm, {
                 headers: { 'Content-Type': 'application/json' },
             })
-            console.log('Updated User:', res.data.data)
-            // Show success message
         } catch (err) {
             console.error('Validation or server err', err.response?.data)
-            // Show error message
         }
     }
 
@@ -103,7 +92,6 @@ export default function EditUserInfoForm() {
                 value={form.url}
                 onChange={handleChange}
             />
-            {/* Add input for group_id? */}
             <Button>Save Profile</Button>
         </form>
     )

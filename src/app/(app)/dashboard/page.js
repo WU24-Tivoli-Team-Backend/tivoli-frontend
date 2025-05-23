@@ -4,7 +4,7 @@ import UserAmusementContainer from '@/components/amusement/UserAmusementContaine
 import '@/components/tivoli/tivoli-background.css'
 
 export const metadata = {
-    title: 'Laravel - Dashboard',
+    title: 'Yrgo Tivoli - Dashboard',
 }
 
 const Dashboard = () => {
@@ -15,17 +15,14 @@ const Dashboard = () => {
                 description="This is where you manage your information and attractions"
             />
             <div className="tivoli-container">
-                {/* Background Image */}
                 <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{
                         backgroundImage: "url('/images/bg-image-park.png')",
                     }}></div>
 
-                {/* Gradient Overlay */}
                 <div className="tivoli-gradient-overlay"></div>
 
-                {/* Content */}
                 <div className="tivoli-content-container">
                     <div className="py-12">
                         <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
