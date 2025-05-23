@@ -102,7 +102,9 @@
 /* Avatar Enhancements */
 .tivoli-avatar {
     will-change: transform, left, top;
-    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
+    transition:
+        left 0.3s linear,
+        top 0.3s linear;
 }
 
 /* Content Animations */

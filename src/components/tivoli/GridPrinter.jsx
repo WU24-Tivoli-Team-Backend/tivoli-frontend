@@ -5,20 +5,6 @@ import GridCell from './GridCell'
 import Avatar from './Avatar'
 import './grid.css'
 
-/**
- * GridPrinter Component
- *
- * Creates a responsive grid system with mobile and desktop layouts
- *
- * @param {Object} props
- * @param {number} props.rows - Number of rows in the grid (desktop default)
- * @param {number} props.cols - Number of columns in the grid (desktop default)
- * @param {number} props.mobileRows - Number of rows for mobile layout
- * @param {number} props.mobileCols - Number of columns for mobile layout
- * @param {Array} props.specialCells - Array of cell coordinates with special content
- * @param {Function} props.onCellActivated - Callback when a cell is activated by the avatar
- * @param {string} props.avatarImage - URL for the avatar image
- */
 const GridPrinter = ({
     rows = 5,
     cols = 5,
@@ -26,16 +12,39 @@ const GridPrinter = ({
     mobileCols = 3,
     specialCells = [],
     onCellActivated,
-    avatarImage,
 }) => {
     const [avatarPosition, setAvatarPosition] = useState({ x: 0, y: 0 })
+    const [prevAvatarPosition, setPrevAvatarPosition] = useState({ x: 0, y: 0 })
     const [activeCell, setActiveCell] = useState({ x: 0, y: 0 })
     const [cellsWithContent, setCellsWithContent] = useState({})
     const [isMobile, setIsMobile] = useState(false)
     const [isTablet, setIsTablet] = useState(false)
+    const [facingDirection, setFacingDirection] = useState('right') // 'left' or 'right'
+
+    const [avatarState, setAvatarState] = useState('idle')
+    const sleepTimeoutRef = useRef(null)
     const gridRef = useRef(null)
 
-    // Detect device type
+    useEffect(() => {
+        const startSleepTimer = () => {
+            if (sleepTimeoutRef.current) {
+                clearTimeout(sleepTimeoutRef.current)
+            }
+
+            sleepTimeoutRef.current = setTimeout(() => {
+                setAvatarState('asleep')
+            }, 15000) // 15 seconds
+        }
+
+        startSleepTimer()
+
+        return () => {
+            if (sleepTimeoutRef.current) {
+                clearTimeout(sleepTimeoutRef.current)
+            }
+        }
+    }, [])
+
     useEffect(() => {
         const checkDeviceType = () => {
             const width = window.innerWidth
@@ -48,7 +57,6 @@ const GridPrinter = ({
         return () => window.removeEventListener('resize', checkDeviceType)
     }, [])
 
-    // Get current grid dimensions based on device
     const getCurrentGridDimensions = () => {
         if (isMobile) {
             return { rows: mobileRows, cols: mobileCols }
@@ -58,7 +66,6 @@ const GridPrinter = ({
 
     const { rows: currentRows, cols: currentCols } = getCurrentGridDimensions()
 
-    // Reset avatar position when switching between mobile/desktop
     useEffect(() => {
         const maxX = currentCols - 1
         const maxY = currentRows - 1
@@ -73,7 +80,6 @@ const GridPrinter = ({
             const contentMap = {}
 
             specialCells.forEach(cell => {
-                // Only include cells that fit in current grid
                 if (cell.x < currentCols && cell.y < currentRows) {
                     const key = `${cell.x}-${cell.y}`
                     contentMap[key] = cell.content || true
@@ -85,7 +91,41 @@ const GridPrinter = ({
     }, [specialCells, currentRows, currentCols])
 
     const handleCellClick = ({ x, y }) => {
-        setAvatarPosition({ x, y })
+        if (x !== avatarPosition.x || y !== avatarPosition.y) {
+            if (sleepTimeoutRef.current) {
+                clearTimeout(sleepTimeoutRef.current)
+            }
+
+            if (x > avatarPosition.x) {
+                setFacingDirection('right')
+            } else if (x < avatarPosition.x) {
+                setFacingDirection('left')
+            }
+
+            const deltaX = Math.abs(x - avatarPosition.x)
+            const deltaY = Math.abs(y - avatarPosition.y)
+            const totalSquares = Math.max(deltaX, deltaY)
+
+            let movementDuration =
+                totalSquares === 1 ? 1100 : 1100 + (totalSquares - 1) * 900
+
+            if (movementDuration > 2200) {
+                movementDuration = 2200
+            }
+
+            setPrevAvatarPosition(avatarPosition)
+            setAvatarPosition({ x, y })
+
+            setAvatarState('movement')
+
+            setTimeout(() => {
+                setAvatarState('idle')
+
+                sleepTimeoutRef.current = setTimeout(() => {
+                    setAvatarState('asleep')
+                }, 15000)
+            }, movementDuration)
+        }
     }
 
     const handleAvatarArrival = ({ x, y }) => {
@@ -104,7 +144,6 @@ const GridPrinter = ({
         }
     }
 
-    // Get responsive cell size with better mobile responsiveness
     const getCellSize = () => {
         if (isMobile) return 'clamp(50px, 15vw, 70px)'
         if (isTablet) return 'clamp(70px, 12vw, 90px)'
@@ -115,7 +154,6 @@ const GridPrinter = ({
 
     return (
         <div className="tivoli-grid-container w-full h-full">
-            {/* Grid background container */}
             <div
                 className={`grid-background ${isMobile ? 'mobile-background' : 'desktop-background'} w-full h-full`}
                 style={{
@@ -135,13 +173,10 @@ const GridPrinter = ({
                             display: 'grid',
                             gridTemplateColumns: `repeat(${currentCols}, ${cellSize})`,
                             gridTemplateRows: `repeat(${currentRows}, ${cellSize})`,
-                            gap: isMobile
-                                ? 'clamp(2px, 1vw, 6px)'
-                                : 'clamp(4px, 1vw, 10px)',
+                            gap: '0px',
                             justifyContent: 'center',
                             alignContent: 'center',
                         }}>
-                        {/* Generate cells */}
                         {Array.from({ length: currentRows * currentCols }).map(
                             (_, index) => {
                                 const x = index % currentCols
@@ -172,16 +207,16 @@ const GridPrinter = ({
                         )}
                     </div>
 
-                    {/* Avatar container */}
                     <div className="avatar-layer">
                         <Avatar
                             x={avatarPosition.x}
                             y={avatarPosition.y}
                             onArrival={handleAvatarArrival}
-                            imageUrl={avatarImage}
                             gridRef={gridRef}
                             currentCols={currentCols}
                             currentRows={currentRows}
+                            avatarState={avatarState}
+                            facingDirection={facingDirection}
                         />
                     </div>
                 </div>
