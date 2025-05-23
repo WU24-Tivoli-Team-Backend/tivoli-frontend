@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+// import Image from 'next/image'
 import GridPrinter from '@/components/tivoli/GridPrinter'
 import { useFetch } from '@/hooks/useFetch'
 import AmusementCard from '@/components/amusement/AmusementCard'
@@ -8,8 +9,12 @@ import Modal from '@/components/tivoli/Modal'
 import UserProfile from '@/components/profile-information/UserProfile'
 import Button from '@/components/Button'
 import Header from '@/app/(app)/Header'
+import '@/components/tivoli/tivoli-background.css'
+
 
 const TivoliPage = () => {
+    const backgroundImage = '/images/tivoli-bg2.png'
+
     const [activeCell, setActiveCell] = useState(null)
     const [message, setMessage] = useState(
         'Welcome to Tivoli! Click any area to explore.',
@@ -17,7 +22,6 @@ const TivoliPage = () => {
     const [openModalId, setOpenModalId] = useState(null)
     const [lastVisitedCell, setLastVisitedCell] = useState(null)
     const [isMobile, setIsMobile] = useState(false)
-    const [showUserProfile, setShowUserProfile] = useState(false)
 
     // Detect device type
     useEffect(() => {
@@ -52,16 +56,12 @@ const TivoliPage = () => {
         }
     }
 
-    const handleUserProfile = e => {
-        e.preventDefault
-        setShowUserProfile(prev => !prev)
-    }
-
     // Find amusement by id
     const getAmusementById = id => {
         if (!amusementData || !amusementData.data) return null
         return amusementData.data.find(amusement => amusement.id === id)
     }
+
     // Define special cells with better distribution for both mobile and desktop
     const specialCells =
         amusementData && amusementData.data
@@ -205,6 +205,18 @@ const TivoliPage = () => {
                 description="Explore the magical park and discover its games and attractions!"
             />
             <div className="min-h-screen">
+        // Apply the CSS classes from our external file
+        <div className="tivoli-container">
+            {/* Background image with grayscale effect */}
+            <div
+                className="tivoli-background-image"
+                style={{ backgroundImage: `url(${backgroundImage})` }}></div>
+
+            {/* Gradient overlay with transparency */}
+            <div className="tivoli-gradient-overlay"></div>
+
+            {/* Content container */}
+            <div className="tivoli-content-container">
                 <div className="flex flex-col items-center pt-2">
                     {/* Status Message */}
                     <div className="mb-2 px-2 w-full flex justify-center">
@@ -244,6 +256,7 @@ const TivoliPage = () => {
                     </Modal>
                 )}
             </div>
+        </div>
         </>
     )
 }
