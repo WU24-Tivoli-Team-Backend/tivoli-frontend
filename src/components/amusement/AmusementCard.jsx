@@ -29,6 +29,10 @@ export default function AmusementCard({ amusement }) {
 
     return (
         <div
+            role="button"
+            tabIndex={0}
+            aria-expanded={expanded}
+            aria-label={`Toggle details for ${amusement.name}`}
             className={`${baseClasses} w-full group/card ${expanded ? '' : 'h-32'}`}
             onClick={handleClick}>
             {!expanded ? (
