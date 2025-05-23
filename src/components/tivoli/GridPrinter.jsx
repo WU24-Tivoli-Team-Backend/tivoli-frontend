@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import GridCell from './GridCell'
 import Avatar from './Avatar'
-import { useAvatarState } from './AvatarAnimation'
 import './grid.css'
 
 const GridPrinter = ({
@@ -20,12 +19,31 @@ const GridPrinter = ({
     const [cellsWithContent, setCellsWithContent] = useState({})
     const [isMobile, setIsMobile] = useState(false)
     const [isTablet, setIsTablet] = useState(false)
-    const [isMoving, setIsMoving] = useState(false)
     const [facingDirection, setFacingDirection] = useState('right') // 'left' or 'right'
+
+    const [avatarState, setAvatarState] = useState('idle')
+    const sleepTimeoutRef = useRef(null)
     const gridRef = useRef(null)
 
-    const { avatarState, setMoving, setIdle, updateActivity } =
-        useAvatarState(10000)
+    useEffect(() => {
+        const startSleepTimer = () => {
+            if (sleepTimeoutRef.current) {
+                clearTimeout(sleepTimeoutRef.current)
+            }
+
+            sleepTimeoutRef.current = setTimeout(() => {
+                setAvatarState('asleep')
+            }, 15000) // 15 seconds
+        }
+
+        startSleepTimer()
+
+        return () => {
+            if (sleepTimeoutRef.current) {
+                clearTimeout(sleepTimeoutRef.current)
+            }
+        }
+    }, [])
 
     useEffect(() => {
         const checkDeviceType = () => {
@@ -74,37 +92,44 @@ const GridPrinter = ({
 
     const handleCellClick = ({ x, y }) => {
         if (x !== avatarPosition.x || y !== avatarPosition.y) {
-            // Determine facing direction
+            if (sleepTimeoutRef.current) {
+                clearTimeout(sleepTimeoutRef.current)
+            }
+
             if (x > avatarPosition.x) {
                 setFacingDirection('right')
             } else if (x < avatarPosition.x) {
                 setFacingDirection('left')
             }
 
-            // Calculate distance in grid squares
             const deltaX = Math.abs(x - avatarPosition.x)
             const deltaY = Math.abs(y - avatarPosition.y)
-            const totalSquares = Math.max(deltaX, deltaY) // Diagonal movement counts as max of x or y
+            const totalSquares = Math.max(deltaX, deltaY)
 
-            // 1 square = 1200ms base, then +200ms for each additional square
-            const movementDuration =
-                totalSquares === 1 ? 1200 : 1200 + (totalSquares - 1) * 200
+            let movementDuration =
+                totalSquares === 1 ? 1100 : 1100 + (totalSquares - 1) * 900
+
+            if (movementDuration > 2200) {
+                movementDuration = 2200
+            }
 
             setPrevAvatarPosition(avatarPosition)
-            setIsMoving(true)
             setAvatarPosition({ x, y })
-            updateActivity()
 
-            // Force movement animation to play for calculated duration
+            setAvatarState('movement')
+
             setTimeout(() => {
-                setIsMoving(false)
+                setAvatarState('idle')
+
+                sleepTimeoutRef.current = setTimeout(() => {
+                    setAvatarState('asleep')
+                }, 15000)
             }, movementDuration)
         }
     }
 
     const handleAvatarArrival = ({ x, y }) => {
         setActiveCell({ x, y })
-        updateActivity()
 
         if (onCellActivated) {
             const key = `${x}-${y}`
@@ -190,7 +215,7 @@ const GridPrinter = ({
                             gridRef={gridRef}
                             currentCols={currentCols}
                             currentRows={currentRows}
-                            avatarState={isMoving ? 'movement' : avatarState}
+                            avatarState={avatarState}
                             facingDirection={facingDirection}
                         />
                     </div>
