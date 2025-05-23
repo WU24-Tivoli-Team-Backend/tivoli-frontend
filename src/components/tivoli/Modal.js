@@ -48,7 +48,7 @@ export default function Modal({ isOpen, closeModal, children }) {
                     style={{ touchAction: 'manipulation' }}>
                     ✕
                     className="absolute top-2 right-2 text-gray-600 z-10 p-2 hover:bg-gray-100 rounded-full"
-                    style={{ touchAction: 'manipulation' }}>
+                    style={{ touchAction: 'manipulation' }}
                     ✕
                 </button>
                 
