@@ -12,5 +12,4 @@ export default function Vote() {
                 <Voting />
             </div>
         </>
-    )
-}
+
