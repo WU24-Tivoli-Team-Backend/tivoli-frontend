@@ -6,11 +6,8 @@ import GridPrinter from '@/components/tivoli/GridPrinter'
 import { useFetch } from '@/hooks/useFetch'
 import AmusementCard from '@/components/amusement/AmusementCard'
 import Modal from '@/components/tivoli/Modal'
-import UserProfile from '@/components/profile-information/UserProfile'
-import Button from '@/components/Button'
-import Header from '@/app/(app)/Header'
+// Import the CSS file
 import '@/components/tivoli/tivoli-background.css'
-
 
 const TivoliPage = () => {
     const backgroundImage = '/images/tivoli-bg2.png'
@@ -199,12 +196,6 @@ const TivoliPage = () => {
     }
 
     return (
-        <>
-            <Header
-                title="Tivoli"
-                description="Explore the magical park and discover its games and attractions!"
-            />
-            <div className="min-h-screen">
         // Apply the CSS classes from our external file
         <div className="tivoli-container">
             {/* Background image with grayscale effect */}
@@ -239,12 +230,6 @@ const TivoliPage = () => {
                             avatarImage="/avatar-placeholder.png"
                         />
                     </div>
-                    <div className="flex flex-col justify-center pb-4">
-                        <Button onClick={handleUserProfile}>
-                            User profile
-                        </Button>
-                        {showUserProfile && <UserProfile />}
-                    </div>
                 </div>
 
                 {/* Modal for attraction details */}
@@ -257,7 +242,6 @@ const TivoliPage = () => {
                 )}
             </div>
         </div>
-        </>
     )
 }
 
