@@ -40,7 +40,7 @@ export default function AmusementCard({ amusement }) {
                     </div>
 
                     <Image
-                        src="/images/Redpanda2.png"
+                        src={amusement.image_url ? amusement.image_url : "/images/Redpanda2.png"}
                         alt={amusement.name}
                         fill
                         className="object-cover"
