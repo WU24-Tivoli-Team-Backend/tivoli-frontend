@@ -9,7 +9,7 @@ export default function GroupCard({ group, members, amusements = [] }) {
             <div className="">
                 <div className="relative h-40 bg-pink-400 p-4">
                     <Image
-                        src={amusements && amusements[0] ? amusements[0].image_url : '/Red_panda.png'}
+                        src={amusements && amusements[0] && amusements[0].image_url ? amusements[0].image_url : '/Red_panda.png'}
                         alt="Group image"
                         layout="fill"
                         objectFit="cover"
