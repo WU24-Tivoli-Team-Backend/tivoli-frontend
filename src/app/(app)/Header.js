@@ -5,7 +5,7 @@ const Header = ({ title, description }) => {
                 <h1 className="font-semibold text-xl text-gray-800 leading-tight">
                     {title}
                 </h1>
-                <p className="text-gray-600 text-xs">{description}</p>
+                <p className="text-gray-600 text-xs mt-2">{description}</p>
             </div>
         </header>
     )
