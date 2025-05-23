@@ -9,7 +9,14 @@ const nunitoFont = Nunito({
 const RootLayout = ({ children }) => {
     return (
         <html lang="en" className={nunitoFont.className}>
-            <body className="antialiased">{children}</body>
+            <body
+                className="antialiased bg-cover bg-center"
+                style={{
+                    backgroundImage:
+                        "linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/tivoli-bg2.png')",
+                }}>
+                {children}
+            </body>
         </html>
     )
 }
