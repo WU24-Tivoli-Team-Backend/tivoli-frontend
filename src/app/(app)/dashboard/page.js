@@ -1,4 +1,4 @@
-//import Header from '@/app/(app)/Header'
+import Header from '@/app/(app)/Header'
 import UserProfile from '@/components/profile-information/UserProfile'
 import UserAmusementContainer from '@/components/amusement/UserAmusementContainer'
 
@@ -11,7 +11,10 @@ export const metadata = {
 const Dashboard = () => {
     return (
         <>
-            {/* <Header title="Dashboard" /> */}
+            <Header
+                title="Dashboard"
+                description="This is where you manage your information and attractions"
+            />
             <div className="py-12">
                 <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg flex flex-col gap-8">
