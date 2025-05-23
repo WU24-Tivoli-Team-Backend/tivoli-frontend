@@ -11,17 +11,14 @@ export default function Groups() {
             />
 
             <div className="tivoli-container relative">
-                {/* Background Image */}
                 <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{
                         backgroundImage: "url('/images/bg-image-park.png')",
                     }}></div>
 
-                {/* Gradient Overlay */}
                 <div className="tivoli-gradient-overlay absolute inset-0 bg-gradient-to-b from-black/50 to-black/50"></div>
 
-                {/* Content */}
                 <div className="relative z-10 p-4">
                     <GroupList />
                 </div>

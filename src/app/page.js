@@ -10,7 +10,6 @@ const Home = () => {
 
     return (
         <div className="relative min-h-screen w-full overflow-hidden">
-            {/* Full-screen background image */}
             <div className="absolute inset-0 z-0">
                 <Image
                     src="/images/red-panda-wide.png"
@@ -22,15 +21,11 @@ const Home = () => {
                 />
             </div>
 
-            {/* Animated gradient overlay */}
             <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/30 via-transparent to-purple-500/20 animate-pulse"></div>
 
-            {/* Main content container */}
             <div className="relative z-20 min-h-screen flex flex-col">
-                {/* Top Banner - YRGO TIVOLI */}
                 <div className="w-full flex justify-center lg:justify-start lg:pl-[33.33%] pt-8 lg:pt-12">
                     <div className="relative">
-                        {/* Enhanced blur background for banner */}
                         <div className="absolute inset-0 bg-black/20 backdrop-blur-2xl rounded-3xl transform -rotate-1 shadow-xl"></div>
 
                         <div className="relative px-8 lg:px-12 py-4 lg:py-6">
@@ -49,10 +44,8 @@ const Home = () => {
                     </div>
                 </div>
 
-                {/* Main content area */}
                 <div className="flex-1 flex items-center justify-center lg:justify-start lg:pl-[66.66%] lg:pr-[8.33%] p-6 lg:p-8">
                     <div className="w-full max-w-lg relative">
-                        {/* Glassmorphism card */}
                         <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-10 lg:p-12 shadow-2xl">
                             <div className="text-center mb-8">
                                 <h2 className="text-2xl font-bold text-white mb-2">
@@ -64,7 +57,6 @@ const Home = () => {
                             </div>
 
                             {user ? (
-                                /* User is logged in */
                                 <div className="space-y-4">
                                     <div className="text-center">
                                         <p className="text-white mb-4">
@@ -82,7 +74,6 @@ const Home = () => {
                                     </Link>
                                 </div>
                             ) : (
-                                /* User is not logged in */
                                 <div className="space-y-4">
                                     <Link href="/login" className="block">
                                         <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
@@ -108,14 +99,12 @@ const Home = () => {
                             )}
                         </div>
 
-                        {/* Floating decorative elements */}
                         <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-pink-400 to-purple-600 rounded-full opacity-20 animate-float"></div>
                         <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-600 rounded-full opacity-20 animate-float-delayed"></div>
                     </div>
                 </div>
             </div>
 
-            {/* CSS Animations */}
             <style jsx>{`
                 @keyframes color-shift-1 {
                     0%,

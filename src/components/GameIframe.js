@@ -111,7 +111,6 @@ const GameIframe = ({
         }
     }
 
-    // Event listener to detect if fullscreen is active
     useEffect(() => {
         const handleFullscreenChange = () => {
             const fullscreenElement =
@@ -144,7 +143,6 @@ const GameIframe = ({
         }
     }, [])
 
-    // Exit fullscreen function
     const exitFullscreen = () => {
         if (document.exitFullscreen) {
             document.exitFullscreen()

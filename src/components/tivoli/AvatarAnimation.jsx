@@ -9,7 +9,6 @@ const AvatarAnimation = ({
 }) => {
     const [currentFrame, setCurrentFrame] = useState(0)
 
-    // Frame definitions from the JSON with exact coordinates
     const animations = {
         idle: {
             frames: [
@@ -20,7 +19,7 @@ const AvatarAnimation = ({
                 { x: 128, y: 0 }, // Idle 4
                 { x: 160, y: 0 }, // Idle 5
             ],
-            duration: 150, // ms per frame
+            duration: 150,
         },
         movement: {
             frames: [
@@ -54,7 +53,6 @@ const AvatarAnimation = ({
     const frameCount = currentAnim.frames.length
     const scale = size / 32
 
-    // Get current frame position
     const getCurrentFramePosition = () => {
         const frame = currentAnim.frames[currentFrame % frameCount]
         if (!frame) return { x: 0, y: 0 }
@@ -64,7 +62,6 @@ const AvatarAnimation = ({
         }
     }
 
-    // Frame animation loop
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentFrame(prev => (prev + 1) % frameCount)
@@ -73,7 +70,6 @@ const AvatarAnimation = ({
         return () => clearInterval(interval)
     }, [state, frameCount, currentAnim.duration])
 
-    // Reset frame when state changes
     useEffect(() => {
         setCurrentFrame(0)
     }, [state])

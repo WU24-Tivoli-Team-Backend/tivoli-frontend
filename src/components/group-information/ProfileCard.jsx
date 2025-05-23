@@ -4,23 +4,19 @@ import Image from 'next/image'
 export default function ProfileCard({ user }) {
     return (
         <div className="flex items-center gap-4 bg-gray-100 p-4 rounded-lg space-x-4 w-full max-w-md my-4">
-            {/* Profile Image */}
             <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
                 <Image
-                    src={user.image_url || '/Red_panda.png'} // Use user image or fallback
+                    src={user.image_url || '/Red_panda.png'}
                     alt={`Profile image of ${user.name}`}
-                    width={64} // Match the size of the container
+                    width={64}
                     height={64}
                     className="object-cover"
                 />
             </div>
 
-            {/* Text Container */}
             <div>
-                {/* Name */}
                 <p className="text-lg font-medium text-black">{user.name}</p>
 
-                {/* Links */}
                 <div className="mt-1 flex items-center text-sm text-gray-600 space-x-2">
                     {user.github && (
                         <a
@@ -32,7 +28,6 @@ export default function ProfileCard({ user }) {
                         </a>
                     )}
 
-                    {/* Show ”|” only if both GitHub and website links are provided */}
                     {user.github && user.url && <span>|</span>}
 
                     {user.url && (

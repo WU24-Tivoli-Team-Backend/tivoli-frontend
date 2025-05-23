@@ -31,22 +31,19 @@ const Avatar = ({
             const topPos = cellRect.top - gridRect.top + cellRect.height / 2
 
             setPosition(prevPos => {
-                // Calculate distance for transition duration
                 const deltaX = leftPos - prevPos.left
                 const deltaY = topPos - prevPos.top
                 const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
 
-                // Base time per unit distance (adjust as needed)
-                const timePerUnit = 8 // ms per pixel
-                const minTime = 500 // minimum transition time
-                const maxTime = 2000 // maximum transition time
+                const timePerUnit = 8
+                const minTime = 500
+                const maxTime = 2000
 
                 const calculatedTime = Math.max(
                     minTime,
                     Math.min(distance * timePerUnit, maxTime),
                 )
 
-                // Update CSS transition duration with !important to override CSS
                 if (avatarRef.current) {
                     avatarRef.current.style.setProperty(
                         'transition',
@@ -78,7 +75,6 @@ const Avatar = ({
 
     useEffect(() => {
         if (onArrival) {
-            // Calculate distance to determine arrival delay
             const prevPos = position
             const deltaX = position.left - prevPos.left
             const deltaY = position.top - prevPos.top

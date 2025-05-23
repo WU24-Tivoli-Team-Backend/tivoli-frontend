@@ -11,7 +11,6 @@ import Button from '@/components/Button'
 import Header from '@/app/(app)/Header'
 import '@/components/tivoli/tivoli-background.css'
 
-
 const TivoliPage = () => {
     const backgroundImage = '/images/tivoli-bg2.png'
 
@@ -24,7 +23,6 @@ const TivoliPage = () => {
     const [isMobile, setIsMobile] = useState(false)
     const [showUserProfile, setShowUserProfile] = useState(false)
 
-    // Detect device type
     useEffect(() => {
         const checkDeviceType = () => {
             const width = window.innerWidth
@@ -43,71 +41,60 @@ const TivoliPage = () => {
         error: amusementError,
     } = useFetch(amusementsApiUrl)
 
-    // Open the modal for a specific amusement card
     const openModal = id => {
         setOpenModalId(id)
     }
 
-    // Close the modal
     const closeModal = () => {
         setOpenModalId(null)
-        // When closing the modal, store the current cell's coordinates to prevent immediate re-triggering
         if (activeCell) {
             setLastVisitedCell(`${activeCell.x}-${activeCell.y}`)
         }
     }
 
-     const handleUserProfile = () => {
+    const handleUserProfile = () => {
         setShowUserProfile(!showUserProfile)
     }
 
-
-    // Find amusement by id
     const getAmusementById = id => {
         if (!amusementData || !amusementData.data) return null
         return amusementData.data.find(amusement => amusement.id === id)
     }
 
-    // Define special cells with better distribution for both mobile and desktop
     const specialCells =
         amusementData && amusementData.data
             ? amusementData.data.map((amusement, index) => {
-                  // Desktop coordinates (5x6 grid) - avoid 0,0
                   const desktopCoordinates = [
                       { x: 1, y: 1 }, // index 0
                       { x: 3, y: 1 }, // index 1
-                      { x: 2, y: 0 }, // index 2 - moved from 0,2 to 2,0
+                      { x: 2, y: 0 }, // index 2
                       { x: 2, y: 2 }, // index 3
                       { x: 4, y: 2 }, // index 4
                       { x: 1, y: 3 }, // index 5
                       { x: 3, y: 3 }, // index 6
-                      { x: 1, y: 4 }, // index 7 - moved from 0,4 to 1,4
+                      { x: 1, y: 4 }, // index 7
                       { x: 4, y: 4 }, // index 8
                       { x: 2, y: 5 }, // index 9
                   ]
 
-                  // Mobile coordinates (4x5 grid) - avoid 0,0
                   const mobileCoordinates = [
                       { x: 1, y: 0 }, // index 0
                       { x: 3, y: 0 }, // index 1
-                      { x: 2, y: 0 }, // index 2 - moved from 0,1 to 2,0
+                      { x: 2, y: 0 }, // index 2
                       { x: 2, y: 1 }, // index 3
                       { x: 1, y: 2 }, // index 4
                       { x: 3, y: 2 }, // index 5
-                      { x: 1, y: 3 }, // index 6 - moved from 0,3 to 1,3
+                      { x: 1, y: 3 }, // index 6
                       { x: 2, y: 3 }, // index 7
                       { x: 1, y: 4 }, // index 8
                       { x: 3, y: 4 }, // index 9
                   ]
 
-                  // Get coordinates for current index based on device
                   let coord = isMobile
                       ? mobileCoordinates[index] || { x: 0, y: 0 }
                       : desktopCoordinates[index] || { x: 0, y: 0 }
 
-                  // If coordinates are 0,0 (top-left corner), reassign to alternative positions
                   if (coord.x === 0 && coord.y === 0) {
-                      // Alternative positions that avoid 0,0
                       const alternativePositions = isMobile
                           ? [
                                 { x: 3, y: 1 },
@@ -122,13 +109,11 @@ const TivoliPage = () => {
                                 { x: 3, y: 0 },
                             ]
 
-                      // Use a fallback position based on the amusement index
                       coord = alternativePositions[
                           index % alternativePositions.length
                       ] || { x: 1, y: 1 }
                   }
 
-                  // Create the cell object
                   return {
                       x: coord.x,
                       y: coord.y,
@@ -156,12 +141,10 @@ const TivoliPage = () => {
     const handleCellActivated = cellInfo => {
         setActiveCell(cellInfo)
 
-        // Find the special cell that matches the activated cell coordinates
         const matchingCell = specialCells.find(
             cell => cell.x === cellInfo.x && cell.y === cellInfo.y,
         )
 
-        // Create a cell identifier string for comparing with lastVisitedCell
         const cellIdentifier = `${cellInfo.x}-${cellInfo.y}`
 
         if (cellInfo.hasContent) {
@@ -169,7 +152,6 @@ const TivoliPage = () => {
                 `You discovered "${getAmusementById(matchingCell?.amusementId)?.name || 'an attraction'}"!`,
             )
 
-            // If the cell has an amusementId AND it's not the last visited cell, open the modal
             if (
                 matchingCell &&
                 matchingCell.amusementId &&
@@ -179,7 +161,6 @@ const TivoliPage = () => {
             }
         } else {
             setMessage('Click any area to explore.')
-            // Reset lastVisitedCell when moving to a non-content cell
             setLastVisitedCell(null)
         }
     }
@@ -204,27 +185,24 @@ const TivoliPage = () => {
         )
     }
 
-   return (
+    return (
         <>
             <Header
                 title="Tivoli"
                 description="Explore the magical park and discover its games and attractions!"
             />
             <div className="min-h-screen">
-                {/* Apply the CSS classes from our external file */}
                 <div className="tivoli-container">
-                    {/* Background image with grayscale effect */}
                     <div
                         className="tivoli-background-image"
-                        style={{ backgroundImage: `url(${backgroundImage})` }}></div>
+                        style={{
+                            backgroundImage: `url(${backgroundImage})`,
+                        }}></div>
 
-                    {/* Gradient overlay with transparency */}
                     <div className="tivoli-gradient-overlay"></div>
 
-                    {/* Content container */}
                     <div className="tivoli-content-container">
                         <div className="flex flex-col items-center pt-2">
-                            {/* Status Message */}
                             <div className="mb-2 px-2 w-full flex justify-center">
                                 <div className="bg-white/80 rounded-full px-6 py-3 shadow-lg border border-purple-200">
                                     <p className="text-sm lg:text-base text-purple-800 font-medium text-center">
@@ -233,7 +211,6 @@ const TivoliPage = () => {
                                 </div>
                             </div>
 
-                            {/* Main Grid */}
                             <div className="flex-1 flex items-center justify-center w-full px-1">
                                 <GridPrinter
                                     rows={6}
@@ -253,9 +230,10 @@ const TivoliPage = () => {
                             </div>
                         </div>
 
-                        {/* Modal for attraction details */}
                         {openModalId && (
-                            <Modal isOpen={!!openModalId} closeModal={closeModal}>
+                            <Modal
+                                isOpen={!!openModalId}
+                                closeModal={closeModal}>
                                 <AmusementCard
                                     amusement={getAmusementById(openModalId)}
                                 />
