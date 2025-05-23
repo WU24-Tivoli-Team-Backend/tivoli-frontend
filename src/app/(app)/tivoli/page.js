@@ -1,14 +1,17 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+// import Image from 'next/image'
 import GridPrinter from '@/components/tivoli/GridPrinter'
 import { useFetch } from '@/hooks/useFetch'
 import AmusementCard from '@/components/amusement/AmusementCard'
 import Modal from '@/components/tivoli/Modal'
-import UserProfile from '@/components/profile-information/UserProfile'
-import Button from '@/components/Button'
+// Import the CSS file
+import '@/components/tivoli/tivoli-background.css'
 
 const TivoliPage = () => {
+    const backgroundImage = '/images/tivoli-bg2.png'
+
     const [activeCell, setActiveCell] = useState(null)
     const [message, setMessage] = useState(
         'Welcome to Tivoli! Click any area to explore.',
@@ -16,7 +19,6 @@ const TivoliPage = () => {
     const [openModalId, setOpenModalId] = useState(null)
     const [lastVisitedCell, setLastVisitedCell] = useState(null)
     const [isMobile, setIsMobile] = useState(false)
-    const [showUserProfile, setShowUserProfile] = useState(false)
 
     // Detect device type
     useEffect(() => {
@@ -51,16 +53,12 @@ const TivoliPage = () => {
         }
     }
 
-    const handleUserProfile = e => {
-        e.preventDefault
-        setShowUserProfile(prev => !prev)
-    }
-
     // Find amusement by id
     const getAmusementById = id => {
         if (!amusementData || !amusementData.data) return null
         return amusementData.data.find(amusement => amusement.id === id)
     }
+
     // Define special cells with better distribution for both mobile and desktop
     const specialCells =
         amusementData && amusementData.data
@@ -198,41 +196,51 @@ const TivoliPage = () => {
     }
 
     return (
-        <div className="min-h-screen">
-            <div className="flex flex-col items-center pt-2">
-                {/* Status Message */}
-                <div className="mb-2 px-2 w-full flex justify-center">
-                    <div className="bg-white/80 rounded-full px-6 py-3 shadow-lg border border-purple-200">
-                        <p className="text-sm lg:text-base text-purple-800 font-medium text-center">
-                            {message}
-                        </p>
+        // Apply the CSS classes from our external file
+        <div className="tivoli-container">
+            {/* Background image with grayscale effect */}
+            <div
+                className="tivoli-background-image"
+                style={{ backgroundImage: `url(${backgroundImage})` }}></div>
+
+            {/* Gradient overlay with transparency */}
+            <div className="tivoli-gradient-overlay"></div>
+
+            {/* Content container */}
+            <div className="tivoli-content-container">
+                <div className="flex flex-col items-center pt-2">
+                    {/* Status Message */}
+                    <div className="mb-2 px-2 w-full flex justify-center">
+                        <div className="bg-white/80 rounded-full px-6 py-3 shadow-lg border border-purple-200">
+                            <p className="text-sm lg:text-base text-purple-800 font-medium text-center">
+                                {message}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Main Grid */}
+                    <div className="flex-1 flex items-center justify-center w-full px-1">
+                        <GridPrinter
+                            rows={6}
+                            cols={5}
+                            mobileRows={5}
+                            mobileCols={4}
+                            specialCells={specialCells}
+                            onCellActivated={handleCellActivated}
+                            avatarImage="/avatar-placeholder.png"
+                        />
                     </div>
                 </div>
 
-                {/* Main Grid */}
-                <div className="flex-1 flex items-center justify-center w-full px-1">
-                    <GridPrinter
-                        rows={6}
-                        cols={5}
-                        mobileRows={5}
-                        mobileCols={4}
-                        specialCells={specialCells}
-                        onCellActivated={handleCellActivated}
-                        avatarImage="/avatar-placeholder.png"
-                    />
-                </div>
-                <div className='flex flex-col justify-center pb-4'>
-                    <Button onClick={handleUserProfile}>User profile</Button>
-                    {showUserProfile && <UserProfile />}
-                </div>
+                {/* Modal for attraction details */}
+                {openModalId && (
+                    <Modal isOpen={!!openModalId} closeModal={closeModal}>
+                        <AmusementCard
+                            amusement={getAmusementById(openModalId)}
+                        />
+                    </Modal>
+                )}
             </div>
-
-            {/* Modal for attraction details */}
-            {openModalId && (
-                <Modal isOpen={!!openModalId} closeModal={closeModal}>
-                    <AmusementCard amusement={getAmusementById(openModalId)} />
-                </Modal>
-            )}
         </div>
     )
 }
