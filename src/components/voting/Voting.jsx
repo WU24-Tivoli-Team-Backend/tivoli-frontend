@@ -10,7 +10,6 @@ export default function Voting() {
         data: voteData,
         error: voteError,
         loading: voteLoading,
-        mutate: mutateVotes,
         refetch: refetchVotes,
     } = useFetch('/api/votes')
 
@@ -18,7 +17,7 @@ export default function Voting() {
         data: amusements,
         error: amusementError,
         loading: amusementLoading,
-        mutate: mutateAmusements,
+        refetch: refetchAmusements,
     } = useFetch('/api/amusements')
 
     const [message, setMessage] = useState('')
@@ -41,10 +40,11 @@ export default function Voting() {
                 user_id: user.id,
             })
 
-            if (response.status === 201) {
+            if (response.status === 201 || response.status === 200) {
                 setMessage('Vote submitted successfully!')
 
-                await Promise.all([mutateVotes(), mutateAmusements()])
+                await refetchVotes()
+                await refetchAmusements?.()
             }
         } catch (error) {
             console.error(
