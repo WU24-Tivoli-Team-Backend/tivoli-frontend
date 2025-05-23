@@ -4,19 +4,23 @@ import Image from 'next/image'
 
 export default function GroupCard({ group, members, amusements = [] }) {
     return (
-<div className="bg-white m-4 shadow-md rounded-lg overflow-hidden w-full max-w-2xl">
-            {/* Bild */}
+        <div className="bg-white m-4 shadow-md rounded-lg overflow-hidden w-full max-w-2xl">
             <div className="">
                 <div className="relative h-40 bg-pink-400 p-4">
                     <Image
-                        src={amusements && amusements[0] && amusements[0].image_url ? amusements[0].image_url : '/Red_panda.png'}
+                        src={
+                            amusements &&
+                            amusements[0] &&
+                            amusements[0].image_url
+                                ? amusements[0].image_url
+                                : '/Red_panda.png'
+                        }
                         alt="Group image"
                         layout="fill"
                         objectFit="cover"
                     />
                 </div>
 
-                {/* Accordion */}
                 <div className="">
                     <details className="accordion group p-4 w-full">
                         <summary className="w-full accordion-header flex justify-between items-center gap-2 cursor-pointer p-4">
@@ -28,7 +32,6 @@ export default function GroupCard({ group, members, amusements = [] }) {
                             </span>
                         </summary>
 
-                        {/* Members section */}
                         <div className="accordion-content p-4">
                             {members.length > 0 ? (
                                 members.map(user => (
@@ -41,7 +44,6 @@ export default function GroupCard({ group, members, amusements = [] }) {
                             )}
                         </div>
 
-                        {/* Amusements section */}
                         <div className="mt-4 p-4">
                             <h3 className="text-lg font-semibold text-gray-800 mb-4">
                                 Amusements

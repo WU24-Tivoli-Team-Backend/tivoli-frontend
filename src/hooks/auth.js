@@ -35,26 +35,17 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     const csrf = async () => {
         try {
-            // Make the request to get the CSRF cookie
             const response = await axios.get('/sanctum/csrf-cookie')
 
-            // Check if we can get the CSRF token from the cookies
-            const csrfToken = getCsrfToken() // Using the function from my previous message
+            const csrfToken = getCsrfToken()
 
-            // Log the result
             if (csrfToken) {
-                console.log(
-                    'CSRF token successfully retrieved:',
-                    csrfToken.substring(0, 10) + '...',
-                )
                 return true
             } else {
                 console.warn(
                     'CSRF endpoint accessed, but no CSRF token found in cookies',
                 )
                 console.log('All cookies:', document.cookie)
-
-                // Check response headers for Set-Cookie
                 console.log('Response status:', response.status)
                 console.log('Response headers:', response.headers)
 
@@ -66,9 +57,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         }
     }
 
-    // Helper function to extract CSRF token from cookies
     function getCsrfToken() {
-        // Function to get a specific cookie value by name
         function getCookie(name) {
             const value = `; ${document.cookie}`
             const parts = value.split(`; ${name}=`)
@@ -78,15 +67,12 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             return null
         }
 
-        // Get the CSRF token - try both standard and Laravel prefixed names
         let token = getCookie('XSRF-TOKEN')
 
-        // For Laravel 12, also check for prefixed cookies
         if (!token) {
             token = getCookie('laravel_XSRF-TOKEN')
         }
 
-        // Decode URI components if token exists
         return token ? decodeURIComponent(token) : ''
     }
 
@@ -107,7 +93,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     const login = async ({ setErrors, setStatus, ...props }) => {
         localStorage.removeItem('jwt')
-        console.log('Old JWT token removed before login.')
 
         const csrfSuccess = await csrf()
 
@@ -151,7 +136,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
                     console.error(
                         'CSRF token mismatch. Trying to refresh token...',
                     )
-                    // Attempt to refresh CSRF token and try again
                     csrf()
                     setStatus('Please try again, refreshing security token...')
                 } else {
@@ -206,7 +190,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         }
 
         localStorage.removeItem('jwt')
-        console.log('JWT token removed during logout.')
 
         window.location.pathname = '/login'
     }

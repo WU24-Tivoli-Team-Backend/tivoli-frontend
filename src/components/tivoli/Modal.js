@@ -1,10 +1,7 @@
-// components/Modal.js
-
 export default function Modal({ isOpen, closeModal, children }) {
     if (!isOpen) return null
 
     const handleBackdropClick = e => {
-        // Only close if the click was directly on the backdrop, not its children
         if (e.target === e.currentTarget) {
             const confirm = window.confirm(
                 'are you sure you want to exit the game?',

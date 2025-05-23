@@ -42,44 +42,18 @@ export default function UserProfile() {
                                     </li>
                                 ))}
                         </ul>
-                        {/* Dropdown Trigger */}
                         <button
                             onClick={toggleDropdown}
                             className="text-blue-600 hover:underline mt-4">
                             Add and edit info
                         </button>
 
-                        {/* Dropdown Content */}
                         {isDropdownOpen && (
                             <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
                                 <EditUserInfoForm user={user} />
                             </div>
                         )}
                     </div>
-
-                    {/* Remove this when the rest of the page is done: */}
-
-                    {/* <h2>{user.name}</h2>
-                    {user.image_url && (
-                        <Image
-                            src={user.image_url}
-                            width={200}
-                            height={200}
-                            alt={`image of ${user.name}`}
-                        />
-                    )}
-                    {!user.image_url && (
-                        <Image
-                            src="/Red_panda.png"
-                            width={200}
-                            height={200}
-                            alt={`image of ${user.name}`}
-                        />
-                    )}
-                    <p>{user.email}</p>
-
-                    <p>Github: {user.github && user.github}</p>
-                    <p>URL: {user.url && user.url}</p> */}
                 </div>
             )}
         </section>

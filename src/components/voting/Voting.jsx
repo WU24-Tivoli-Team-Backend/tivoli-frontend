@@ -59,12 +59,10 @@ export default function Voting() {
         }
     }
 
-    // Combine amusements with vote counts
     const processedAmusements = React.useMemo(() => {
         if (!amusements?.data || !voteData) return []
 
         return amusements.data.map(amusement => {
-            // Find vote count for this amusement from the vote data
             const voteInfo = voteData.find(
                 v => v.amusement === amusement.name,
             ) || { votes: 0 }
