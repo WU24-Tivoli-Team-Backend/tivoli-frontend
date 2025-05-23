@@ -5,6 +5,8 @@ import GridPrinter from '@/components/tivoli/GridPrinter'
 import { useFetch } from '@/hooks/useFetch'
 import AmusementCard from '@/components/amusement/AmusementCard'
 import Modal from '@/components/tivoli/Modal'
+import UserProfile from '@/components/profile-information/UserProfile'
+import Button from '@/components/Button'
 
 const TivoliPage = () => {
     const [activeCell, setActiveCell] = useState(null)
@@ -14,6 +16,7 @@ const TivoliPage = () => {
     const [openModalId, setOpenModalId] = useState(null)
     const [lastVisitedCell, setLastVisitedCell] = useState(null)
     const [isMobile, setIsMobile] = useState(false)
+    const [showUserProfile, setShowUserProfile] = useState(false)
 
     // Detect device type
     useEffect(() => {
@@ -46,6 +49,11 @@ const TivoliPage = () => {
         if (activeCell) {
             setLastVisitedCell(`${activeCell.x}-${activeCell.y}`)
         }
+    }
+
+    const handleUserProfile = e => {
+        e.preventDefault
+        setShowUserProfile(prev => !prev)
     }
 
     // Find amusement by id
@@ -212,6 +220,10 @@ const TivoliPage = () => {
                         onCellActivated={handleCellActivated}
                         avatarImage="/avatar-placeholder.png"
                     />
+                </div>
+                <div className='flex flex-col justify-center pb-4'>
+                    <Button onClick={handleUserProfile}>User profile</Button>
+                    {showUserProfile && <UserProfile />}
                 </div>
             </div>
 
