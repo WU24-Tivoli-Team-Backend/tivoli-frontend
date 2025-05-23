@@ -31,7 +31,6 @@ export default function GuestLoginButton() {
     const submitForm = async event => {
         event.preventDefault()
 
-
         /*@TODO: Fix this later, this is for deploy, maybe email, password and shouldremember could just be normal variables */
         setEmail('rune@yrgobanken.vip')
         setPassword('password')
@@ -50,7 +49,7 @@ export default function GuestLoginButton() {
         <>
             <AuthSessionStatus className="mb-4" status={status} />
             <form onSubmit={submitForm}>
-                <Button>Log in as guest</Button>
+                <Button>Visit as guest</Button>
             </form>
         </>
     )

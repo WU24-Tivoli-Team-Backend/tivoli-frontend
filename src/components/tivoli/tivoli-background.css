@@ -1,0 +1,57 @@
+.tivoli-container {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.tivoli-background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+}
+
+.tivoli-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    z-index: 1;
+}
+
+.tivoli-content-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+.tivoli-gradient-overlay {
+    background-size: 200% 200%;
+    animation: gradientShift 20s ease infinite;
+}

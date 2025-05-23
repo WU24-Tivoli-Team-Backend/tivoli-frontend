@@ -1,74 +1,125 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import AvatarAnimation from './AvatarAnimation'
 
-/**
- * Avatar Component
- *
- * A visual representation that can move between grid cells
- *
- * @param {Object} props
- * @param {number} props.x - Current X position of the avatar
- * @param {number} props.y - Current Y position of the avatar
- * @param {Function} props.onArrival - Callback when avatar arrives at a cell
- * @param {string} props.imageUrl - Optional image URL for the avatar
- */
-const Avatar = ({ x, y, onArrival, imageUrl = '/avatar-placeholder.png' }) => {
+const Avatar = ({
+    x,
+    y,
+    onArrival,
+    gridRef,
+    currentCols,
+    currentRows,
+    avatarState = 'idle',
+    facingDirection = 'right',
+}) => {
     const avatarRef = useRef(null)
+    const [position, setPosition] = useState({ left: 0, top: 0 })
+
+    useEffect(() => {
+        if (!gridRef?.current) return
+
+        const grid = gridRef.current
+        const targetCellId = `cell-${x}-${y}`
+        const targetCell = grid.querySelector(`[id="${targetCellId}"]`)
+
+        if (targetCell) {
+            const gridRect = grid.getBoundingClientRect()
+            const cellRect = targetCell.getBoundingClientRect()
+
+            const leftPos = cellRect.left - gridRect.left + cellRect.width / 2
+            const topPos = cellRect.top - gridRect.top + cellRect.height / 2
+
+            setPosition(prevPos => {
+                // Calculate distance for transition duration
+                const deltaX = leftPos - prevPos.left
+                const deltaY = topPos - prevPos.top
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+
+                // Base time per unit distance (adjust as needed)
+                const timePerUnit = 8 // ms per pixel
+                const minTime = 500 // minimum transition time
+                const maxTime = 2000 // maximum transition time
+
+                const calculatedTime = Math.max(
+                    minTime,
+                    Math.min(distance * timePerUnit, maxTime),
+                )
+
+                // Update CSS transition duration with !important to override CSS
+                if (avatarRef.current) {
+                    avatarRef.current.style.setProperty(
+                        'transition',
+                        `all ${calculatedTime}ms linear`,
+                        'important',
+                    )
+                }
+
+                return { left: leftPos, top: topPos }
+            })
+        }
+    }, [x, y, gridRef, currentCols, currentRows])
+
+    const getAvatarSize = () => {
+        if (!gridRef?.current) return 40
+
+        const grid = gridRef.current
+        const firstCell = grid.querySelector('[data-x="0"][data-y="0"]')
+
+        if (firstCell) {
+            const cellRect = firstCell.getBoundingClientRect()
+            return Math.max(cellRect.width * 0.6, 30)
+        }
+
+        return 40
+    }
+
+    const avatarSize = getAvatarSize()
 
     useEffect(() => {
         if (onArrival) {
+            // Calculate distance to determine arrival delay
+            const prevPos = position
+            const deltaX = position.left - prevPos.left
+            const deltaY = position.top - prevPos.top
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+
+            const timePerUnit = 8
+            const minTime = 500
+            const maxTime = 2000
+            const arrivalDelay = Math.max(
+                minTime,
+                Math.min(distance * timePerUnit, maxTime),
+            )
+
             const timer = setTimeout(() => {
                 onArrival({ x, y })
-            }, 300) // Match this with your transition duration
+            }, arrivalDelay)
 
             return () => clearTimeout(timer)
         }
-    }, [x, y, onArrival])
+    }, [x, y, onArrival, position])
 
     return (
         <div
             ref={avatarRef}
-            className="
-        absolute
-        w-16
-        h-16
-        transition-all
-        duration-300
-        ease-in-out
-        transform
-        -translate-x-1/2
-        -translate-y-1/2
-        z-10
-      "
+            className="tivoli-avatar"
             style={{
-                left: `calc(${x} * (100px + 8px) + 50px)`,
-                top: `calc(${y} * (100px + 8px) + 50px)`,
+                position: 'absolute',
+                width: avatarSize,
+                height: avatarSize,
+                left: `${position.left}px`,
+                top: `${position.top}px`,
+                transform: 'translate(-50%, -50%)',
+                transition: '',
+                zIndex: 20,
             }}>
-            <div
-                className="
-        w-full 
-        h-full 
-        rounded-full 
-        bg-blue-500 
-        flex 
-        items-center 
-        justify-center
-        border-4
-        border-white
-        shadow-lg
-        overflow-hidden
-      ">
-                {imageUrl ? (
-                    <img
-                        src={imageUrl}
-                        alt="Avatar"
-                        className="w-full h-full object-cover"
-                    />
-                ) : (
-                    <div className="text-white text-2xl">A</div>
-                )}
-            </div>
+            <AvatarAnimation
+                spriteSheet="/rune-avatar.png"
+                state={avatarState}
+                size={avatarSize}
+                facingDirection={facingDirection}
+            />
         </div>
     )
 }

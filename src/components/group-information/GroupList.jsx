@@ -28,7 +28,7 @@ export default function GroupsList() {
     console.log('Amusement Data:', amusementData)
 
     return (
-        <div className="space-y-4">
+<div className="space-y-4 max-w-4xl mx-auto sm:px-6 lg:px-8 flex flex-col items-center">
             {groupData.data.map(group => {
                 // Filter users for this group
                 const members = userData.data.filter(

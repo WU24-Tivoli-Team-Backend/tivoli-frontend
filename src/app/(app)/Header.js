@@ -1,11 +1,11 @@
-const Header = ({ title }) => {
+const Header = ({ title, description }) => {
     return (
-        <header className="bg-white shadow">
+        <header className="bg-white shadow-md">
             <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                <h1 className="font-semibold text-xl text-gray-800 leading-tight">
                     {title}
-                </h2>
+                </h1>
+                <p className="text-gray-600 text-xs mt-2">{description}</p>
             </div>
         </header>
     )
