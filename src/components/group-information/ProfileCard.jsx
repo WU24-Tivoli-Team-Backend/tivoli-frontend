@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 export default function ProfileCard({ user }) {
     return (
-        <div className="flex items-center gap-4 bg-gray-100 p-4 rounded-lg space-x-4 w-full max-w-md">
+        <div className="flex items-center gap-4 bg-gray-100 p-4 rounded-lg space-x-4 w-full max-w-md my-4">
             {/* Profile Image */}
             <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
                 <Image
