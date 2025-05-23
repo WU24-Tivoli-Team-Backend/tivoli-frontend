@@ -1,6 +1,6 @@
 import LoginLinks from '@/app/LoginLinks'
 import Image from 'next/image'
-import GuestLoginButton from '@/components/GuestLoginButton'
+//import GuestLoginButton from '@/components/GuestLoginButton'
 
 export const metadata = {
     title: 'YRGO TIVOLI',
@@ -22,8 +22,8 @@ const Home = () => {
                         priority // Preload the image for better performance
                         style={{ width: 'auto', height: 'auto' }} // Ensure aspect ratio is maintained
                     />
-                    {/* This will be added after May 26th:{' '} */}
-                    <GuestLoginButton className="size-fit" />
+                    {/* This will be added after May 26th:{' '} 
+                    <GuestLoginButton className="size-fit" /> */}
                 </div>
             </div>
         </>
