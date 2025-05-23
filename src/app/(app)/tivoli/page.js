@@ -7,6 +7,7 @@ import AmusementCard from '@/components/amusement/AmusementCard'
 import Modal from '@/components/tivoli/Modal'
 import UserProfile from '@/components/profile-information/UserProfile'
 import Button from '@/components/Button'
+import Header from '@/app/(app)/Header'
 
 const TivoliPage = () => {
     const [activeCell, setActiveCell] = useState(null)
@@ -198,42 +199,52 @@ const TivoliPage = () => {
     }
 
     return (
-        <div className="min-h-screen">
-            <div className="flex flex-col items-center pt-2">
-                {/* Status Message */}
-                <div className="mb-2 px-2 w-full flex justify-center">
-                    <div className="bg-white/80 rounded-full px-6 py-3 shadow-lg border border-purple-200">
-                        <p className="text-sm lg:text-base text-purple-800 font-medium text-center">
-                            {message}
-                        </p>
+        <>
+            <Header
+                title="Tivoli"
+                description="Explore the magical park and discover its games and attractions!"
+            />
+            <div className="min-h-screen">
+                <div className="flex flex-col items-center pt-2">
+                    {/* Status Message */}
+                    <div className="mb-2 px-2 w-full flex justify-center">
+                        <div className="bg-white/80 rounded-full px-6 py-3 shadow-lg border border-purple-200">
+                            <p className="text-sm lg:text-base text-purple-800 font-medium text-center">
+                                {message}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Main Grid */}
+                    <div className="flex-1 flex items-center justify-center w-full px-1">
+                        <GridPrinter
+                            rows={6}
+                            cols={5}
+                            mobileRows={5}
+                            mobileCols={4}
+                            specialCells={specialCells}
+                            onCellActivated={handleCellActivated}
+                            avatarImage="/avatar-placeholder.png"
+                        />
+                    </div>
+                    <div className="flex flex-col justify-center pb-4">
+                        <Button onClick={handleUserProfile}>
+                            User profile
+                        </Button>
+                        {showUserProfile && <UserProfile />}
                     </div>
                 </div>
 
-                {/* Main Grid */}
-                <div className="flex-1 flex items-center justify-center w-full px-1">
-                    <GridPrinter
-                        rows={6}
-                        cols={5}
-                        mobileRows={5}
-                        mobileCols={4}
-                        specialCells={specialCells}
-                        onCellActivated={handleCellActivated}
-                        avatarImage="/avatar-placeholder.png"
-                    />
-                </div>
-                <div className='flex flex-col justify-center pb-4'>
-                    <Button onClick={handleUserProfile}>User profile</Button>
-                    {showUserProfile && <UserProfile />}
-                </div>
+                {/* Modal for attraction details */}
+                {openModalId && (
+                    <Modal isOpen={!!openModalId} closeModal={closeModal}>
+                        <AmusementCard
+                            amusement={getAmusementById(openModalId)}
+                        />
+                    </Modal>
+                )}
             </div>
-
-            {/* Modal for attraction details */}
-            {openModalId && (
-                <Modal isOpen={!!openModalId} closeModal={closeModal}>
-                    <AmusementCard amusement={getAmusementById(openModalId)} />
-                </Modal>
-            )}
-        </div>
+        </>
     )
 }
 
