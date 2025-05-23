@@ -1,11 +1,12 @@
 import Voting from '@/components/voting/Voting'
 import Header from '@/app/(app)/Header'
+import '@/components/tivoli/tivoli-background.css'
 
 export default function Vote() {
     return (
         <>
             <Header
-                title="Vote"
+                title="Votes"
                 description="This is where you can vote for your favorite amusements"
             />
             <div className="tivoli-container relative min-h-screen">
