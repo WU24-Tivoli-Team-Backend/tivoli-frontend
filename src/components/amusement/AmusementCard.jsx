@@ -43,7 +43,7 @@ export default function AmusementCard({ amusement }) {
 
                     <Image
                         src={
-                            amusement.image_url
+                            amusement.image_url && amusement
                                 ? amusement.image_url
                                 : '/images/Redpanda2.png'
                         }
@@ -64,7 +64,11 @@ export default function AmusementCard({ amusement }) {
                     {/* Image at the top */}
                     <div className="relative w-full h-48">
                         <Image
-                            src="/Red_panda.png"
+                            src={
+                                amusement.image_url && amusement
+                                    ? amusement.image_url
+                                    : '/images/Redpanda2.png'
+                            }
                             alt={amusement.name}
                             fill
                             className="object-cover"

@@ -12,15 +12,25 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         data: user,
         error,
         mutate,
-    } = useSWR('/api/user', async () =>
-        axios
-            .get('/api/user')
-            .then(res => res.data)
-            .catch(error => {
-                if (error.response.status !== 409) throw error
-
-                router.push('/verify-email')
-            }),
+    } = useSWR(
+        '/api/user',
+        async () => {
+            try {
+                const res = await axios.get('/api/user')
+                return res.data
+            } catch (error) {
+                if (error.response?.status === 401) return null
+                if (error.response?.status === 409) {
+                    router.push('/verify-email')
+                    return
+                }
+                throw error
+            }
+        },
+        {
+            shouldRetryOnError: false,
+            revalidateOnFocus: false,
+        },
     )
 
     const csrf = async () => {
