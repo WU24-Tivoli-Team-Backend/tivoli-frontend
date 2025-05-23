@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 export default function Modal({ isOpen, closeModal, children }) {
     if (!isOpen) return null
 
@@ -11,6 +13,17 @@ export default function Modal({ isOpen, closeModal, children }) {
             }
         }
     }
+
+    useEffect(() => {
+    if (isOpen) {
+        const originalOverflow = document.body.style.overflow
+        document.body.style.overflow = 'hidden'
+        
+        return () => {
+            document.body.style.overflow = originalOverflow
+        }
+    }
+}, [isOpen])
 
     return (
     <div
@@ -31,6 +44,9 @@ export default function Modal({ isOpen, closeModal, children }) {
                 
                 <button
                     onClick={closeModal}
+                    className="absolute top-2 right-2 text-gray-600 z-10 p-2 hover:bg-gray-100 rounded-full"
+                    style={{ touchAction: 'manipulation' }}>
+                    ✕
                     className="absolute top-2 right-2 text-gray-600 z-10 p-2 hover:bg-gray-100 rounded-full"
                     style={{ touchAction: 'manipulation' }}>
                     ✕
