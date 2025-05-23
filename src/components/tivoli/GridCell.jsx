@@ -23,7 +23,7 @@ const GridCell = ({
     hasContent = false,
     content = null,
     onClick,
-    isMobile = false,
+    // isMobile = false,
 }) => {
     // Generate a unique ID for this cell based on coordinates
     const cellId = `cell-${x}-${y}`
