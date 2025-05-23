@@ -21,6 +21,33 @@ export default function AmusementCard({ amusement }) {
         setShowData(prev => !prev)
     }
 
+    const stampMap = {
+        1: 'Panda',
+        6: 'Silver panda',
+        7: 'Gold panda',
+        8: 'Platinum panda',
+        2: 'Orca',
+        9: 'Silver Orca',
+        10: 'Gold Orca',
+        11: 'Platinum Orca',
+        3: 'Raven',
+        12: 'Silver Raven',
+        13: 'Gold Raven',
+        14: 'Platinum Raven',
+        4: 'Blobfish',
+        15: 'Silver Blobfish',
+        16: 'Gold Blobfish',
+        17: 'Platinum Blobfish',
+        5: 'Pallas cat',
+        18: 'Silver Pallas cat',
+        19: 'Gold Pallas cat',
+        20: 'Platinum Pallas cat',
+    }
+
+    const stampName = amusement.stamp_id
+        ? stampMap[amusement.stamp_id] || 'Unknown stamp'
+        : 'No stamp assigned'
+
     const baseClasses =
         'cursor-pointer overflow-hidden rounded-lg shadow-md transition-all duration-300'
 
@@ -52,9 +79,16 @@ export default function AmusementCard({ amusement }) {
                     />
 
                     <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-4 opacity-0 group-hover/card:opacity-100 transition-opacity">
-                        <p className="text-sm text-white uppercase">
-                            {amusement.type}
-                        </p>
+                        <div className="flex justify-between items-center">
+                            <p className="text-sm text-white uppercase">
+                                {amusement.type}
+                            </p>
+                            {amusement.stamp_id && (
+                                <span className="bg-amber-500/80 text-white text-xs px-2 py-1 rounded-full">
+                                    {stampName}
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </div>
             ) : (
@@ -70,6 +104,12 @@ export default function AmusementCard({ amusement }) {
                             fill
                             className="object-cover"
                         />
+
+                        {amusement.stamp_id && (
+                            <div className="absolute top-2 right-2 bg-amber-500/80 text-white text-xs px-2 py-1 rounded-full">
+                                {stampName}
+                            </div>
+                        )}
                     </div>
 
                     <div className="p-6 flex flex-col">
@@ -84,9 +124,11 @@ export default function AmusementCard({ amusement }) {
                                         'No description available'}
                                 </p>
 
-                                <p className="uppercase text-sm">
-                                    {amusement.type}
-                                </p>
+                                <div className="flex flex-wrap gap-2 items-center mb-2">
+                                    <p className="uppercase text-sm">
+                                        {amusement.type}
+                                    </p>
+                                </div>
                             </>
                         )}
                         <button
