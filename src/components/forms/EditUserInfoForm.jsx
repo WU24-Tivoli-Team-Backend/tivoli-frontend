@@ -52,7 +52,7 @@ export default function EditUserInfoForm() {
 
                 setForm(updatedForm)
             }
-            const res = await axios.patch('/api/user', updatedForm, {
+            const _res = await axios.patch('/api/user', updatedForm, {
                 headers: { 'Content-Type': 'application/json' },
             })
         } catch (err) {
