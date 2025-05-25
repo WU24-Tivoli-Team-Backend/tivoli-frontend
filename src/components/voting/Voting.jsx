@@ -113,10 +113,10 @@ export default function Voting() {
                                 <button
                                     onClick={() => submitVote(amusement.id)}
                                     disabled={loadingVote || isOwner}
-                                    className={`px-4 py-2 rounded text-white ${
+                                    className={`px-6 py-3 rounded-xl text-white font-semibold transition-all duration-300 transform ${
                                         isOwner
                                             ? 'bg-gray-400 cursor-not-allowed'
-                                            : 'bg-blue-500 hover:bg-blue-600'
+                                            : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:scale-105 hover:shadow-xl'
                                     }`}>
                                     {votingForId === amusement.id
                                         ? 'Submitting...'
