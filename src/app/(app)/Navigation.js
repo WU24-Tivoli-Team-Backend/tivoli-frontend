@@ -16,35 +16,43 @@ const Navigation = ({ user }) => {
     const pathname = usePathname()
 
     return (
-        <nav className="bg-white border-b border-gray-100">
+        <nav className="bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 border-b border-purple-700 shadow-lg relative z-10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex">
                         <div className="flex-shrink-0 flex items-center">
                             <Link href="/dashboard">
-                                <ApplicationLogo className="block h-10 w-auto fill-current text-gray-600" />
+                                <ApplicationLogo className="block h-10 w-auto fill-current text-white" />
                             </Link>
                         </div>
 
                         <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                             <NavLink
                                 href="/dashboard"
-                                active={usePathname() === '/dashboard'}>
+                                active={usePathname() === '/dashboard'}
+                                className="text-white/90 hover:text-white hover:scale-105 transition-all duration-200"
+                                activeClassName="border-b-2 border-white font-bold text-white">
                                 Dashboard
                             </NavLink>
                             <NavLink
                                 href="/groups"
-                                active={usePathname() === '/groups'}>
+                                active={usePathname() === '/groups'}
+                                className="text-white/90 hover:text-white hover:scale-105 transition-all duration-200"
+                                activeClassName="border-b-2 border-white font-bold text-white">
                                 Groups
                             </NavLink>
                             <NavLink
                                 href="/votes"
-                                active={usePathname() === '/votes'}>
+                                active={usePathname() === '/votes'}
+                                className="text-white/90 hover:text-white hover:scale-105 transition-all duration-200"
+                                activeClassName="border-b-2 border-white font-bold text-white">
                                 Votes
                             </NavLink>
                             <NavLink
                                 href="/tivoli"
-                                active={usePathname() === '/tivoli'}>
+                                active={usePathname() === '/tivoli'}
+                                className="text-white/90 hover:text-white hover:scale-105 transition-all duration-200"
+                                activeClassName="border-b-2 border-white font-bold text-white">
                                 Tivoli
                             </NavLink>
                         </div>
@@ -55,7 +63,7 @@ const Navigation = ({ user }) => {
                             align="right"
                             width="48"
                             trigger={
-                                <button className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out">
+                                <button className="flex items-center text-sm font-medium text-white hover:text-white/90 focus:outline-none transition duration-150 ease-in-out bg-white/10 px-4 py-2 rounded-xl hover:bg-white/20">
                                     <div>{user?.name}</div>
 
                                     <div className="ml-1">
@@ -81,7 +89,7 @@ const Navigation = ({ user }) => {
                     <div className="-mr-2 flex items-center sm:hidden">
                         <button
                             onClick={() => setOpen(open => !open)}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                            className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white hover:bg-purple-700/50 focus:outline-none focus:bg-purple-700/50 transition duration-150 ease-in-out">
                             <svg
                                 className="h-6 w-6"
                                 stroke="currentColor"
@@ -111,61 +119,40 @@ const Navigation = ({ user }) => {
             </div>
 
             {open && (
-                <div className="block sm:hidden">
+                <div className="block sm:hidden bg-gradient-to-b from-purple-600 to-blue-700 shadow-lg">
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
                             href="/dashboard"
-                            active={pathname === '/dashboard'}>
+                            active={pathname === '/dashboard'}
+                            className="text-white hover:bg-purple-700/50">
                             Dashboard
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href="/groups"
-                            active={pathname === '/groups'}>
+                            active={pathname === '/groups'}
+                            className="text-white hover:bg-purple-700/50">
                             Groups
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href="/votes"
-                            active={pathname === '/votes'}>
+                            active={pathname === '/votes'}
+                            className="text-white hover:bg-purple-700/50">
                             Votes
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href="/tivoli"
-                            active={pathname === '/tivoli'}>
+                            active={pathname === '/tivoli'}
+                            className="text-white hover:bg-purple-700/50">
                             Tivoli
                         </ResponsiveNavLink>
                     </div>
 
-                    <div className="pt-4 pb-1 border-t border-gray-200">
-                        <div className="flex items-center px-4">
-                            <div className="flex-shrink-0">
-                                <svg
-                                    className="h-10 w-10 fill-current text-gray-400"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                    />
-                                </svg>
-                            </div>
-
-                            <div className="ml-3">
-                                <div className="font-medium text-base text-gray-800">
-                                    {user?.name}
-                                </div>
-                                <div className="font-medium text-sm text-gray-500">
-                                    {user?.email}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="mt-3 space-y-1">
-                            {/* Authentication */}
-                            <ResponsiveNavButton onClick={logout}>
+                    {/* Simplified section with just the logout button */}
+                    <div className="pt-4 pb-1 border-t border-purple-800">
+                        <div className="px-4">
+                            <ResponsiveNavButton
+                                onClick={logout}
+                                className="text-white hover:bg-purple-700/50 w-full">
                                 Logout
                             </ResponsiveNavButton>
                         </div>
