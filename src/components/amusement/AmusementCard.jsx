@@ -93,24 +93,26 @@ export default function AmusementCard({ amusement }) {
                 </div>
             ) : (
                 <div className="w-full flex flex-col bg-black text-white">
-                    <div className="relative w-full h-48">
-                        <Image
-                            src={
-                                amusement.image_url && amusement
-                                    ? amusement.image_url
-                                    : '/images/Redpanda2.png'
-                            }
-                            alt={amusement.name}
-                            fill
-                            className="object-cover"
-                        />
+                    {showData && (
+                        <div className="relative w-full h-48">
+                            <Image
+                                src={
+                                    amusement.image_url && amusement
+                                        ? amusement.image_url
+                                        : '/images/Redpanda2.png'
+                                }
+                                alt={amusement.name}
+                                fill
+                                className="object-cover"
+                            />
 
-                        {amusement.stamp_id && (
-                            <div className="absolute top-2 right-2 bg-amber-500/80 text-white text-xs px-2 py-1 rounded-full">
-                                {stampName}
-                            </div>
-                        )}
-                    </div>
+                            {amusement.stamp_id && (
+                                <div className="absolute top-2 right-2 bg-amber-500/80 text-white text-xs px-2 py-1 rounded-full">
+                                    {stampName}
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                     <div className="p-6 flex flex-col">
                         {showData && (
