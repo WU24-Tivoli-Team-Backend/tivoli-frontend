@@ -1,17 +1,21 @@
-import { Nunito } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import '@/app/global.css'
 
-const nunitoFont = Nunito({
+const inter = Inter({
     subsets: ['latin'],
     display: 'swap',
 })
 
 const RootLayout = ({ children }) => {
     return (
-        <html lang="en" className={nunitoFont.className}>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover"></meta>
-<meta name="apple-mobile-web-app-capable" content="yes"></meta>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></meta>
+        <html lang="en" className={inter.className}>
+            <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover"></meta>
+            <meta name="apple-mobile-web-app-capable" content="yes"></meta>
+            <meta
+                name="apple-mobile-web-app-status-bar-style"
+                content="black-translucent"></meta>
             <body className="antialiased">{children}</body>
         </html>
     )
