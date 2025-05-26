@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/auth'
 import ProfileCard from '../group-information/ProfileCard'
 import EditUserInfoForm from '@/components/forms/EditUserInfoForm'
 import { useState } from 'react'
+import { redirect } from 'next/navigation'
 
 export default function UserProfile() {
     const { user } = useAuth({ middleware: 'auth' })
