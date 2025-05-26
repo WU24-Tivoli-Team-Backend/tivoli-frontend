@@ -102,7 +102,7 @@ export default function Voting() {
                                         {amusement.name}
                                     </p>
                                     <p className="text-gray-600">
-                                        Votes: {amusement.votes}
+                                        Votes: This is secret
                                     </p>
                                     {isOwner && (
                                         <p className="text-xs text-red-500">
