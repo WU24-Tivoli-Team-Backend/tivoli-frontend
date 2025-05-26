@@ -81,7 +81,7 @@ export default function AmusementList() {
         }
     }
 
-    if (user.group_id) {
+    if (user.group_id == 8)  {
            return ('As a guest, you don\'t have amusements')
        }
 
