@@ -88,7 +88,7 @@ const Home = () => {
                                         </button>
                                     </Link>
 
-                                    {/* <GuestLoginButton className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl" /> */}
+                                    <GuestLoginButton className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl" />
 
                                     <div className="text-center mt-6">
                                         <p className="text-white/70 text-sm">

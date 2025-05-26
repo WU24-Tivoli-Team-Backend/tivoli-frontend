@@ -13,12 +13,9 @@ export default function UserProfile() {
         setIsDropdownOpen(prev => !prev)
     }
 
-    //This will be added after May 26th:
-    // This redirects Rune to the dashboard
-    //     const { user } = useAuth({ middleware: 'auth' })
-    // if (user.group_id == 8) {
-    //     redirect('/groups')
-    // }
+    if (user.group_id == 8) {
+        redirect('/tivoli')
+    }
 
     return (
         <section>
