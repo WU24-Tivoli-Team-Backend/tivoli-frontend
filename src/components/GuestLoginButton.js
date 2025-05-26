@@ -1,7 +1,7 @@
 'use client'
 
 import Button from './Button'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/auth'
 import { useState, useEffect } from 'react'
 import AuthSessionStatus from '@/app/(auth)/AuthSessionStatus'
@@ -11,7 +11,7 @@ export default function GuestLoginButton() {
 
     const { login } = useAuth({
         middleware: 'guest',
-        redirectIfAuthenticated: '/groups',
+        redirectIfAuthenticated: '/tivoli',
     })
 
     const [email, setEmail] = useState('rune@yrgobanken.vip')
@@ -42,6 +42,8 @@ export default function GuestLoginButton() {
             setErrors,
             setStatus,
         })
+
+        redirect('/tivoli')
     }
 
     return (

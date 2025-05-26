@@ -31,6 +31,7 @@ const Dashboard = () => {
                                     You are logged in!
                                 </div>
                                 <UserProfile />
+                                
                                 <UserAmusementContainer />
                             </div>
                         </div>

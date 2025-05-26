@@ -81,6 +81,10 @@ export default function AmusementList() {
         }
     }
 
+    if (user.group_id) {
+           return ('As a guest, you don\'t have amusements')
+       }
+
     return (
         <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">

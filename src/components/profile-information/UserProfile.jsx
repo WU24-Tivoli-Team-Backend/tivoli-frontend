@@ -14,10 +14,6 @@ export default function UserProfile() {
         setIsDropdownOpen(prev => !prev)
     }
 
-    if (user.group_id == 8) {
-        redirect('/tivoli')
-    }
-
     return (
         <section>
             {user && (
@@ -49,16 +45,20 @@ export default function UserProfile() {
                                     </li>
                                 ))}
                         </ul>
-                        <button
-                            onClick={toggleDropdown}
-                            className="text-blue-600 hover:underline mt-4">
-                            Add and edit info
-                        </button>
+                        {user.group_id !== 8 && (
+                            <>
+                                <button
+                                    onClick={toggleDropdown}
+                                    className="text-blue-600 hover:underline mt-4">
+                                    Add and edit info
+                                </button>
 
-                        {isDropdownOpen && (
-                            <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
-                                <EditUserInfoForm user={user} />
-                            </div>
+                                {isDropdownOpen && (
+                                    <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
+                                        <EditUserInfoForm user={user} />
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                 </div>
