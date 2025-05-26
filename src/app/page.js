@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/auth'
 import './homepage.css'
-// import GuestLoginButton from '@/components/GuestLoginButton'
+import GuestLoginButton from '@/components/GuestLoginButton'
 
 const Home = () => {
     const { user } = useAuth({ middleware: 'guest' })
@@ -82,11 +82,11 @@ const Home = () => {
                                         </button>
                                     </Link>
 
-                                    <Link href="/register" className="block">
+                                    {/* <Link href="/register" className="block">
                                         <button className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
                                             Register
                                         </button>
-                                    </Link>
+                                    </Link> */}
 
                                     <GuestLoginButton className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl" />
 
