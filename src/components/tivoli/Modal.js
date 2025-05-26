@@ -32,7 +32,8 @@ export default function Modal({ isOpen, closeModal, children }) {
             style={{
                 minHeight: '100dvh',
             }}>
-            <div className="min-h-full flex items-start justify-center p-4 py-8">
+
+            <div className="min-h-full flex items-center justify-center p-4 py-8">
                 <div
                     className="bg-white rounded-lg w-full relative shadow-xl"
                     style={{
