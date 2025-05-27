@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic'
 // Dynamically import JwtMessageBridge to avoid SSR issues
 const JwtMessageBridge = dynamic(() => import('./JwtMessageBridge'), {
     ssr: false,
-    loading: () => <div className="animate-pulse bg-gray-200 w-full h-full" />
+    loading: () => <div className="animate-pulse bg-gray-200 w-full h-full" />,
 })
 
 export const ScreenSize = {
@@ -44,34 +44,38 @@ const breakpoints = {
 // Modern iOS detection using Next.js patterns (no deprecated APIs)
 const useIOSDetection = () => {
     const [isIOS, setIsIOS] = useState(false)
-    
+
     useEffect(() => {
         // Only run on client side
         const checkIOS = () => {
             // Check for iOS devices in user agent
             const isIOSUserAgent = /iPad|iPhone|iPod/.test(navigator.userAgent)
-            
+
             // Modern way to detect iPad on iOS 13+ (which reports as desktop)
-            const isIPadOS = navigator.maxTouchPoints > 1 && 
-                            /Mac/.test(navigator.userAgent) &&
-                            !window.MSStream
-            
+            const isIPadOS =
+                navigator.maxTouchPoints > 1 &&
+                /Mac/.test(navigator.userAgent) &&
+                !window.MSStream
+
             // Additional check for touch-enabled Safari
-            const isTouchSafari = 'ontouchstart' in window && 
-                                /Safari/.test(navigator.userAgent) && 
-                                !/Chrome|CriOS|FxiOS/.test(navigator.userAgent)
-            
+            const isTouchSafari =
+                'ontouchstart' in window &&
+                /Safari/.test(navigator.userAgent) &&
+                !/Chrome|CriOS|FxiOS/.test(navigator.userAgent)
+
             return isIOSUserAgent || isIPadOS || isTouchSafari
         }
-        
+
         setIsIOS(checkIOS())
     }, [])
-    
+
     return isIOS
 }
 
 const GameIframe = ({
-    url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/game',
+    url = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3001'
+        : '/game',
     title = 'Game',
     defaultSize = ScreenSize.DESKTOP,
     aspectRatios = defaultAspectRatios,
@@ -86,12 +90,12 @@ const GameIframe = ({
     const [isFullscreen, setIsFullscreen] = useState(false)
     const [jwtToken, setJwtToken] = useState(null)
     const [mounted, setMounted] = useState(false)
-    
+
     const containerRef = useRef(null)
     const originalStyleRef = useRef(null)
-    
+
     const isIOS = useIOSDetection()
-    
+
     // Handle hydration
     useEffect(() => {
         setMounted(true)
@@ -107,7 +111,7 @@ const GameIframe = ({
     // Modern resize handler with useCallback
     const handleResize = useCallback(() => {
         if (typeof window === 'undefined') return
-        
+
         const width = window.innerWidth
         const height = window.innerHeight
         const isLandscape = width > height
@@ -144,7 +148,7 @@ const GameIframe = ({
     // Resize event listeners
     useEffect(() => {
         if (!mounted) return
-        
+
         handleResize()
 
         window.addEventListener('resize', handleResize)
@@ -178,12 +182,13 @@ const GameIframe = ({
             left: '0',
             width: '100vw',
             height: '100vh',
-            zIndex: '9999',
+            zIndex: '2147483647', // Use maximum z-index
             backgroundColor: 'black',
             transform: 'translate3d(0,0,0)',
+            isolation: 'isolate', // Better to include it in the Object.assign
         })
-
         container.classList.add('ios-fullscreen')
+
         setIsFullscreen(true)
 
         // Prevent body scroll
@@ -230,7 +235,10 @@ const GameIframe = ({
                     simulateFullscreenIOS()
                 }
             } catch (error) {
-                console.warn('Native fullscreen failed, using simulated:', error)
+                console.warn(
+                    'Native fullscreen failed, using simulated:',
+                    error,
+                )
                 simulateFullscreenIOS()
             }
         }
@@ -239,7 +247,10 @@ const GameIframe = ({
     const exitFullscreen = useCallback(async () => {
         const container = containerRef.current
 
-        if (isIOS || (container && container.classList.contains('ios-fullscreen'))) {
+        if (
+            isIOS ||
+            (container && container.classList.contains('ios-fullscreen'))
+        ) {
             exitSimulatedFullscreenIOS()
         } else {
             try {
@@ -262,7 +273,8 @@ const GameIframe = ({
 
         const handleFullscreenChange = () => {
             const container = containerRef.current
-            const hasIOSFullscreen = container && container.classList.contains('ios-fullscreen')
+            const hasIOSFullscreen =
+                container && container.classList.contains('ios-fullscreen')
 
             if (isIOS) {
                 setIsFullscreen(hasIOSFullscreen || false)
@@ -272,14 +284,16 @@ const GameIframe = ({
                     document.webkitFullscreenElement ||
                     document.msFullscreenElement
 
-                setIsFullscreen(!!fullscreenElement || hasIOSFullscreen || false)
+                setIsFullscreen(
+                    !!fullscreenElement || hasIOSFullscreen || false,
+                )
             }
         }
 
         const events = [
             'fullscreenchange',
             'webkitfullscreenchange',
-            'msfullscreenchange'
+            'msfullscreenchange',
         ]
 
         events.forEach(event => {
@@ -325,7 +339,6 @@ const GameIframe = ({
                 }),
             }}
             data-screen-size={currentScreenSize}>
-            
             <JwtMessageBridge
                 url={url}
                 jwt={jwtToken}
